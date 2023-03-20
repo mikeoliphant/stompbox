@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -8,7 +8,7 @@ enum
 	AUTOWAH_NUMPARAMETERS
 };
 
-class AutoWah : public GuitarSimComponent
+class AutoWah : public StompBox
 {
 private:
 	int fSamplingFreq;

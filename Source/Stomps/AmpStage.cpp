@@ -12,7 +12,7 @@ AmpStage::AmpStage()
 	Gain = 3;
 
 	NumParameters = AMPSTAGE_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[AMPSTAGE_GAIN].Name = "Gain";
 	Parameters[AMPSTAGE_GAIN].SourceVariable = &Gain;
@@ -75,7 +75,7 @@ void AmpStage::SetParameterValue(int id, double value)
 	}
 	else
 	{
-		GuitarSimComponent::SetParameterValue(id, value);
+		StompBox::SetParameterValue(id, value);
 	}
 }
 
@@ -142,7 +142,7 @@ void AmpStage::init(int samplingFreq)
 	if (needUpdate)
 		UpdateStageType(newStageType, newNumStages);
 
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 	//samplingFreq *= 8;
 
 	this->samplingFreq = samplingFreq;

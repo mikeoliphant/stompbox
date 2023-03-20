@@ -10,7 +10,7 @@ PitchDetector::PitchDetector(int bufferSize)
 	Name = "PitchDetector";
 
 	NumParameters = 0;
-	Parameters = new GuitarSimParameter[0];
+	Parameters = new StompBoxParameter[0];
 
 	pitchMPM = new PitchMPM(bufferSize);
 	buffer = new float[bufferSizeTimesTwo];
@@ -27,7 +27,7 @@ float PitchDetector::GetCurrentPitch()
 
 void PitchDetector::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	pitchMPM->setSampleRate(samplingFreq);
 }

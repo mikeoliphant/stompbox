@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -10,7 +10,7 @@ enum
 	SCREAMER_NUMPARAMETERS
 };
 
-class TS9 : public GuitarSimComponent
+class TS9 : public StompBox
 {
 private:
 	int fSamplingFreq;

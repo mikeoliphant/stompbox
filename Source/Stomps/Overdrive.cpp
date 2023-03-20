@@ -63,7 +63,7 @@ BossSD1::BossSD1()
 	fslider2 = FAUSTFLOAT(1000);
 
 	NumParameters = OVERDRIVE_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 	Parameters[OVERDRIVE_DRIVE].Name = "Drive";
 	Parameters[OVERDRIVE_DRIVE].SourceVariable = &fslider1;
 
@@ -85,7 +85,7 @@ BossSD1::BossSD1()
 
 void BossSD1::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

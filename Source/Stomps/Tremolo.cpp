@@ -9,7 +9,7 @@ Tremolo::Tremolo()
 	Name = "Tremolo";
 
 	NumParameters = TREMOLO_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	speed = 5;
 	Parameters[TREMOLO_SPEED].Name = "Speed";
@@ -36,7 +36,7 @@ Tremolo::Tremolo()
 
 void Tremolo::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	time = 0;
 	tfrac = 1.0 / (double)samplingFreq;

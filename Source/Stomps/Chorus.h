@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -79,7 +79,7 @@ static void deletemydspSIG0(mydspSIG0* dsp) { delete dsp; }
 
 static double ftbl0mydspSIG0[65536];
 
-class Chorus : public GuitarSimComponent
+class Chorus : public StompBox
 {
 private:
 	int fSamplingFreq;

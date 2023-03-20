@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -11,7 +11,7 @@ enum
 	FUZZ_NUMPARAMETERS
 };
 
-class Fuzz : public GuitarSimComponent
+class Fuzz : public StompBox
 {
 private:
 	double level;

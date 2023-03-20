@@ -17,7 +17,7 @@ FreeVerb::FreeVerb()
 	fVslider2 = FAUSTFLOAT(5);
 
 	NumParameters = REVERB_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[REVERB_ROOMSIZE].Name = "Size";
 	Parameters[REVERB_ROOMSIZE].SourceVariable = &fVslider1;
@@ -38,7 +38,7 @@ FreeVerb::FreeVerb()
 
 void FreeVerb::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 	instanceClear();

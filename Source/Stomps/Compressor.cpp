@@ -20,7 +20,7 @@ Compressor::Compressor()
 	fHslider1 = FAUSTFLOAT(0.2);
 
 	NumParameters = COMPRESSOR_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 	Parameters[COMPRESSOR_SUSTAIN].Name = "Sustain";
 	Parameters[COMPRESSOR_SUSTAIN].SourceVariable = &fEntry0;
 	Parameters[COMPRESSOR_SUSTAIN].MinValue = 0;
@@ -43,7 +43,7 @@ Compressor::Compressor()
 
 void Compressor::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

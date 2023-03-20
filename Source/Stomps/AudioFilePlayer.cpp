@@ -5,7 +5,7 @@ AudioFilePlayer::AudioFilePlayer()
 	Name = "AudioFilePlayer";
 
 	NumParameters = AUDIOFILEPLAYER_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[AUDIOFILEPLAYER_FILE].Name = "File";
 	Parameters[AUDIOFILEPLAYER_FILE].SourceVariable = &fileIndex;
@@ -61,7 +61,7 @@ void AudioFilePlayer::IndexFiles(std::filesystem::path path)
 
 void AudioFilePlayer::SetParameterValue(int id, double value)
 {
-	GuitarSimComponent::SetParameterValue(id, value);
+	StompBox::SetParameterValue(id, value);
 
 	if (id == AUDIOFILEPLAYER_FILE)
 	{
@@ -127,7 +127,7 @@ void AudioFilePlayer::SetFile(const std::string filename)
 
 void AudioFilePlayer::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 }
 
 void AudioFilePlayer::compute(int count, double* input, double* output)

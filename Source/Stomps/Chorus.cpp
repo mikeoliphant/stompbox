@@ -18,7 +18,7 @@ Chorus::Chorus()
 	fVslider0 = FAUSTFLOAT(100.0);
 
 	NumParameters = CHORUS_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	//Parameters[CHORUS_LEVEL].Name = "Level";
 	//Parameters[CHORUS_LEVEL].SourceVariable = &fHslider0;
@@ -37,7 +37,7 @@ Chorus::Chorus()
 
 void Chorus::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	mydspSIG0* sig0 = newmydspSIG0();
 	sig0->instanceInitmydspSIG0(samplingFreq);

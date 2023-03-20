@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -12,7 +12,7 @@ enum
 	DELAY_NUMPARAMETERS
 };
 
-class Delay : public GuitarSimComponent
+class Delay : public StompBox
 {
 private:
 	int fSamplingFreq;

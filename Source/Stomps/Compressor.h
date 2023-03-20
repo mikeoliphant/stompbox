@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -10,7 +10,7 @@ enum
 	COMPRESSOR_NUMPARAMETERS
 };
 
-class Compressor : public GuitarSimComponent
+class Compressor : public StompBox
 {
 private:
 	int fSamplingFreq;

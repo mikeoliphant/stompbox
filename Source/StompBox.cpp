@@ -1,34 +1,34 @@
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #include <algorithm>
 
-GuitarSimParameter* GuitarSimComponent::GetParameter(int id)
+StompBoxParameter* StompBox::GetParameter(int id)
 {
 	return &Parameters[id];
 }
 
-GuitarSimComponent::GuitarSimComponent()
+StompBox::StompBox()
 {
 	doubleBuffer[0] = nullptr;
 }
 
-void GuitarSimComponent::SetParameterValue(int index, double value)
+void StompBox::SetParameterValue(int index, double value)
 {
 	*(Parameters[index].SourceVariable) = std::clamp(value, Parameters[index].MinValue, Parameters[index].MaxValue);
 }
 
-double GuitarSimComponent::GetParameterValue(int index)
+double StompBox::GetParameterValue(int index)
 {
 	return *(Parameters[index].SourceVariable);
 }
 
-void GuitarSimComponent::SetBPM(double bpm)
+void StompBox::SetBPM(double bpm)
 {
 	this->bpm = bpm;
 
 	UpdateBPM();
 }
 
-void GuitarSimComponent::UpdateBPM()
+void StompBox::UpdateBPM()
 {
 	for (int i = 0; i < NumParameters; i++)
 	{
@@ -39,7 +39,7 @@ void GuitarSimComponent::UpdateBPM()
 	}
 }
 
-//void GuitarSimComponent::doComputeDouble(int count, FAUSTFLOAT* input, FAUSTFLOAT* output, EFactor oversample)
+//void StompBox::doComputeDouble(int count, FAUSTFLOAT* input, FAUSTFLOAT* output, EFactor oversample)
 //{
 //	if (count != bufferSize)
 //	{

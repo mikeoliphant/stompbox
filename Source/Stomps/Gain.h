@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -8,7 +8,7 @@ enum
 	GAIN_NUMPARAMETERS
 };
 
-class Gain : public GuitarSimComponent
+class Gain : public StompBox
 {
 private:
 	double gain;

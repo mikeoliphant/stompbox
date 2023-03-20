@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -11,7 +11,7 @@ enum
 };
 
 
-class FreeVerb : public GuitarSimComponent
+class FreeVerb : public StompBox
 {
 private:
 	FAUSTFLOAT fVslider0;

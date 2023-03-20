@@ -1,6 +1,6 @@
 file(GLOB_RECURSE SOURCES *.cpp *.c *.h)
 
-add_library(stompbox MODULE ${SOURCES})
+add_library(stompbox STATIC ${SOURCES})
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 

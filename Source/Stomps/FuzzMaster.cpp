@@ -46,7 +46,7 @@ FuzzMaster::FuzzMaster()
 	fVslider1 = FAUSTFLOAT(0.5);
 
 	NumParameters = FUZZMASTER_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[FUZZMASTER_TONE].Name = "Tone";
 	Parameters[FUZZMASTER_TONE].SourceVariable = &fVslider0;
@@ -59,7 +59,7 @@ FuzzMaster::FuzzMaster()
 
 void FuzzMaster::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

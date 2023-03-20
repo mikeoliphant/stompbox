@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #define __rt_data
 #include <cstdint>
 
@@ -21,7 +21,7 @@ enum
 	FUZZMASTER_NUMPARAMETERS
 };
 
-class FuzzMaster : public GuitarSimComponent
+class FuzzMaster : public StompBox
 {
 private:
 	int fSamplingFreq;

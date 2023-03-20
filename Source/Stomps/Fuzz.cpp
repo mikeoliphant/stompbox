@@ -7,7 +7,7 @@ Fuzz::Fuzz()
 	Name = "Fuzz";
 
 	NumParameters = FUZZ_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	level = 0.5;
 	fuzz = 0.5;
@@ -35,7 +35,7 @@ Fuzz::Fuzz()
 
 void Fuzz::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 }
 
 void Fuzz::compute(int count, double* input0, double* output0)

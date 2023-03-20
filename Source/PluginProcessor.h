@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include <list>
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #include "PluginFactory.h"
 #include "GuitarServer.h"
 #include "GuitarClient.h"
@@ -23,7 +23,7 @@ enum
 struct CCMap
 {
 	int CCNumber;
-	GuitarSimComponent* Plugin;
+	StompBox* Plugin;
 	int Parameter;
 };
 
@@ -35,9 +35,9 @@ protected:
 
 	double sampleRate;
 	double bpm = 120;
-	std::list<GuitarSimComponent *> pluginList1;
-	std::list<GuitarSimComponent*> pluginList2;
-	std::list<GuitarSimComponent*>& plugins = pluginList1;
+	std::list<StompBox *> pluginList1;
+	std::list<StompBox*> pluginList2;
+	std::list<StompBox*>& plugins = pluginList1;
 	int tmpBufSize = 64;
 	double* tmpBuf1 = nullptr;
 	double* tmpBuf2 = nullptr;
@@ -54,10 +54,10 @@ protected:
 	PitchDetector* tuner;
 	AudioFilePlayer* audioFilePlayer = nullptr;
 	AudioFileRecorder* audioFileRecorder = nullptr;
-	std::list<GuitarSimComponent*> inputChain;
-	std::list<GuitarSimComponent*> fxLoop;
-	std::list<GuitarSimComponent*> outputChain;
-	GuitarSimComponent* monitorPlugin = nullptr;
+	std::list<StompBox*> inputChain;
+	std::list<StompBox*> fxLoop;
+	std::list<StompBox*> outputChain;
+	StompBox* monitorPlugin = nullptr;
 	std::function<void(double*, int)> monitorCallback = nullptr;
 	std::function<void(int, int, int)> midiCallback = nullptr;
 	std::function<void(const std::string)> messageCallback = nullptr;
@@ -88,9 +88,9 @@ public:
 	void Init(double sampleRate);
 	void SetBPM(double bpm);
 	void StartServer();
-	GuitarSimComponent* CreatePlugin(std::string const& id);
+	StompBox* CreatePlugin(std::string const& id);
 	void UpdatePlugins();
-	void InitPlugin(GuitarSimComponent* plugin);
+	void InitPlugin(StompBox* plugin);
 	double GetBPM()
 	{
 		return bpm;
@@ -137,15 +137,15 @@ public:
 	{
 		return cabinet;
 	}
-	std::list<GuitarSimComponent*> GetInputChain()
+	std::list<StompBox*> GetInputChain()
 	{
 		return inputChain;
 	}
-	std::list<GuitarSimComponent*> GetFxLoop()
+	std::list<StompBox*> GetFxLoop()
 	{
 		return fxLoop;
 	}
-	std::list<GuitarSimComponent*> GetOutputChain()
+	std::list<StompBox*> GetOutputChain()
 	{
 		return outputChain;
 	}
@@ -169,12 +169,12 @@ public:
 	void ReportDSPLoad(float currentLoad);
 	std::string HandleCommand(std::string const& line);
 	bool HandleMidiCommand(int midiCommand, int midiData1, int midiData2);
-	bool CheckMidiCommand(GuitarSimComponent* plugin, int parameter);
+	bool CheckMidiCommand(StompBox* plugin, int parameter);
 	void SyncPreset();
 	void LoadPreset(std::string preset);
 	void LoadSettings();
 	bool LoadCommandsFromFile(std::filesystem::path filePath);
-	void AppendPluginParams(std::string& dump, GuitarSimComponent* plugin, bool dirtyOnly);
+	void AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 	std::string DumpSettings();
 	std::string DumpProgram();
 	std::string DumpConfig();

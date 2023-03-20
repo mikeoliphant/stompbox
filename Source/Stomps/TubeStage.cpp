@@ -20,7 +20,7 @@ TubeStage::TubeStage(int tubeTableIndex, double initialGain, double vplus, doubl
 	fVslider0 = FAUSTFLOAT(initialGain);
 
 	NumParameters = TUBESTAGE_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[TUBESTAGE_GAIN].Name = "Gain";
 	Parameters[TUBESTAGE_GAIN].SourceVariable = &fVslider0;
@@ -31,7 +31,7 @@ TubeStage::TubeStage(int tubeTableIndex, double initialGain, double vplus, doubl
 
 void TubeStage::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

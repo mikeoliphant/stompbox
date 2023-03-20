@@ -28,7 +28,7 @@ Vibrato::Vibrato()
 	fratio = 1.5;
 
 	NumParameters = VIBRATO_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 	Parameters[VIBRATO_SPEED].Name = "Speed";
 	Parameters[VIBRATO_SPEED].MinValue = 0.1;
 	Parameters[VIBRATO_SPEED].MaxValue = 10;
@@ -56,7 +56,7 @@ Vibrato::Vibrato()
 
 void Vibrato::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

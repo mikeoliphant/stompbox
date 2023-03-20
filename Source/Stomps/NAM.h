@@ -15,7 +15,7 @@
 #include <limits.h>
 
 #include "NAM/dsp.h"
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -24,7 +24,7 @@ enum
 };
 
 
-class NAM : public GuitarSimComponent
+class NAM : public StompBox
 {
 private:
 	double modelIndex;

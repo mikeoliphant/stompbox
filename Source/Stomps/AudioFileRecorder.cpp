@@ -7,7 +7,7 @@ AudioFileRecorder::AudioFileRecorder(std::filesystem::path savePath)
 	Name = "AudioFileRecorder";
 
 	NumParameters = AUDIOFILERECORDER_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[AUDIOFILERECORDER_SECONDSRECORDED].Name = "SecsRecorded";
 	Parameters[AUDIOFILERECORDER_SECONDSRECORDED].SourceVariable = &recordSeconds;
@@ -56,7 +56,7 @@ void AudioFileRecorder::init(int samplingFreq)
 {
 	if (samplingFreq != this->samplingFreq)
 	{
-		GuitarSimComponent::init(samplingFreq);
+		StompBox::init(samplingFreq);
 
 		if (waveWriter != nullptr)
 		{

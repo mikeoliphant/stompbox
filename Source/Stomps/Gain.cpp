@@ -11,7 +11,7 @@ Gain::Gain(double initialGain, double minGain, double maxGain)
 	this->maxGain = maxGain;
 
 	NumParameters = GAIN_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[GAIN_GAIN].Name = "Gain";
 	Parameters[GAIN_GAIN].SourceVariable = &gain;

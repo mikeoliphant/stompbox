@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -10,7 +10,7 @@ enum
 	TREMOLO_NUMPARAMETERS
 };
 
-class Tremolo : public GuitarSimComponent
+class Tremolo : public StompBox
 {
 private:
 	double speed;

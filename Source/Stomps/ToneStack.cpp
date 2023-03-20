@@ -40,7 +40,7 @@ Tonestack::Tonestack()
 	fVslider2 = FAUSTFLOAT(5);
 
 	NumParameters = TONESTACK_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[TONESTACK_BASS].Name = "Bass";
 	Parameters[TONESTACK_BASS].SourceVariable = &fVslider1;
@@ -75,7 +75,7 @@ Tonestack::Tonestack()
 
 void Tonestack::SetParameterValue(int id, double value)
 {
-	GuitarSimComponent::SetParameterValue(id, value);
+	StompBox::SetParameterValue(id, value);
 
 	if (id == TONESTACK_PRESET)
 	{
@@ -103,7 +103,7 @@ void Tonestack::SetParameters(double r1, double r2, double r3, double r4, double
 
 void Tonestack::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 	instanceClear();

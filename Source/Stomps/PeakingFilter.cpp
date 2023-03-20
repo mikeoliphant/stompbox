@@ -27,7 +27,7 @@ PeakingFilter::PeakingFilter(double freq, double q)
 	this->q = q;
 
 	NumParameters = PEAKINGFILTER_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[PEAKINGFILTER_LEVEL].Name = "Level";
 	Parameters[PEAKINGFILTER_LEVEL].MaxValue = -15;
@@ -38,7 +38,7 @@ PeakingFilter::PeakingFilter(double freq, double q)
 
 void PeakingFilter::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

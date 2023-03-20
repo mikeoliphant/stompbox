@@ -1,9 +1,9 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #include "PitchMPM.h"
 
-class PitchDetector : public GuitarSimComponent
+class PitchDetector : public StompBox
 {
 private:
 	PitchMPM *pitchMPM;

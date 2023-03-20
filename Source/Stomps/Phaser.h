@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -12,7 +12,7 @@ enum
 	PHASER_NUMPARAMETERS
 };
 
-class Phaser : public GuitarSimComponent
+class Phaser : public StompBox
 {
 private:
 	int fSamplingFreq;

@@ -3,7 +3,7 @@
 
 #include "PluginFactory.h"
 
-GuitarSimComponent* CreateInputGainPlugin()
+StompBox* CreateInputGainPlugin()
 {
 	Gain *input = new Gain(0, -40, 40);
 
@@ -12,7 +12,7 @@ GuitarSimComponent* CreateInputGainPlugin()
 	return input;
 }
 
-GuitarSimComponent* CreateMasterVolumePlugin()
+StompBox* CreateMasterVolumePlugin()
 {
 	Gain* master = new Gain(0, -40, 40);
 
@@ -34,7 +34,7 @@ std::vector<int> preampStageMap
 	AMPSTAGE_JJECC83S
 };
 
-GuitarSimComponent* CreatePreampPlugin()
+StompBox* CreatePreampPlugin()
 {
 	AmpStage* preamp = new AmpStage();
 
@@ -65,7 +65,7 @@ std::vector<int> powerampStageMap
 	AMPSTAGE_6L6CG,
 };
 
-GuitarSimComponent* CreatePowerampPlugin()
+StompBox* CreatePowerampPlugin()
 {
 	AmpStage* poweramp = new AmpStage();
 	poweramp->Parameters[AMPSTAGE_GAIN].Name = "Volume";
@@ -79,7 +79,7 @@ GuitarSimComponent* CreatePowerampPlugin()
 	return poweramp;
 }
 
-GuitarSimComponent* CreateTonestackPlugin()
+StompBox* CreateTonestackPlugin()
 {
 	Tonestack* tonestack = new Tonestack();
 	tonestack->SetPreset(0);
@@ -89,7 +89,7 @@ GuitarSimComponent* CreateTonestackPlugin()
 
 std::filesystem::path cabinetPath;
 
-GuitarSimComponent* CreateGuitarConvolverPlugin()
+StompBox* CreateGuitarConvolverPlugin()
 {
 	GuitarConvolver* convolver = new GuitarConvolver();
 
@@ -110,7 +110,7 @@ GuitarSimComponent* CreateGuitarConvolverPlugin()
 
 std::filesystem::path reverbPath;
 
-GuitarSimComponent* CreateConvolutionReverbPlugin()
+StompBox* CreateConvolutionReverbPlugin()
 {
 	GuitarConvolver* reverb = new GuitarConvolver();
 
@@ -125,7 +125,7 @@ GuitarSimComponent* CreateConvolutionReverbPlugin()
 
 std::filesystem::path namModelPath;
 
-GuitarSimComponent* CreateNAMPlugin()
+StompBox* CreateNAMPlugin()
 {
 	NAM* nam = new NAM();
 
@@ -134,7 +134,7 @@ GuitarSimComponent* CreateNAMPlugin()
 	return nam;
 }
 
-GuitarSimComponent* CreateBoostPlugin()
+StompBox* CreateBoostPlugin()
 {
 	Gain *gain = new Gain(10, 0, 20);
 
@@ -144,7 +144,7 @@ GuitarSimComponent* CreateBoostPlugin()
 	return gain;
 }
 
-GuitarSimComponent* CreateCompressorPlugin()
+StompBox* CreateCompressorPlugin()
 {
 	Compressor *compressor = new Compressor();
 
@@ -154,7 +154,7 @@ GuitarSimComponent* CreateCompressorPlugin()
 	return compressor;
 }
 
-GuitarSimComponent* CreateFuzzPlugin()
+StompBox* CreateFuzzPlugin()
 {
 	Fuzz *fuzz = new Fuzz();
 
@@ -163,7 +163,7 @@ GuitarSimComponent* CreateFuzzPlugin()
 	return fuzz;
 }
 
-GuitarSimComponent* CreateAutoWahPlugin()
+StompBox* CreateAutoWahPlugin()
 {
 	AutoWah *wah = new AutoWah();
 
@@ -173,7 +173,7 @@ GuitarSimComponent* CreateAutoWahPlugin()
 	return wah;
 }
 
-GuitarSimComponent* CreateWahPlugin()
+StompBox* CreateWahPlugin()
 {
 	Wah* wah = new Wah();
 
@@ -183,7 +183,7 @@ GuitarSimComponent* CreateWahPlugin()
 	return wah;
 }
 
-GuitarSimComponent* CreateScreamerPlugin()
+StompBox* CreateScreamerPlugin()
 {
 	TS9* ts9 = new TS9();
 
@@ -192,7 +192,7 @@ GuitarSimComponent* CreateScreamerPlugin()
 	return ts9;
 }
 
-GuitarSimComponent* CreateDistortionPlugin()
+StompBox* CreateDistortionPlugin()
 {
 	BossDS1 *ds1 = new BossDS1();
 
@@ -201,7 +201,7 @@ GuitarSimComponent* CreateDistortionPlugin()
 	return ds1;
 }
 
-GuitarSimComponent* CreateOverdrivePlugin()
+StompBox* CreateOverdrivePlugin()
 {
 	BossSD1* sd1 = new BossSD1();
 
@@ -210,7 +210,7 @@ GuitarSimComponent* CreateOverdrivePlugin()
 	return sd1;
 }
 
-GuitarSimComponent* CreatePhaserPlugin()
+StompBox* CreatePhaserPlugin()
 {
 	Phaser *phaser = new Phaser();
 
@@ -219,7 +219,7 @@ GuitarSimComponent* CreatePhaserPlugin()
 	return phaser;
 }
 
-GuitarSimComponent* CreateVibratoPlugin()
+StompBox* CreateVibratoPlugin()
 {
 	Vibrato *vibrato = new Vibrato();
 
@@ -228,7 +228,7 @@ GuitarSimComponent* CreateVibratoPlugin()
 	return vibrato;
 }
 
-GuitarSimComponent* CreateFlangerPlugin()
+StompBox* CreateFlangerPlugin()
 {
 	Flanger *flanger = new Flanger();
 
@@ -238,7 +238,7 @@ GuitarSimComponent* CreateFlangerPlugin()
 	return flanger;
 }
 
-GuitarSimComponent* CreateChorusPlugin()
+StompBox* CreateChorusPlugin()
 {
 	Chorus *chorus = new Chorus();
 
@@ -247,7 +247,7 @@ GuitarSimComponent* CreateChorusPlugin()
 	return chorus;
 }
 
-GuitarSimComponent* CreateTremoloPlugin()
+StompBox* CreateTremoloPlugin()
 {
 	Tremolo *tremolo = new Tremolo();
 
@@ -257,7 +257,7 @@ GuitarSimComponent* CreateTremoloPlugin()
 	return tremolo;
 }
 
-GuitarSimComponent* CreateDelayPlugin()
+StompBox* CreateDelayPlugin()
 {
 	Delay*delay = new Delay();
 
@@ -266,7 +266,7 @@ GuitarSimComponent* CreateDelayPlugin()
 	return delay;
 }
 
-GuitarSimComponent* CreateReverbPlugin()
+StompBox* CreateReverbPlugin()
 {
 	FreeVerb *reverb = new FreeVerb();
 
@@ -276,7 +276,7 @@ GuitarSimComponent* CreateReverbPlugin()
 	return reverb;
 }
 
-GuitarSimComponent* CreateEQ7Plugin()
+StompBox* CreateEQ7Plugin()
 {
 	GraphicEqualizer *eq7 = new GraphicEqualizer(7, 100, 1);
 
@@ -285,7 +285,7 @@ GuitarSimComponent* CreateEQ7Plugin()
 	return eq7;
 }
 
-GuitarSimComponent* CreateTunerPlugin()
+StompBox* CreateTunerPlugin()
 {
 	PitchDetector *tuner = new PitchDetector(4096);
 
@@ -296,7 +296,7 @@ GuitarSimComponent* CreateTunerPlugin()
 
 std::filesystem::path musicPath;
 
-GuitarSimComponent* CreateAudioFilePlayerPlugin()
+StompBox* CreateAudioFilePlayerPlugin()
 {
 	AudioFilePlayer* player = new AudioFilePlayer();
 
@@ -307,7 +307,7 @@ GuitarSimComponent* CreateAudioFilePlayerPlugin()
 	return player;
 }
 
-GuitarSimComponent* CreateAudioFileRecorderPlugin()
+StompBox* CreateAudioFileRecorderPlugin()
 {
 	AudioFileRecorder* recorder = new AudioFileRecorder(musicPath);
 
@@ -380,9 +380,9 @@ void PluginFactory::LoadAllPlugins()
 }
 
 
-GuitarSimComponent* PluginFactory::CreatePlugin(std::string const& name, std::string const& id)
+StompBox* PluginFactory::CreatePlugin(std::string const& name, std::string const& id)
 {
-	GuitarSimComponent* component = FindPlugin(id);
+	StompBox* component = FindPlugin(id);
 
 	if (component != nullptr)
 	{
@@ -396,7 +396,7 @@ GuitarSimComponent* PluginFactory::CreatePlugin(std::string const& name, std::st
 	{
 		CreatePluginFunction func = iter->second;
 
-		GuitarSimComponent* component = func();
+		StompBox* component = func();
 
 		component->Name.assign(name);
 		component->ID.assign(id);
@@ -413,7 +413,7 @@ GuitarSimComponent* PluginFactory::CreatePlugin(std::string const& name, std::st
 
 void PluginFactory::ReleasePlugin(std::string id)
 {
-	GuitarSimComponent* component = FindPlugin(id);
+	StompBox* component = FindPlugin(id);
 
 	if (component != nullptr)
 	{
@@ -423,7 +423,7 @@ void PluginFactory::ReleasePlugin(std::string id)
 	}
 }
 
-GuitarSimComponent* PluginFactory::FindPlugin(std::string id)
+StompBox* PluginFactory::FindPlugin(std::string id)
 {
 	auto iter = loadedPlugins.find(id);
 	if (iter != loadedPlugins.end())

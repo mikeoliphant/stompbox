@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Tube.h"
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -9,7 +9,7 @@ enum
 	TUBESTAGE_NUMPARAMETERS
 };
 
-class TubeStage : public GuitarSimComponent
+class TubeStage : public StompBox
 {
 private:
 	int fSamplingFreq;

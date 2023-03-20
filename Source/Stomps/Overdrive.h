@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -10,7 +10,7 @@ enum
 	OVERDRIVE_NUMPARAMETERS
 };
 
-class BossSD1 : public GuitarSimComponent
+class BossSD1 : public StompBox
 {
 private:
 	int fSamplingFreq;

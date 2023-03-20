@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -42,7 +42,7 @@ enum
 
 extern TonestackDefinition tonestacks[];
 
-class Tonestack : public GuitarSimComponent
+class Tonestack : public StompBox
 {
 private:
 	int fSamplingFreq;

@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <limits.h>
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #include "WaveReader.h"
 
 enum
@@ -16,7 +16,7 @@ enum
 	AUDIOFILERECORDER_NUMPARAMETERS
 };
 
-class AudioFileRecorder : public GuitarSimComponent
+class AudioFileRecorder : public StompBox
 {
 private:
 	WaveWriter* waveWriter = nullptr;

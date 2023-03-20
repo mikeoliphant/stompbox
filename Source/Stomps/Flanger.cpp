@@ -12,7 +12,7 @@ Flanger::Flanger()
 	fHslider2 = FAUSTFLOAT(0.20000000000000001);
 
 	NumParameters = FLANGER_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[FLANGER_RATE].Name = "Rate";
 	Parameters[FLANGER_RATE].MaxValue = 5;
@@ -34,7 +34,7 @@ Flanger::Flanger()
 
 void Flanger::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

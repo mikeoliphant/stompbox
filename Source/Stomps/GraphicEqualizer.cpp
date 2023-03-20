@@ -26,7 +26,7 @@ GraphicEqualizer::GraphicEqualizer(int numBands, int startingFreqency, double q)
 	volume = 0;
 
 	NumParameters = numBands + 1;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	peakingFilters = new PeakingFilter*[numBands];
 
@@ -81,7 +81,7 @@ GraphicEqualizer::~GraphicEqualizer()
 
 void GraphicEqualizer::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

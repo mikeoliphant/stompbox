@@ -1,9 +1,9 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #include "PeakingFilter.h"
 
-class GraphicEqualizer : public GuitarSimComponent
+class GraphicEqualizer : public StompBox
 {
 private:
 	int fSamplingFreq;

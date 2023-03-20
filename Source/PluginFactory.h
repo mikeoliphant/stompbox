@@ -2,7 +2,7 @@
 
 #include <list>
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #include "Gain.h"
 #include "AmpStage.h"
 #include "GuitarConvolver.h"
@@ -30,7 +30,7 @@
 
 #include <unordered_map>
 
-typedef GuitarSimComponent * (*CreatePluginFunction)(void);
+typedef StompBox * (*CreatePluginFunction)(void);
 
 extern std::filesystem::path cabinetPath;
 extern std::filesystem::path reverbPath;
@@ -41,7 +41,7 @@ class PluginFactory
 {
 protected:
 	std::unordered_map<std::string, CreatePluginFunction> pluginMap;
-	std::unordered_map<std::string, GuitarSimComponent*> loadedPlugins;
+	std::unordered_map<std::string, StompBox*> loadedPlugins;
 	std::list<std::string> userPluginList;
 	std::list<std::string> allPluginList;
 
@@ -67,8 +67,8 @@ public:
 	std::list<std::string> GetUserPlugins();
 	std::list<std::string> GetAllPlugins();
 	void LoadAllPlugins();
-	GuitarSimComponent* CreatePlugin(std::string const& name, std::string const& id);
-	GuitarSimComponent* CreatePlugin(std::string const& id)
+	StompBox* CreatePlugin(std::string const& name, std::string const& id);
+	StompBox* CreatePlugin(std::string const& id)
 	{
 		std::size_t found = id.find('_', 0);
 
@@ -80,6 +80,6 @@ public:
 		return CreatePlugin(id, id);
 	}
 	void ReleasePlugin(std::string id);
-	GuitarSimComponent* FindPlugin(std::string id);
+	StompBox* FindPlugin(std::string id);
 };
 

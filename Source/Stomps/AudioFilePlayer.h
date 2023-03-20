@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <limits.h>
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 #include "WaveReader.h"
 
 enum
@@ -19,7 +19,7 @@ enum
 	AUDIOFILEPLAYER_NUMPARAMETERS
 };
 
-class AudioFilePlayer : public GuitarSimComponent
+class AudioFilePlayer : public StompBox
 {
 private:
 	std::vector<std::string> fileNames;

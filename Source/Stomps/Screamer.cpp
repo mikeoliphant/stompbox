@@ -95,7 +95,7 @@ TS9::TS9()
 	fVslider2 = FAUSTFLOAT(0.5);
 
 	NumParameters = SCREAMER_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[SCREAMER_DRIVE].Name = "Drive";
 	Parameters[SCREAMER_DRIVE].SourceVariable = &fVslider2;
@@ -117,7 +117,7 @@ TS9::TS9()
 
 void TS9::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	mydspSIG0* sig0 = newmydspSIG0();
 	sig0->instanceInitmydspSIG0(samplingFreq);

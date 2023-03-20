@@ -22,7 +22,7 @@ BossDS1::BossDS1()
 	fVslider0 = FAUSTFLOAT(0.5);
 
 	NumParameters = DISTORTION_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[DISTORTION_DISTORTION].Name = "Dist";
 	Parameters[DISTORTION_DISTORTION].SourceVariable = &fHslider1;
@@ -43,7 +43,7 @@ BossDS1::BossDS1()
 
 void BossDS1::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

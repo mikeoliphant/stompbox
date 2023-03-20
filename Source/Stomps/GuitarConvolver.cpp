@@ -7,7 +7,7 @@ GuitarConvolver::GuitarConvolver()
     newImpulseData[0] = nullptr;
 
     NumParameters = CONVOLVER_NUMPARAMETERS;
-    Parameters = new GuitarSimParameter[NumParameters];
+    Parameters = new StompBoxParameter[NumParameters];
 
     Parameters[CONVOLVER_IMPULSE].Name = "Impulse";
     Parameters[CONVOLVER_IMPULSE].SourceVariable = &impulseIndex;
@@ -25,7 +25,7 @@ GuitarConvolver::GuitarConvolver()
 
 void GuitarConvolver::init(int samplingFreq)
 {
-    GuitarSimComponent::init(samplingFreq);
+    StompBox::init(samplingFreq);
 
     SetImpulse(impulsePaths[(int)impulseIndex]);
 }
@@ -55,7 +55,7 @@ void GuitarConvolver::IndexImpulses(std::filesystem::path path)
 
 void GuitarConvolver::SetParameterValue(int id, double value)
 {
-    GuitarSimComponent::SetParameterValue(id, value);
+    StompBox::SetParameterValue(id, value);
 
     if (id == CONVOLVER_IMPULSE)
     {

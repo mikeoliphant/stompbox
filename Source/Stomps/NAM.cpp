@@ -5,7 +5,7 @@ NAM::NAM()
     Name = "NAM";
 
     NumParameters = NAM_NUMPARAMETERS;
-    Parameters = new GuitarSimParameter[NumParameters];
+    Parameters = new StompBoxParameter[NumParameters];
 
     Parameters[NAM_MODEL].Name = "Model";
     Parameters[NAM_MODEL].SourceVariable = &modelIndex;
@@ -15,7 +15,7 @@ NAM::NAM()
 
 void NAM::init(int samplingFreq)
 {
-    GuitarSimComponent::init(samplingFreq);
+    StompBox::init(samplingFreq);
 
     SetModel(modelPaths[(int)modelIndex]);
 }
@@ -45,7 +45,7 @@ void NAM::IndexModels(std::filesystem::path path)
 
 void NAM::SetParameterValue(int id, double value)
 {
-    GuitarSimComponent::SetParameterValue(id, value);
+    StompBox::SetParameterValue(id, value);
 
     if (id == NAM_MODEL)
     {

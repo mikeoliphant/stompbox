@@ -15,7 +15,7 @@ AutoWah::AutoWah()
 	fVslider0 = FAUSTFLOAT(0.5);
 
 	NumParameters = AUTOWAH_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 	Parameters[AUTOWAH_LEVEL].Name = "Level";
 	Parameters[AUTOWAH_LEVEL].DefaultValue = fVslider0;
 	Parameters[AUTOWAH_LEVEL].SourceVariable = &fVslider0;
@@ -23,7 +23,7 @@ AutoWah::AutoWah()
 
 void AutoWah::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

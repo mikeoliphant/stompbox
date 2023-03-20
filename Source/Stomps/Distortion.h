@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -10,7 +10,7 @@ enum
 	DISTORTION_NUMPARAMETERS
 };
 
-class BossDS1 : public GuitarSimComponent
+class BossDS1 : public StompBox
 {
 private:
 	int fSamplingFreq;

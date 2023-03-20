@@ -280,7 +280,7 @@ void PluginProcessor::SendClientMessage(const std::string message)
 
 void PluginProcessor::UpdatePlugins()
 {
-    std::list<GuitarSimComponent*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
+    std::list<StompBox*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
 
     fprintf(stderr, "Update Plugins\n");
 
@@ -331,9 +331,9 @@ void PluginProcessor::UpdatePlugins()
     fprintf(stderr, "\n");
 }
 
-GuitarSimComponent* PluginProcessor::CreatePlugin(std::string const& id)
+StompBox* PluginProcessor::CreatePlugin(std::string const& id)
 {
-    GuitarSimComponent* plugin = pluginFactory.CreatePlugin(id);
+    StompBox* plugin = pluginFactory.CreatePlugin(id);
 
     plugin->MidiCallback = midiCallback;
 
@@ -342,7 +342,7 @@ GuitarSimComponent* PluginProcessor::CreatePlugin(std::string const& id)
     return plugin;
 }
 
-void PluginProcessor::InitPlugin(GuitarSimComponent* plugin)
+void PluginProcessor::InitPlugin(StompBox* plugin)
 {
     if (initialized)
     {
@@ -375,7 +375,7 @@ std::string PluginProcessor::DumpConfig()
 
     for (const auto& plugin : pluginFactory.GetAllPlugins())
     {
-        GuitarSimComponent* component = pluginFactory.CreatePlugin(plugin, plugin);
+        StompBox* component = pluginFactory.CreatePlugin(plugin, plugin);
 
         dump.append("PluginConfig ");
         dump.append(component->Name);
@@ -399,7 +399,7 @@ std::string PluginProcessor::DumpConfig()
 
         for (int i = 0; i < component->NumParameters; i++)
         {
-            GuitarSimParameter* param = component->GetParameter(i);
+            StompBoxParameter* param = component->GetParameter(i);
 
             dump.append("ParameterConfig ");
             dump.append(component->Name);
@@ -472,7 +472,7 @@ std::string PluginProcessor::DumpConfig()
     return dump;
 }
 
-void PluginProcessor::AppendPluginParams(std::string& dump, GuitarSimComponent* plugin, bool dirtyOnly)
+void PluginProcessor::AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly)
 {
     if (!dirtyOnly || plugin->EnabledIsDirty)
     {
@@ -485,7 +485,7 @@ void PluginProcessor::AppendPluginParams(std::string& dump, GuitarSimComponent* 
 
     for (int i = 0; i < plugin->NumParameters; i++)
     {
-        GuitarSimParameter* param = plugin->GetParameter(i);
+        StompBoxParameter* param = plugin->GetParameter(i);
 
         if (!param->SuppressSave && (!dirtyOnly || param->IsDirty))
         {
@@ -735,7 +735,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                GuitarSimComponent* component = pluginFactory.FindPlugin(commandWords[1]);
+                StompBox* component = pluginFactory.FindPlugin(commandWords[1]);
 
                 if (component == nullptr)
                 {
@@ -766,7 +766,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                         {
                             for (int i = 0; i < component->NumParameters; i++)
                             {
-                                GuitarSimParameter* param = component->GetParameter(i);
+                                StompBoxParameter* param = component->GetParameter(i);
 
                                 if (param->Name == commandWords[2])
                                 {
@@ -838,7 +838,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                std::list<GuitarSimComponent*>* chain = nullptr;
+                std::list<StompBox*>* chain = nullptr;
 
                 if (commandWords[1] == "Input")
                 {
@@ -869,7 +869,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                     {
                         std::cerr << commandWords[i + 2] << "\n";
 
-                        GuitarSimComponent* newComponent = CreatePlugin(commandWords[i + 2]);
+                        StompBox* newComponent = CreatePlugin(commandWords[i + 2]);
 
                         if (newComponent != nullptr)
                             chain->push_back(newComponent);
@@ -969,7 +969,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                 if (commandWords.size() > 3)
                 {
-                    GuitarSimComponent* plugin = pluginFactory.FindPlugin(commandWords[2]);
+                    StompBox* plugin = pluginFactory.FindPlugin(commandWords[2]);
 
                     ccMap.Plugin = plugin;
 
@@ -985,7 +985,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                         {
                             for (int i = 0; i < plugin->NumParameters; i++)
                             {
-                                GuitarSimParameter* param = plugin->GetParameter(i);
+                                StompBoxParameter* param = plugin->GetParameter(i);
 
                                 if (param->Name == commandWords[3])
                                 {
@@ -1026,7 +1026,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                GuitarSimComponent* component = pluginFactory.FindPlugin(commandWords[1]);
+                StompBox* component = pluginFactory.FindPlugin(commandWords[1]);
 
                 if (component == nullptr)
                 {
@@ -1171,7 +1171,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                         }
                         else
                         {
-                            GuitarSimParameter* parameter = ccMap.Plugin->Parameters + ccMap.Parameter;
+                            StompBoxParameter* parameter = ccMap.Plugin->Parameters + ccMap.Parameter;
 
                             double value = parameter->MinValue + ((parameter->MaxValue - parameter->MinValue) * ((double)midiData2 / 127.0));
 
@@ -1247,7 +1247,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
     return false;
 }
 
-bool PluginProcessor::CheckMidiCommand(GuitarSimComponent* plugin, int parameter)
+bool PluginProcessor::CheckMidiCommand(StompBox* plugin, int parameter)
 {
     for (auto& ccMap : ccMapEntries)
     {

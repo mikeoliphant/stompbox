@@ -18,7 +18,7 @@
 
 #include "WDL/convoengine.h"
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -32,7 +32,7 @@ enum
 };
 
 
-class GuitarConvolver : public GuitarSimComponent
+class GuitarConvolver : public StompBox
 {
 private:
 	WDL_ImpulseBuffer impulseBuffer;

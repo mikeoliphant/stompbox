@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -8,7 +8,7 @@ enum
 	PEAKINGFILTER_NUMPARAMETERS
 };
 
-class PeakingFilter : public GuitarSimComponent
+class PeakingFilter : public StompBox
 {
 private:
 	int fSamplingFreq;

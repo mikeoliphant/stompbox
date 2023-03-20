@@ -15,7 +15,7 @@ Wah::Wah()
 	fVslider0 = FAUSTFLOAT(0.5);
 
 	NumParameters = WAH_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 	Parameters[WAH_LEVEL].Name = "Wah";
 	Parameters[WAH_LEVEL].DefaultValue = fVslider0;
 	Parameters[WAH_LEVEL].SourceVariable = &fVslider0;
@@ -23,7 +23,7 @@ Wah::Wah()
 
 void Wah::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

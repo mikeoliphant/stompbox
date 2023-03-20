@@ -20,7 +20,7 @@ Delay::Delay()
 	hilo = 0.5;
 
 	NumParameters = DELAY_NUMPARAMETERS;
-	Parameters = new GuitarSimParameter[NumParameters];
+	Parameters = new StompBoxParameter[NumParameters];
 
 	Parameters[DELAY_DELAY].Name = "Delay";
 	Parameters[DELAY_DELAY].MinValue = 1;
@@ -57,7 +57,7 @@ Delay::Delay()
 
 void Delay::init(int samplingFreq)
 {
-	GuitarSimComponent::init(samplingFreq);
+	StompBox::init(samplingFreq);
 
 	instanceConstants(samplingFreq);
 

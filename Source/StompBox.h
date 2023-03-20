@@ -25,7 +25,7 @@ enum
 	PARAMETER_TYPE_ENUM
 };
 
-struct GuitarSimParameter
+struct StompBoxParameter
 {
 	std::string Name = "Unnamed";
 	double* SourceVariable;
@@ -44,7 +44,7 @@ struct GuitarSimParameter
 	bool SuppressSave = false;
 };
 
-class GuitarSimComponent
+class StompBox
 {
 protected:
 	double samplingFreq = 0;
@@ -56,7 +56,7 @@ protected:
 
 public:
 	bool Enabled = false;
-	GuitarSimParameter* Parameters = nullptr;
+	StompBoxParameter* Parameters = nullptr;
 	double* OutputValue = nullptr;
 	int NumParameters;
 	std::string Name;
@@ -72,15 +72,15 @@ public:
 	bool ParamIsDirty = false;
 	std::function<void(int, int, int)> MidiCallback = nullptr;
 
-	GuitarSimComponent();
-	virtual ~GuitarSimComponent()
+	StompBox();
+	virtual ~StompBox()
 	{
 		if (Parameters != nullptr)
 		{
 			delete[] Parameters;
 		}
 	}
-	virtual GuitarSimParameter* GetParameter(int id);
+	virtual StompBoxParameter* GetParameter(int id);
 	virtual void SetParameterValue(int id, double value);
 	virtual double GetParameterValue(int index);
 	virtual void HandleCommand(std::vector<std::string> commandWords) { };

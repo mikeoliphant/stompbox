@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TubeStage.h"
-#include "GuitarSimComponent.h"
+#include "StompBox.h"
 
 enum
 {
@@ -28,7 +28,7 @@ enum
 	AMPSTAGE_GAIN_LOG
 };
 
-class AmpStage : public GuitarSimComponent
+class AmpStage : public StompBox
 {
 private:
 	int samplingFreq;
