@@ -1,0 +1,3 @@
+[submodule "Depends/eigen"]
+	path = Depends/eigen
+	url = https://gitlab.com/libeigen/eigen
