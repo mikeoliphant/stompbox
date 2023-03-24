@@ -14,8 +14,9 @@
 #include <fstream>
 #include <limits.h>
 
-#include "NAM/dsp.h"
 #include "StompBox.h"
+
+#include "dsp.h"
 
 enum
 {
@@ -32,6 +33,7 @@ private:
 	std::vector<std::string> modelPaths;
 	std::unique_ptr<DSP> stagedModel;
 	std::unique_ptr<DSP> activeModel;
+	int loadedModelIndex = -1;
 
 public:
 
@@ -40,6 +42,7 @@ public:
 	virtual void init(int samplingFreq);
 	void IndexModels(std::filesystem::path path);
 	void SetParameterValue(int id, double value);
+	void SetModel(int index);
 	void SetModel(const std::string filename);
 	virtual void compute(int count, double* input, double* output);
 };

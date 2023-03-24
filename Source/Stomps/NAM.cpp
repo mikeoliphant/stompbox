@@ -17,7 +17,7 @@ void NAM::init(int samplingFreq)
 {
     StompBox::init(samplingFreq);
 
-    SetModel(modelPaths[(int)modelIndex]);
+    SetModel((int)modelIndex);
 }
 
 void NAM::IndexModels(std::filesystem::path path)
@@ -49,7 +49,17 @@ void NAM::SetParameterValue(int id, double value)
 
     if (id == NAM_MODEL)
     {
-        SetModel(modelPaths[(int)modelIndex]);
+        SetModel((int)modelIndex);
+    }
+}
+
+void NAM::SetModel(int index)
+{
+    if (loadedModelIndex != index)
+    {
+        SetModel(modelPaths[index]);
+
+        loadedModelIndex = (int)index;
     }
 }
 
@@ -72,9 +82,6 @@ void NAM::SetModel(const std::string filename)
     }
 }
 
-double** inptrs = new double*[1];
-double** outptrs = new double* [1];
-
 void NAM::compute(int count, double* input, double* output)
 {
     if (stagedModel != nullptr)
@@ -90,9 +97,6 @@ void NAM::compute(int count, double* input, double* output)
         return;
     }
 
-    inptrs[0] = input;
-    outptrs[0] = output;
-
-    activeModel->process(inptrs, outptrs, 1, count);
+    activeModel->process(&input, &output, 1, count, 1.0, 1.0, {});
     activeModel->finalize_(count);
 }
