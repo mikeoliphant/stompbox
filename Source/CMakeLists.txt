@@ -20,6 +20,7 @@ source_group(NAM ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NAM_SOURCES})
 include_directories(stompbox ../Dependencies/eigen)
 include_directories(stompbox ../Dependencies/NeuralAmpModelerCore/NAM)
 include_directories(stompbox ../Dependencies/json)
+include_directories(stompbox ../Dependencies/denormal)
 include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps Stomps/Clipping Stomps/TubeTables )
 
 target_compile_features(stompbox PUBLIC cxx_std_17)

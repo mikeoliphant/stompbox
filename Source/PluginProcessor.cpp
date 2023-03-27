@@ -1,6 +1,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "architecture.hpp"
+
 #include "PluginProcessor.h"
 
 #if _WIN32
@@ -1361,6 +1363,11 @@ bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
 
 void PluginProcessor::Process(double* input, double* output, int count)
 {
+    // Disable floating point denormals
+    std::fenv_t fe_state;
+    std::feholdexcept(&fe_state);
+    disable_denormals();
+
     memcpy(output, input, count * sizeof(double));
 
     for (const auto& plugin : plugins)
@@ -1394,6 +1401,9 @@ void PluginProcessor::Process(double* input, double* output, int count)
                 }
             }
         }
+
+        // restore previous floating point state
+        std::feupdateenv(&fe_state);
 
         if (plugin == monitorPlugin)
         {
