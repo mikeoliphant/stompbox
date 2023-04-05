@@ -1,6 +1,7 @@
 file(GLOB_RECURSE SOURCES *.cpp *.c *.h)
 
 set(NAM_SOURCES ../Dependencies/NeuralAmpModelerCore/NAM/activations.h
+	../Dependencies/NeuralAmpModelerCore/NAM/activations.cpp
 	../Dependencies/NeuralAmpModelerCore/NAM/version.h
 	../Dependencies/NeuralAmpModelerCore/NAM/lstm.h
 	../Dependencies/NeuralAmpModelerCore/NAM/lstm.cpp
@@ -9,6 +10,8 @@ set(NAM_SOURCES ../Dependencies/NeuralAmpModelerCore/NAM/activations.h
 	../Dependencies/NeuralAmpModelerCore/NAM/get_dsp.cpp
 	../Dependencies/NeuralAmpModelerCore/NAM/util.cpp
 	../Dependencies/NeuralAmpModelerCore/NAM/util.h
+	../Dependencies/NeuralAmpModelerCore/NAM/convnet.h
+	../Dependencies/NeuralAmpModelerCore/NAM/convnet.cpp
 	../Dependencies/NeuralAmpModelerCore/NAM/wavenet.cpp
 	../Dependencies/NeuralAmpModelerCore/NAM/wavenet.h)
 

@@ -1,4 +1,5 @@
 #include "NAM.h"
+#include "activations.h"
 
 NAM::NAM()
 {
@@ -15,6 +16,8 @@ NAM::NAM()
 
 void NAM::init(int samplingFreq)
 {
+    activations::Activation::enable_fast_tanh();
+
     StompBox::init(samplingFreq);
 
     SetModel((int)modelIndex);

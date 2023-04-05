@@ -18,12 +18,18 @@ else()
 endif()
 
 add_subdirectory(Source)
+add_subdirectory(Source/stompbox-jack)
 
 file(MAKE_DIRECTORY build/stompbox)
 
-add_custom_target(copy_binaries ALL
+add_custom_target(copy_library ALL
 	${CMAKE_COMMAND} -E copy "$<TARGET_FILE:stompbox>" stompbox/
 	DEPENDS stompbox
 )
 
+file(MAKE_DIRECTORY build/stompbox-jack)
 
+add_custom_target(copy_binaries ALL
+	${CMAKE_COMMAND} -E copy "$<TARGET_FILE:stompbox-jack>" stompbox-jack/
+	DEPENDS stompbox-jack
+)
