@@ -17,6 +17,8 @@ else()
 	message(FATAL_ERROR "Unrecognized Platform!")
 endif()
 
+link_libraries(stdc++fs pthread)
+
 add_subdirectory(Source)
 add_subdirectory(Source/stompbox-jack)
 
