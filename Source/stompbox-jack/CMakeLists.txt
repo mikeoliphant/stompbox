@@ -1,6 +1,10 @@
 add_executable(stompbox-jack stompbox-jack.cpp)
 
-include_directories(stompbox-jack .. ../Stomps)
+# Should remove all of these - PluginProcessor.h pulls them in
+include_directories(stompbox ../../Dependencies/eigen)
+include_directories(stompbox ../../Dependencies/NeuralAmpModelerCore/NAM)
+include_directories(stompbox ../../Dependencies/json)
+include_directories(stompbox ../../Dependencies/denormal)include_directories(stompbox-jack .. ../Stomps Stomps Stomps/Clipping Stomps/TubeTables)
 
 target_compile_features(stompbox-jack PUBLIC cxx_std_17)
 
