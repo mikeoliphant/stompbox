@@ -1,6 +1,6 @@
 add_executable(stompbox-jack stompbox-jack.cpp)
 
-include_directories(stompbox-jack ..)
+include_directories(stompbox-jack .. ../Stomps)
 
 target_compile_features(stompbox-jack PUBLIC cxx_std_17)
 
