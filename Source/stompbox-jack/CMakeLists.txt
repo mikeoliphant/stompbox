@@ -7,7 +7,7 @@ include_directories(stompbox-jack ../../Dependencies/json)
 include_directories(stompbox-jack ../../Dependencies/denormal)
 include_directories(stompbox-jack .. ../Stomps Stomps Stomps/Clipping Stomps/TubeTables)
 
-target_link_libraries(stompbox-jack PUBLIC /usr/lib/arm-linux-gnueabihf/libjack.so PRIVATE stompbox)
+target_link_libraries(stompbox-jack PUBLIC libjack.so PRIVATE stompbox)
 
 target_compile_features(stompbox-jack PUBLIC cxx_std_17)
 
