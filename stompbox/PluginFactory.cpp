@@ -3,6 +3,23 @@
 
 #include "PluginFactory.h"
 
+#include "NAM.h"
+#include "Tremolo.h"
+#include "Screamer.h"
+#include "Distortion.h"
+#include "Overdrive.h"
+#include "AutoWah.h"
+#include "Wah.h"
+#include "Delay.h"
+#include "Reverb.h"
+#include "Compressor.h"
+#include "Phaser.h"
+#include "Vibrato.h"
+#include "Flanger.h"
+#include "Chorus.h"
+#include "Fuzz.h"
+#include "GraphicEqualizer.h"
+
 StompBox* CreateInputGainPlugin()
 {
 	Gain *input = new Gain(0, -40, 40);

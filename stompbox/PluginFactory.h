@@ -7,25 +7,10 @@
 #include "AmpStage.h"
 #include "GuitarConvolver.h"
 #include "ToneStack.h"
-#include "Tremolo.h"
-#include "Screamer.h"
-#include "Distortion.h"
-#include "Overdrive.h"
-#include "AutoWah.h"
-#include "Wah.h"
-#include "Delay.h"
-#include "Reverb.h"
-#include "Compressor.h"
-#include "Phaser.h"
-#include "Vibrato.h"
-#include "Flanger.h"
-#include "Chorus.h"
-#include "Fuzz.h"
-#include "GraphicEqualizer.h"
 #include "PitchDetector.h"
 #include "AudioFilePlayer.h"
 #include "AudioFileRecorder.h"
-#include "NAM.h"
+
 
 #include <unordered_map>
 
