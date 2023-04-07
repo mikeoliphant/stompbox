@@ -20,7 +20,6 @@
 #include "Vibrato.h"
 #include "Flanger.h"
 #include "Chorus.h"
-#include "FuzzMaster.h"
 #include "Fuzz.h"
 #include "GraphicEqualizer.h"
 #include "PitchDetector.h"

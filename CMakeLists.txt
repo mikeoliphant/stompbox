@@ -17,10 +17,11 @@ else()
 	message(FATAL_ERROR "Unrecognized Platform!")
 endif()
 
+set(STOMPBOX_DEPS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies")
+
 link_libraries(stdc++fs pthread)
 
-add_subdirectory(Source)
-add_subdirectory(Source/stompbox-jack)
+add_subdirectory(stompbox)
 
 file(MAKE_DIRECTORY build/stompbox)
 
@@ -29,9 +30,15 @@ add_custom_target(copy_library ALL
 	DEPENDS stompbox
 )
 
-file(MAKE_DIRECTORY build/stompbox-jack)
+find_library(JACK_LIB libjack)
 
-add_custom_target(copy_binaries ALL
-	${CMAKE_COMMAND} -E copy "$<TARGET_FILE:stompbox-jack>" stompbox-jack/
-	DEPENDS stompbox-jack
-)
+if(JACK_LIB)
+	add_subdirectory(stompbox-jack)
+
+	file(MAKE_DIRECTORY build/stompbox-jack)
+
+	add_custom_target(copy_binaries ALL
+		${CMAKE_COMMAND} -E copy "$<TARGET_FILE:stompbox-jack>" stompbox-jack/
+		DEPENDS stompbox-jack
+	)
+endif()
