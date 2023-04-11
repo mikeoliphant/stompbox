@@ -318,9 +318,9 @@ main(int argc, char* argv[])
         exit(1);
     }
 
-    for (i = 0; i < 2; i++)
+    for (i = 0; i < 1; i++)
         if (jack_connect(client, ports[i], jack_port_name(input_ports[i])))
-            fprintf(stderr, "cannot connect input ports\n");
+            fprintf(stderr, "cannot connect input port [%s]\n", i);
 
     free(ports);
 
@@ -333,7 +333,7 @@ main(int argc, char* argv[])
 
     for (i = 0; i < 2; i++)
         if (jack_connect(client, jack_port_name(output_ports[i]), ports[i]))
-            fprintf(stderr, "cannot connect input ports\n");
+            fprintf(stderr, "cannot connect output port [%d]\n", i);
 
     free(ports);
 
