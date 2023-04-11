@@ -46,7 +46,7 @@ if (MSVC)
 	)
 else()
 	target_compile_options(stompbox PRIVATE
-		-Wall -Wextra -Wpedantic -Wstrict-aliasing -Wunreachable-code -Weffc++
+		-Wall -Wextra -Wpedantic -Wstrict-aliasing -Wunreachable-code -Weffc++ -Wno-unused-parameter
 		"$<$<CONFIG:DEBUG>:-Og;-ggdb;-Werror>"
 		"$<$<CONFIG:RELEASE>:-Ofast>"
 	)
