@@ -39,21 +39,21 @@
 
 struct table1d   // 1-dimensional function table
 {
-    float low;
-    float high;
-    float istep;
+    double low;
+    double high;
+    double istep;
     int32_t size;
-    float data[];
+    double data[];
 };
 
 template <int32_t tab_size>
 struct table1d_imp
 {
-    float low;
-    float high;
-    float istep;
+    double low;
+    double high;
+    double istep;
     int32_t size;
-    float data[tab_size];
+    double data[tab_size];
     operator table1d& () const
     {
         return *(table1d*)this;
