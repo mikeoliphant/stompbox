@@ -48,7 +48,6 @@ else()
 	target_compile_options(stompbox PRIVATE
 		-Wall -Wextra -Wpedantic -Wshadow -Wstrict-aliasing
 		-Wunreachable-code -Weffc++
-		-Wsign-conversion
 		"$<$<CONFIG:DEBUG>:-Og;-ggdb;-Werror>"
 		"$<$<CONFIG:RELEASE>:-Ofast>"
 	)
