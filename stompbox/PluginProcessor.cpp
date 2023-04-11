@@ -687,21 +687,14 @@ std::string PluginProcessor::GetNextPreset(std::string afterPreset)
 std::string PluginProcessor::GetPreviousPreset(std::string beforePreset)
 {
     bool isFirst = true;
-    bool needLast = false;
     std::string last;
 
     for (const auto& entry : std::filesystem::directory_iterator(presetPath))
     {
         if (entry.path().filename().string() == beforePreset)
         {
-            if (isFirst)
-            {
-                needLast = true;
-            }
-            else
-            {
+            if (!isFirst)
                 return last;
-            }
         }
 
         isFirst = false;
@@ -782,7 +775,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                                             bool gotEnum = false;
 
-                                            for (int e = 0; e < enumValues->size(); e++)
+                                            for (int e = 0; e < (int)enumValues->size(); e++)
                                             {
                                                 if ((*enumValues)[e] == commandWords[3])
                                                 {
