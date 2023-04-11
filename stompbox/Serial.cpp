@@ -86,8 +86,6 @@ Serial::Serial(const char* portName)
     //    fprintf(stderr, "ERROR: Unable to open serial port\n");
     //}
 
-    int baud = 9600;
-
     // Standard struct for holding port data/settings
     struct termios toptions;
 
@@ -105,30 +103,7 @@ Serial::Serial(const char* portName)
         // return -1;
     }
 
-    speed_t brate = baud;
-
-    // Simple switch for the baudrate selection
-    switch (baud)
-    {
-    case 4800:
-        brate = B4800;
-        break;
-    case 9600:
-        brate = B9600;
-        break;
-    case 19200:
-        brate = B19200;
-        break;
-    case 38400:
-        brate = B38400;
-        break;
-    case 57600:
-        brate = B57600;
-        break;
-    case 115200:
-        brate = B115200;
-        break;
-    }
+    speed_t brate = B9600;
 
     cfsetispeed(&toptions, brate);
     cfsetospeed(&toptions, brate);
