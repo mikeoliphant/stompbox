@@ -501,7 +501,7 @@ void PluginProcessor::AppendPluginParams(std::string& dump, StompBox* plugin, bo
             {
                 int enumIndex = (int)plugin->GetParameterValue(i);
 
-                if (enumIndex <= param->MaxValue)
+                if ((enumIndex >= 0) && (enumIndex <= param->MaxValue))
                     dump.append((*param->EnumValues)[enumIndex]);
             }
             else if ((param->ParameterType == PARAMETER_TYPE_INT) || (param->ParameterType == PARAMETER_TYPE_BOOL))

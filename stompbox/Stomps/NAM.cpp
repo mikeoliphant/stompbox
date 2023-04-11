@@ -12,6 +12,7 @@ NAM::NAM()
     Parameters[NAM_MODEL].SourceVariable = &modelIndex;
     Parameters[NAM_MODEL].ParameterType = PARAMETER_TYPE_ENUM;
     Parameters[NAM_MODEL].EnumValues = &modelNames;
+    Parameters[NAM_MODEL].DefaultValue = -1;
 }
 
 void NAM::init(int samplingFreq)
@@ -19,8 +20,6 @@ void NAM::init(int samplingFreq)
     activations::Activation::enable_fast_tanh();
 
     StompBox::init(samplingFreq);
-
-    SetModel((int)modelIndex);
 }
 
 void NAM::IndexModels(std::filesystem::path path)

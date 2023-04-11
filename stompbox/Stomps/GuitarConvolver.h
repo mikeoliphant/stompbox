@@ -47,7 +47,7 @@ private:
 	double *newImpulseData[1];
 	int newImpulseSamples;
 	bool haveImpulseData = false;
-	double impulseIndex;
+	double impulseIndex = -1;
 	double wet = 1;
 	double dry = 0;
 	std::vector<std::string> impulseNames;

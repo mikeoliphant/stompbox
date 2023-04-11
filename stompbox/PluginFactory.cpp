@@ -112,16 +112,6 @@ StompBox* CreateGuitarConvolverPlugin()
 
 	convolver->IndexImpulses(cabinetPath);
 
-	for (int i = 0; i < convolver->Parameters[CONVOLVER_IMPULSE].EnumValues->size(); i++)
-	{
-		if ((*convolver->Parameters[CONVOLVER_IMPULSE].EnumValues)[i].rfind("Fender", 0) == 0)
-		{
-			convolver->SetParameterValue(CONVOLVER_IMPULSE, i);
-
-			break;
-		}
-	}
-
 	return convolver;
 }
 

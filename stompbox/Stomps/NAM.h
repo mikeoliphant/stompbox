@@ -28,12 +28,12 @@ enum
 class NAM : public StompBox
 {
 private:
-	double modelIndex;
+	double modelIndex = -1;
+	int loadedModelIndex = -1;
 	std::vector<std::string> modelNames;
 	std::vector<std::string> modelPaths;
 	std::unique_ptr<DSP> stagedModel;
 	std::unique_ptr<DSP> activeModel;
-	int loadedModelIndex = -1;
 
 public:
 

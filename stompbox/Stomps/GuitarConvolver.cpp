@@ -13,6 +13,7 @@ GuitarConvolver::GuitarConvolver()
     Parameters[CONVOLVER_IMPULSE].SourceVariable = &impulseIndex;
     Parameters[CONVOLVER_IMPULSE].ParameterType = PARAMETER_TYPE_ENUM;
     Parameters[CONVOLVER_IMPULSE].EnumValues = &impulseNames;
+    Parameters[CONVOLVER_IMPULSE].DefaultValue = -1;
 
     Parameters[CONVOLVER_DRY].Name = "Dry";
     Parameters[CONVOLVER_DRY].SourceVariable = &dry;
@@ -26,8 +27,6 @@ GuitarConvolver::GuitarConvolver()
 void GuitarConvolver::init(int samplingFreq)
 {
     StompBox::init(samplingFreq);
-
-    SetImpulse(impulsePaths[(int)impulseIndex]);
 }
 
 void GuitarConvolver::IndexImpulses(std::filesystem::path path)
