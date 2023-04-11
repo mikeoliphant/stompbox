@@ -1,7 +1,7 @@
 #include <math.h>
 #include <algorithm>
 
-#include "tube.h"
+#include "Tube.h"
 #include "AmpStage.h"
 
 AmpStage::AmpStage()
