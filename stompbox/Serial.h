@@ -40,7 +40,6 @@ private:
 
     //Connection status
     bool connected;
-    char writeBuf[WriteBufSize];
 
 public:
     //Initialize Serial communication with the given COM port

@@ -238,7 +238,7 @@ bool Serial::WriteData(const char* buffer, unsigned int nbChar)
     if (bytesWritten == -1)
         perror("Write error: ");
 
-    return (bytesWritten == nbChar);
+    return (bytesWritten == (int)nbChar);
 #endif
 }
 

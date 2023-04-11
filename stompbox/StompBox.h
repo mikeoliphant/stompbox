@@ -83,7 +83,7 @@ public:
 	virtual StompBoxParameter* GetParameter(int id);
 	virtual void SetParameterValue(int id, double value);
 	virtual double GetParameterValue(int index);
-	virtual void HandleCommand(std::vector<std::string> commandWords) { };
+	virtual void HandleCommand(std::vector<std::string> /* commandWords */) { };
 	virtual void SetBPM(double bpm);
 	virtual void UpdateBPM();
 	virtual void init(int samplingFreq)
