@@ -32,6 +32,8 @@ void PitchDetector::init(int samplingFreq)
 	pitchMPM->setSampleRate(samplingFreq);
 }
 
+long sampsSoFar = 0;
+
 void PitchDetector::compute(int count, double* input0, double* output0)
 {
 	//for (int i = 0; i < count; i++)
@@ -51,7 +53,9 @@ void PitchDetector::compute(int count, double* input0, double* output0)
 		output0[i] = input0[i];
 
 		if (bufIndex == bufferSize)
+		{
 			bufIndex = 0;
+		}
 	}
 
 	int offset = bufIndex - bufferSize;
@@ -59,7 +63,14 @@ void PitchDetector::compute(int count, double* input0, double* output0)
 	if (offset < 0)
 		offset += bufferSize;
 
-	currentPitch = pitchMPM->getPitch(buffer + offset);
+	sampsSoFar += bufferSize;
+
+	if (sampsSoFar > (samplingFreq / 10))
+	{
+		currentPitch = pitchMPM->getPitch(buffer + offset);
+
+		sampsSoFar = 0;
+	}
 
 
 	//if (bufIndex == bufferSize)
