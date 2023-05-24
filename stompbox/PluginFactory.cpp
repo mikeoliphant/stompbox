@@ -192,7 +192,7 @@ StompBox* CreateWahPlugin()
 
 StompBox* CreateScreamerPlugin()
 {
-	TS9* ts9 = new TS9();
+	screamer::TS9* ts9 = new screamer::TS9();
 
 	ts9->BackgroundColor = "#01b434";
 
@@ -247,7 +247,7 @@ StompBox* CreateFlangerPlugin()
 
 StompBox* CreateChorusPlugin()
 {
-	Chorus *chorus = new Chorus();
+	chorus::Chorus *chorus = new chorus::Chorus();
 
 	chorus->BackgroundColor = "#00c5c5";
 
