@@ -5,7 +5,7 @@ include_directories(stompbox-jack ${STOMPBOX_DEPS_PATH}/eigen)
 include_directories(stompbox-jack ${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM)
 include_directories(stompbox-jack ${STOMPBOX_DEPS_PATH}/json)
 include_directories(stompbox-jack ${STOMPBOX_DEPS_PATH}/denormal)
-include_directories(stompbox-jack .. ../Stomps Stomps Stomps/Clipping Stomps/TubeTables)
+include_directories(stompbox-jack ../stompbox ../stompbox/Stomps)
 
 target_link_libraries(stompbox-jack PUBLIC libjack.so PRIVATE stompbox)
 

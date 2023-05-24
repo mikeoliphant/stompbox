@@ -30,7 +30,7 @@ add_custom_target(copy_library ALL
 	DEPENDS stompbox
 )
 
-find_library(JACK_LIB libjack)
+find_library(JACK_LIB libjack.so)
 
 if(JACK_LIB)
 	add_subdirectory(stompbox-jack)
