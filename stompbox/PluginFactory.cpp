@@ -285,11 +285,39 @@ StompBox* CreateReverbPlugin()
 
 StompBox* CreateEQ7Plugin()
 {
-	GraphicEqualizer *eq7 = new GraphicEqualizer(7, 100, 1);
+	double* frequencies = new double[7];
+	float startFrequency = 100;
+
+	for (int band = 0; band < 7; band++)
+	{
+		frequencies[band] = startFrequency * pow(2, band);
+	}
+
+	GraphicEqualizer *eq7 = new GraphicEqualizer(7, frequencies, 1);
 
 	eq7->BackgroundColor = "#d6d3c1";
 
 	return eq7;
+}
+
+StompBox* CreateBassEQ7Plugin()
+{
+	double* frequencies = new double[7];
+
+	frequencies[0] = 50;
+	frequencies[1] = 120;
+	frequencies[2] = 400;
+	frequencies[3] = 500;
+	frequencies[4] = 800;
+	frequencies[5] = 4500;
+	frequencies[6] = 10000;
+
+
+	GraphicEqualizer* beq7 = new GraphicEqualizer(7, frequencies, 1);
+
+	beq7->BackgroundColor = "#a0a0a0";
+
+	return beq7;
 }
 
 StompBox* CreateTunerPlugin()
@@ -344,8 +372,10 @@ PluginFactory::PluginFactory()
 	AddPlugin("ConvoReverb", &CreateConvolutionReverbPlugin, true);
 	AddPlugin("NAM", &CreateNAMPlugin, true);
 	AddPlugin("EQ-7", &CreateEQ7Plugin, true);
-	AddPlugin("Preamp", &CreatePreampPlugin, true);
-	AddPlugin("Poweramp", &CreatePowerampPlugin, true);
+	AddPlugin("BEQ-7", &CreateBassEQ7Plugin, true);
+	//AddPlugin("Preamp", &CreatePreampPlugin, true);
+	AddPlugin("Preamp", &CreateNAMPlugin, true);
+	//AddPlugin("Poweramp", &CreatePowerampPlugin, true);
 	AddPlugin("Tonestack", &CreateTonestackPlugin, true);
 	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin, true);
 	AddPlugin("Input", &CreateInputGainPlugin, false);

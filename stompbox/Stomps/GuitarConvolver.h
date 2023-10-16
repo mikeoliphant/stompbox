@@ -5,7 +5,6 @@
 #define NOMINMAX  // prevents windows.h from defining min/max macros and messing with juce
 
 #if _WIN32
-#define WIN32_LEAN_AND_MEAN
 #include "windows.h"
 #endif
 

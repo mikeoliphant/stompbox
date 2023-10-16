@@ -11,9 +11,10 @@ private:
 	double volume;
 	int numBands;
 	PeakingFilter** peakingFilters = nullptr;
+	float linearGain;
 
 public:
-	GraphicEqualizer(int numBands, int startingFreqency, double q);
+	GraphicEqualizer(int numBands, double* frequencies, double q);
 	virtual ~GraphicEqualizer();
 	virtual void init(int samplingFreq);
 	virtual void instanceConstants(int samplingFreq);

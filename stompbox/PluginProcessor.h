@@ -46,9 +46,9 @@ protected:
 	GuitarServer guitarServer;
 	SerialDisplayInterface serialDisplayInterface;
 	Gain* inputGain;
-	AmpStage* preamp;
+	StompBox* preamp;
 	Tonestack* tonestack;
-	AmpStage* poweramp;
+	//AmpStage* poweramp;
 	Gain* masterVolume;
 	GuitarConvolver* cabinet;
 	PitchDetector* tuner;
@@ -121,14 +121,14 @@ public:
 	{
 		return masterVolume;
 	}
-	AmpStage* GetPreamp()
+	StompBox* GetPreamp()
 	{
 		return preamp;
 	}
-	AmpStage* GetPoweramp()
-	{
-		return poweramp;
-	}
+	//AmpStage* GetPoweramp()
+	//{
+	//	return poweramp;
+	//}
 	Tonestack* GetTonestack()
 	{
 		return tonestack;

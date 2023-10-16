@@ -1,7 +1,5 @@
 #pragma once
 
-#define NOMINMAX
-
 //#include "WDLConvolver/Oversampler.h"
 
 #ifndef FAUSTFLOAT

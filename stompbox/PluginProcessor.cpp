@@ -70,8 +70,8 @@ PluginProcessor::PluginProcessor(bool dawMode)
     preamp = (AmpStage*)CreatePlugin("Preamp");
     preamp->Enabled = true;
 
-    poweramp = (AmpStage*)CreatePlugin("Poweramp");
-    poweramp->Enabled = true;
+    //poweramp = (AmpStage*)CreatePlugin("Poweramp");
+    //poweramp->Enabled = true;
 
     tonestack = (Tonestack*)CreatePlugin("Tonestack");
     tonestack->Enabled = true;
@@ -308,7 +308,7 @@ void PluginProcessor::UpdatePlugins()
         newPlugins.push_back(plugin);
     }
 
-    newPlugins.push_back(poweramp);
+    //newPlugins.push_back(poweramp);
     newPlugins.push_back(cabinet);
 
     for (const auto& plugin : outputChain)
@@ -598,7 +598,7 @@ std::string PluginProcessor::DumpProgram()
 
     AppendPluginParams(dump, preamp, false);
     AppendPluginParams(dump, tonestack, false);
-    AppendPluginParams(dump, poweramp, false);
+    //AppendPluginParams(dump, poweramp, false);
     AppendPluginParams(dump, cabinet, false);
 
     for (const auto& plugin : inputChain)

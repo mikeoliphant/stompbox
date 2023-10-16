@@ -3,21 +3,7 @@
 
 #include "GraphicEqualizer.h"
 
-static double mydsp_faustpower2_f(double value) {
-	return (value * value);
-
-}
-
-static double mydsp_faustpower3_f(double value) {
-	return ((value * value) * value);
-
-}
-static double mydsp_faustpower4_f(double value) {
-	return (((value * value) * value) * value);
-
-}
-
-GraphicEqualizer::GraphicEqualizer(int numBands, int startingFreqency, double q)
+GraphicEqualizer::GraphicEqualizer(int numBands, double* frequencies, double q)
 {
 	Name = "EQ";
 
@@ -32,7 +18,7 @@ GraphicEqualizer::GraphicEqualizer(int numBands, int startingFreqency, double q)
 
 	for (int band = 0; band < numBands; band++)
 	{
-		double freq = startingFreqency * pow(2, band);
+		double freq = frequencies[band];
 
 		peakingFilters[band] = new PeakingFilter(freq, q);
 
@@ -111,10 +97,12 @@ void GraphicEqualizer::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output
 		peakingFilters[band]->compute(count, input0, input0);
 	}
 
-	float linearGain = pow(10.0, (0.050000000000000003 * volume));
+	float desiredGain = pow(10.0, (0.05 * volume));
 
 	for (int i = 0; i < count; i++)
 	{
+		linearGain = (linearGain * .99f) + (desiredGain * .01f);
+
 		output0[i] = input0[i] * linearGain;
 	}
 }

@@ -30,7 +30,7 @@ double Gain::GetLevel()
 
 void Gain::compute(int count, double* input0, double* output0)
 {
-	float linearGain = pow(10.0, (0.050000000000000003 * double(gain)));
+	float linearGain = pow(10.0, (0.05 * double(gain)));
 
 	double level = 0;
 

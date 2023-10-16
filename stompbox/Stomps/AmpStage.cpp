@@ -8,7 +8,7 @@ AmpStage::AmpStage()
 {
 	Name = "AmpStage";
 
-	RampTime = 0.1;
+	//RampTime = .1;
 
 	Gain = 3;
 
@@ -139,7 +139,7 @@ void AmpStage::UpdateStageType(int stageType, int numTubeStages)
 }
 
 void AmpStage::init(int samplingFreq)
-{	
+{
 	if (needUpdate)
 		UpdateStageType(newStageType, newNumStages);
 
