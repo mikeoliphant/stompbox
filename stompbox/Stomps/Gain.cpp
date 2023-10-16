@@ -28,6 +28,16 @@ double Gain::GetLevel()
 	return currentLevel;
 }
 
+void Gain::init(int samplingFreq)
+{
+	StompBox::init(samplingFreq);
+
+	linearGain = pow(10.0, (0.05 * gain));
+
+	instanceConstants(samplingFreq);
+	instanceClear();
+}
+
 void Gain::compute(int count, double* input0, double* output0)
 {
 	double desiredGain = pow(10.0, (0.05 * gain));

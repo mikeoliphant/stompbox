@@ -20,6 +20,7 @@ private:
 public:
 	Gain(double initialGain, double minGain, double maxGain);
 	~Gain() {}
+	virtual void init(int samplingFreq);
 	double GetLevel();
 
 	virtual void compute(int count, double* input, double* output);

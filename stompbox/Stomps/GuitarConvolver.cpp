@@ -27,6 +27,9 @@ GuitarConvolver::GuitarConvolver()
 void GuitarConvolver::init(int samplingFreq)
 {
     StompBox::init(samplingFreq);
+
+    if (impulseIndex != -1)
+        SetImpulse(impulsePaths[(int)impulseIndex]);
 }
 
 void GuitarConvolver::IndexImpulses(std::filesystem::path path)
@@ -58,7 +61,8 @@ void GuitarConvolver::SetParameterValue(int id, double value)
 
     if (id == CONVOLVER_IMPULSE)
     {
-        SetImpulse(impulsePaths[(int)impulseIndex]);
+        if (!NeedsInit)
+            SetImpulse(impulsePaths[(int)impulseIndex]);
     }
 }
 

@@ -47,7 +47,7 @@ protected:
 	SerialDisplayInterface serialDisplayInterface;
 	Gain* inputGain;
 	StompBox* preamp;
-	Tonestack* tonestack;
+	StompBox* tonestack;
 	//AmpStage* poweramp;
 	Gain* masterVolume;
 	GuitarConvolver* cabinet;
@@ -125,11 +125,7 @@ public:
 	{
 		return preamp;
 	}
-	//AmpStage* GetPoweramp()
-	//{
-	//	return poweramp;
-	//}
-	Tonestack* GetTonestack()
+	StompBox* GetTonestack()
 	{
 		return tonestack;
 	}

@@ -70,9 +70,6 @@ PluginProcessor::PluginProcessor(bool dawMode)
     preamp = (AmpStage*)CreatePlugin("Preamp");
     preamp->Enabled = true;
 
-    //poweramp = (AmpStage*)CreatePlugin("Poweramp");
-    //poweramp->Enabled = true;
-
     tonestack = (Tonestack*)CreatePlugin("Tonestack");
     tonestack->Enabled = true;
 

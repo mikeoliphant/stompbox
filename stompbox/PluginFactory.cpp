@@ -373,10 +373,8 @@ PluginFactory::PluginFactory()
 	AddPlugin("NAM", &CreateNAMPlugin, true);
 	AddPlugin("EQ-7", &CreateEQ7Plugin, true);
 	AddPlugin("BEQ-7", &CreateBassEQ7Plugin, true);
-	//AddPlugin("Preamp", &CreatePreampPlugin, true);
 	AddPlugin("Preamp", &CreateNAMPlugin, true);
-	//AddPlugin("Poweramp", &CreatePowerampPlugin, true);
-	AddPlugin("Tonestack", &CreateTonestackPlugin, true);
+	AddPlugin("Tonestack", &CreateEQ7Plugin, true);
 	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin, true);
 	AddPlugin("Input", &CreateInputGainPlugin, false);
 	AddPlugin("Master", &CreateMasterVolumePlugin, false);
