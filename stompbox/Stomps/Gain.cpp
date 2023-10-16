@@ -30,12 +30,14 @@ double Gain::GetLevel()
 
 void Gain::compute(int count, double* input0, double* output0)
 {
-	float linearGain = pow(10.0, (0.05 * double(gain)));
+	double desiredGain = pow(10.0, (0.05 * gain));
 
 	double level = 0;
 
 	for (int i = 0; i < count; i++)
 	{
+		linearGain = (linearGain * .99f) + (desiredGain * .01f);
+
 		output0[i] = input0[i] * linearGain;
 
 		level = std::max(level, abs(output0[i]));

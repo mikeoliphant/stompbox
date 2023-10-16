@@ -14,6 +14,7 @@ private:
 	double gain;
 	double minGain;
 	double maxGain;
+	double linearGain;
 	double currentLevel = 0;
 
 public:
