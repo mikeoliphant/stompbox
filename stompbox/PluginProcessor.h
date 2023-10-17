@@ -46,11 +46,10 @@ protected:
 	GuitarServer guitarServer;
 	SerialDisplayInterface serialDisplayInterface;
 	Gain* inputGain;
-	StompBox* preamp;
+	StompBox* amp;
 	StompBox* tonestack;
-	//AmpStage* poweramp;
 	Gain* masterVolume;
-	GuitarConvolver* cabinet;
+	StompBox* cabinet;
 	PitchDetector* tuner;
 	AudioFilePlayer* audioFilePlayer = nullptr;
 	AudioFileRecorder* audioFileRecorder = nullptr;
@@ -121,17 +120,22 @@ public:
 	{
 		return masterVolume;
 	}
-	StompBox* GetPreamp()
+	StompBox* GetPluginSlot(const std::string& slotName)
 	{
-		return preamp;
-	}
-	StompBox* GetTonestack()
-	{
-		return tonestack;
-	}
-	GuitarConvolver* GetCabinet()
-	{
-		return cabinet;
+		if (slotName == "Amp")
+		{
+			return amp;
+		}
+		else if (slotName == "Tonestack")
+		{
+			return tonestack;
+		}
+		else if (slotName == "Cabinet")
+		{
+			return cabinet;
+		}
+
+		return nullptr;
 	}
 	std::list<StompBox*> GetInputChain()
 	{
@@ -163,7 +167,7 @@ public:
 	}
 	void SetMessageCallback(std::function<void(const std::string)> callback);
 	void ReportDSPLoad(float currentLoad);
-	std::string HandleCommand(std::string const& line);
+	std::string HandleCommand(const std::string& line);
 	bool HandleMidiCommand(int midiCommand, int midiData1, int midiData2);
 	bool CheckMidiCommand(StompBox* plugin, int parameter);
 	void SyncPreset();

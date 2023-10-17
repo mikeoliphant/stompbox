@@ -67,10 +67,10 @@ PluginProcessor::PluginProcessor(bool dawMode)
     masterVolume = (Gain*)CreatePlugin("Master");
     masterVolume->Enabled = true;
 
-    preamp = (AmpStage*)CreatePlugin("Preamp");
-    preamp->Enabled = true;
+    amp = CreatePlugin("NAM");
+    amp->Enabled = true;
 
-    tonestack = (Tonestack*)CreatePlugin("Tonestack");
+    tonestack = (Tonestack*)CreatePlugin("EQ-7");
     tonestack->Enabled = true;
 
     cabinet = (GuitarConvolver*)CreatePlugin("Cabinet");
@@ -297,7 +297,7 @@ void PluginProcessor::UpdatePlugins()
         newPlugins.push_back(plugin);
     }
 
-    newPlugins.push_back(preamp);
+    newPlugins.push_back(amp);
     newPlugins.push_back(tonestack);
 
     for (const auto& plugin : fxLoop)
@@ -305,7 +305,6 @@ void PluginProcessor::UpdatePlugins()
         newPlugins.push_back(plugin);
     }
 
-    //newPlugins.push_back(poweramp);
     newPlugins.push_back(cabinet);
 
     for (const auto& plugin : outputChain)
@@ -333,6 +332,9 @@ void PluginProcessor::UpdatePlugins()
 StompBox* PluginProcessor::CreatePlugin(std::string const& id)
 {
     StompBox* plugin = pluginFactory.CreatePlugin(id);
+
+    if (plugin == nullptr)
+        return nullptr;
 
     plugin->MidiCallback = midiCallback;
 
@@ -559,9 +561,13 @@ std::string PluginProcessor::DumpProgram()
 {
     std::string dump;
 
-    dump.append("SetPreset ");
-    dump.append(currentPreset);
-    dump.append("\r\n");
+    //dump.append("SetPreset ");
+    //dump.append(currentPreset);
+    //dump.append("\r\n");
+
+    dump.append("SetPluginSlot Amp " + amp->ID + "\r\n");
+    dump.append("SetPluginSlot Tonestack " + tonestack->ID + "\r\n");
+    dump.append("SetPluginSlot Cabinet " + cabinet->ID + "\r\n");
 
     dump.append("SetChain Input ");
 
@@ -593,7 +599,7 @@ std::string PluginProcessor::DumpProgram()
 
     dump.append("\r\n");
 
-    AppendPluginParams(dump, preamp, false);
+    AppendPluginParams(dump, amp, false);
     AppendPluginParams(dump, tonestack, false);
     //AppendPluginParams(dump, poweramp, false);
     AppendPluginParams(dump, cabinet, false);
@@ -722,6 +728,33 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         if ((commandWords[0] == "Ok") || (commandWords[0] == "Error"))
         {
             // Handle responses
+        }
+        else if (commandWords[0] == "SetPluginSlot")
+        {
+            if (commandWords.size() > 2)
+            {
+                if (commandWords[1] == "Amp")
+                {
+                    if (amp->ID != commandWords[2])
+                    {
+                        amp = CreatePlugin(commandWords[2]);
+                    }
+                }
+                else if (commandWords[1] == "Tonestack")
+                {
+                    if (tonestack->ID != commandWords[2])
+                    {
+                        tonestack = CreatePlugin(commandWords[2]);
+                    }
+                }
+                else if (commandWords[1] == "Cabinet")
+                {
+                    if (cabinet->ID != commandWords[2])
+                    {
+                        cabinet = CreatePlugin(commandWords[2]);
+                    }
+                }
+            }
         }
         else if (commandWords[0] == "SetParam")
         {
