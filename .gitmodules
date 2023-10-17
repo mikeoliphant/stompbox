@@ -5,3 +5,6 @@
 	path = Dependencies/NeuralAmpModelerCore
 	url = https://github.com/mikeoliphant/NeuralAmpModelerCore
 	branch = devel
+[submodule "Dependencies/AudioDSPTools"]
+	path = Dependencies/AudioDSPTools
+	url = https://github.com/sdatkinson/AudioDSPTools
