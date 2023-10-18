@@ -801,13 +801,21 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                     {
                                         if (component->GetParameter(i)->ParameterType == PARAMETER_TYPE_ENUM)
                                         {
+                                            std::string paramValue = commandWords[3];
+
+                                            // Concatenate any additional words
+                                            for (int i = 4; i < commandWords.size(); i++)
+                                            {
+                                                paramValue += " " + commandWords[i];
+                                            }
+
                                             std::vector<std::string>* enumValues = param->EnumValues;
 
                                             bool gotEnum = false;
 
                                             for (int e = 0; e < (int)enumValues->size(); e++)
                                             {
-                                                if ((*enumValues)[e] == commandWords[3])
+                                                if ((*enumValues)[e] == paramValue)
                                                 {
                                                     component->SetParameterValue(i, e);
 
