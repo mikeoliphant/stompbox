@@ -67,14 +67,14 @@ PluginProcessor::PluginProcessor(bool dawMode)
     masterVolume = (Gain*)CreatePlugin("Master");
     masterVolume->Enabled = true;
 
-    amp = CreatePlugin("NAM");
-    amp->Enabled = true;
+    //amp = CreatePlugin("NAM");
+    //amp->Enabled = true;
 
-    tonestack = (Tonestack*)CreatePlugin("EQ-7");
-    tonestack->Enabled = true;
+    //tonestack = (Tonestack*)CreatePlugin("EQ-7");
+    //tonestack->Enabled = true;
 
-    cabinet = (GuitarConvolver*)CreatePlugin("Cabinet");
-    cabinet->Enabled = true;
+    //cabinet = (GuitarConvolver*)CreatePlugin("Cabinet");
+    //cabinet->Enabled = true;
 
     tuner = (PitchDetector*)CreatePlugin("Tuner");
 
@@ -297,15 +297,19 @@ void PluginProcessor::UpdatePlugins()
         newPlugins.push_back(plugin);
     }
 
-    newPlugins.push_back(amp);
-    newPlugins.push_back(tonestack);
+    if (amp != nullptr)
+        newPlugins.push_back(amp);
+
+    if (tonestack != nullptr)
+        newPlugins.push_back(tonestack);
 
     for (const auto& plugin : fxLoop)
     {
         newPlugins.push_back(plugin);
     }
-
-    newPlugins.push_back(cabinet);
+    
+    if (cabinet != nullptr)
+        newPlugins.push_back(cabinet);
 
     for (const auto& plugin : outputChain)
     {
@@ -565,9 +569,14 @@ std::string PluginProcessor::DumpProgram()
     //dump.append(currentPreset);
     //dump.append("\r\n");
 
-    dump.append("SetPluginSlot Amp " + amp->ID + "\r\n");
-    dump.append("SetPluginSlot Tonestack " + tonestack->ID + "\r\n");
-    dump.append("SetPluginSlot Cabinet " + cabinet->ID + "\r\n");
+    if (amp != nullptr)
+        dump.append("SetPluginSlot Amp " + amp->ID + "\r\n");
+
+    if (tonestack != nullptr)
+        dump.append("SetPluginSlot Tonestack " + tonestack->ID + "\r\n");
+
+    if (cabinet != nullptr)
+        dump.append("SetPluginSlot Cabinet " + cabinet->ID + "\r\n");
 
     dump.append("SetChain Input ");
 
@@ -735,24 +744,15 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
             {
                 if (commandWords[1] == "Amp")
                 {
-                    if (amp->ID != commandWords[2])
-                    {
-                        amp = CreatePlugin(commandWords[2]);
-                    }
+                    amp = CreatePlugin(commandWords[2]);
                 }
                 else if (commandWords[1] == "Tonestack")
                 {
-                    if (tonestack->ID != commandWords[2])
-                    {
-                        tonestack = CreatePlugin(commandWords[2]);
-                    }
+                    tonestack = CreatePlugin(commandWords[2]);
                 }
                 else if (commandWords[1] == "Cabinet")
                 {
-                    if (cabinet->ID != commandWords[2])
-                    {
-                        cabinet = CreatePlugin(commandWords[2]);
-                    }
+                    cabinet = CreatePlugin(commandWords[2]);
                 }
             }
         }

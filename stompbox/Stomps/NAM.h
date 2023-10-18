@@ -15,7 +15,7 @@
 
 #include "StompBox.h"
 
-#include "dsp.h"
+#include "NAM/dsp.h"
 
 enum
 {
@@ -33,6 +33,8 @@ private:
 	std::vector<std::string> modelPaths;
 	std::unique_ptr<DSP> stagedModel;
 	std::unique_ptr<DSP> activeModel;
+	double prevDCInput = 0;
+	double prevDCOutput = 0;
 
 public:
 

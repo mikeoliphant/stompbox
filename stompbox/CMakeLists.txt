@@ -21,7 +21,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 source_group(NAM ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NAM_SOURCES})
 
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/eigen)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/json)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/denormal)
 include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps Stomps/Clipping Stomps/TubeTables )

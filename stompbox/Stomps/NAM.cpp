@@ -1,5 +1,5 @@
 #include "NAM.h"
-#include "activations.h"
+#include "NAM/activations.h"
 
 NAM::NAM()
 {
@@ -99,6 +99,23 @@ void NAM::compute(int count, double* input, double* output)
         return;
     }
 
-    activeModel->process(&input, &output, 1, count, 1.0, 1.0, {});
+    activeModel->process(input, output, count);
     activeModel->finalize_(count);
+
+    if (activeModel->HasLoudness())
+    {
+        // Normalize model to -18dB
+        double modelLoudnessAdjustmentDB = -18 - activeModel->GetLoudness();
+
+        for (int i = 0; i < count; i++)
+        {
+            float dcInput = output[i] * modelLoudnessAdjustmentDB;
+
+            // dc blocker
+            output[i] = dcInput - prevDCInput + 0.995 * prevDCOutput;
+
+            prevDCInput = dcInput;
+            prevDCOutput = output[i];
+        }
+    }
 }
