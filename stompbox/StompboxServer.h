@@ -27,7 +27,7 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "24639"
 
-class GuitarServer
+class StompboxServer
 {
 protected:
 	std::thread* runThread;
@@ -43,8 +43,8 @@ protected:
 	void HandleConnection();
 
 public:
-	GuitarServer();
-	~GuitarServer() {}
+	StompboxServer();
+	~StompboxServer() {}
 	void Start();
 	void Stop();
 	void SetLineCallback(std::function<std::string(std::string)> callback);

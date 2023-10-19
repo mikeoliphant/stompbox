@@ -107,8 +107,8 @@ PluginProcessor::PluginProcessor(bool dawMode)
 
     //StartServer();
 
-    //guitarClient.SetLineCallback([this](std::string line) { return HandleCommand(line); });
-    //guitarClient.Start();
+    //StompboxClient.SetLineCallback([this](std::string line) { return HandleCommand(line); });
+    //StompboxClient.Start();
 }
 
 PluginProcessor::~PluginProcessor()
@@ -160,8 +160,8 @@ void PluginProcessor::SetBPM(double bpm)
 
 void PluginProcessor::StartServer()
 {
-    guitarServer.SetLineCallback([this](std::string line) { return HandleCommand(line); });
-    guitarServer.Start();
+    stompboxServer.SetLineCallback([this](std::string line) { return HandleCommand(line); });
+    stompboxServer.Start();
 
     serverIsRunning = true;
 }
@@ -274,7 +274,7 @@ void PluginProcessor::SendClientMessage(const std::string message)
         messageCallback(message);
 
     if (HaveClient())
-        guitarServer.SendData(message);
+        stompboxServer.SendData(message);
 }
 
 void PluginProcessor::UpdatePlugins()
@@ -608,10 +608,14 @@ std::string PluginProcessor::DumpProgram()
 
     dump.append("\r\n");
 
-    AppendPluginParams(dump, amp, false);
-    AppendPluginParams(dump, tonestack, false);
-    //AppendPluginParams(dump, poweramp, false);
-    AppendPluginParams(dump, cabinet, false);
+    if (amp != nullptr)
+        AppendPluginParams(dump, amp, false);
+
+    if (tonestack != nullptr)
+        AppendPluginParams(dump, tonestack, false);
+
+    if (cabinet != nullptr)
+        AppendPluginParams(dump, cabinet, false);
 
     for (const auto& plugin : inputChain)
     {
@@ -803,7 +807,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                         {
                                             std::string paramValue = commandWords[3];
 
-                                            // Concatenate any additional words
+                                            // Concatenate any additional words - should probably enclose in quotes or something instead
                                             for (int i = 4; i < commandWords.size(); i++)
                                             {
                                                 paramValue += " " + commandWords[i];
@@ -984,7 +988,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
             std::filesystem::path outPath;
 
             outPath.assign(dataPath);
-            outPath.append(".GuitarSimSettings");
+            outPath.append(".stompbox");
 
             std::ofstream outFile(outPath, std::ios::binary);
 
@@ -1265,7 +1269,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
             {
                 LoadPreset(preset);
 
-                if (guitarServer.HaveClient())
+                if (stompboxServer.HaveClient())
                 {
                     std::string dump = DumpProgram();
 

@@ -4,8 +4,7 @@
 #include <list>
 #include "StompBox.h"
 #include "PluginFactory.h"
-#include "GuitarServer.h"
-#include "GuitarClient.h"
+#include "StompboxServer.h"
 #include "SerialDisplayInterface.h"
 
 enum
@@ -43,7 +42,7 @@ protected:
 	double* tmpBuf2 = nullptr;
 	bool initialized = false;
 	PluginFactory pluginFactory;
-	GuitarServer guitarServer;
+	StompboxServer stompboxServer;
 	SerialDisplayInterface serialDisplayInterface;
 	Gain* inputGain;
 	StompBox* amp;
@@ -106,7 +105,7 @@ public:
 		if (!serverIsRunning)
 			return false;
 
-		return guitarServer.HaveClient();
+		return stompboxServer.HaveClient();
 	}
 	PluginFactory* GetPluginFactory()
 	{

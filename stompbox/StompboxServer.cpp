@@ -1,11 +1,11 @@
 #include <string>
-#include "GuitarServer.h"
+#include "StompboxServer.h"
 
-GuitarServer::GuitarServer()
+StompboxServer::StompboxServer()
 {
 }
 
-void GuitarServer::Start()
+void StompboxServer::Start()
 {
 #if _WIN32
     WSADATA wsaData;
@@ -17,10 +17,10 @@ void GuitarServer::Start()
     }
 #endif
     
-    runThread = new std::thread(&GuitarServer::RunServer, this);
+    runThread = new std::thread(&StompboxServer::RunServer, this);
 }
 
-void GuitarServer::Stop()
+void StompboxServer::Stop()
 {
 	runThread->join();
 	delete runThread;
@@ -40,7 +40,7 @@ void LogError(const char* err)
 #endif
 }
 
-void GuitarServer::RunServer()
+void StompboxServer::RunServer()
 {
     fprintf(stderr, "Open listen socket\n");
 
@@ -60,13 +60,13 @@ void GuitarServer::RunServer()
     } while (true);
 }
 
-void GuitarServer::SetLineCallback(std::function<std::string(std::string)> callback)
+void StompboxServer::SetLineCallback(std::function<std::string(std::string)> callback)
 {
     lineCallback = callback;
 }
 
 
-void GuitarServer::SendData(std::string const& data)
+void StompboxServer::SendData(std::string const& data)
 {
     if (ClientSocket != INVALID_SOCKET)
     {
@@ -81,7 +81,7 @@ void GuitarServer::SendData(std::string const& data)
     }
 }
 
-void GuitarServer::StartListening()
+void StompboxServer::StartListening()
 {
     ListenSocket = INVALID_SOCKET;
 
@@ -132,7 +132,7 @@ void GuitarServer::StartListening()
     }
 }
 
-void GuitarServer::HandleConnection()
+void StompboxServer::HandleConnection()
 {
     ClientSocket = INVALID_SOCKET;
 

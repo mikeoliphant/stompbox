@@ -1,22 +1,22 @@
 #include <string>
-#include "GuitarClient.h"
+#include "StompboxClient.h"
 
-GuitarClient::GuitarClient()
+StompboxClient::StompboxClient()
 {
 }
 
-void GuitarClient::Start()
+void StompboxClient::Start()
 {
-    runThread = new std::thread(&GuitarClient::Connect, this);
+    runThread = new std::thread(&StompboxClient::Connect, this);
 }
 
-void GuitarClient::Stop()
+void StompboxClient::Stop()
 {
     runThread->join();
     delete runThread;
 }
 
-void GuitarClient::Connect()
+void StompboxClient::Connect()
 {
     int iResult;
 
@@ -106,13 +106,13 @@ void GuitarClient::Connect()
 #endif
 }
 
-void GuitarClient::SetLineCallback(std::function<std::string(std::string)> callback)
+void StompboxClient::SetLineCallback(std::function<std::string(std::string)> callback)
 {
     lineCallback = callback;
 }
 
 
-void GuitarClient::SendData(std::string const& data)
+void StompboxClient::SendData(std::string const& data)
 {
     if (ConnectSocket != INVALID_SOCKET)
     {

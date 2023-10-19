@@ -28,7 +28,7 @@
 #define DEFAULT_PORT "24639"
 #define DEFAULT_SERVER "raspberrypi"
 
-class GuitarClient
+class StompboxClient
 {
 protected:
 	std::thread* runThread;
@@ -41,8 +41,8 @@ protected:
 	void Connect();
 
 public:
-	GuitarClient();
-	~GuitarClient() {}
+	StompboxClient();
+	~StompboxClient() {}
 	void Start();
 	void Stop();
 	void SetLineCallback(std::function<std::string(std::string)> callback);
