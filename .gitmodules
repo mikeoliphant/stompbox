@@ -8,3 +8,6 @@
 [submodule "Dependencies/AudioDSPTools"]
 	path = Dependencies/AudioDSPTools
 	url = https://github.com/sdatkinson/AudioDSPTools
+[submodule "Dependencies/dr_libs"]
+	path = Dependencies/dr_libs
+	url = https://github.com/mackron/dr_libs
