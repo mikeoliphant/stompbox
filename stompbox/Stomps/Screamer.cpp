@@ -5,8 +5,6 @@
 
 namespace screamer
 {
-
-
 	static double mydsp_faustpower2_f(double value) {
 		return (value * value);
 

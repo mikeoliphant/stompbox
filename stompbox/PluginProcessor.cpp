@@ -1,9 +1,11 @@
 #include <iostream>
+#include <fstream>
 #include <sstream>
 
 #include "architecture.hpp"
 
 #include "PluginProcessor.h"
+#include "AudioFileRecorder.h"
 
 #if _WIN32
 void GetDataPathFromModule(std::filesystem::path& dataPath)
@@ -61,10 +63,10 @@ PluginProcessor::PluginProcessor(bool dawMode)
 
     pluginFactory.SetDataPath(dataPath);
 
-    inputGain = (Gain *)CreatePlugin("Input");
+    inputGain = CreatePlugin("Input");
     inputGain->Enabled = true;
 
-    masterVolume = (Gain*)CreatePlugin("Master");
+    masterVolume = CreatePlugin("Master");
     masterVolume->Enabled = true;
 
     //amp = CreatePlugin("NAM");
@@ -76,13 +78,13 @@ PluginProcessor::PluginProcessor(bool dawMode)
     //cabinet = (GuitarConvolver*)CreatePlugin("Cabinet");
     //cabinet->Enabled = true;
 
-    tuner = (PitchDetector*)CreatePlugin("Tuner");
+    tuner = CreatePlugin("Tuner");
 
-    audioFilePlayer = (AudioFilePlayer*)CreatePlugin("AudioFilePlayer");
+    audioFilePlayer = CreatePlugin("AudioFilePlayer");
 
     if (!dawMode)
     {
-        audioFileRecorder = (AudioFileRecorder*)CreatePlugin("AudioFileRecorder");
+        audioFileRecorder = CreatePlugin("AudioFileRecorder");
         audioFileRecorder->Enabled = true;
     }
 
@@ -1247,7 +1249,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                 {
                     if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
                     {
-                        std::thread saveThread = std::thread(&AudioFileRecorder::SaveRecording, audioFileRecorder);
+                        std::thread saveThread = std::thread(&AudioFileRecorder::SaveRecording, (AudioFileRecorder *)audioFileRecorder);
                         saveThread.detach();
                     }
                 }

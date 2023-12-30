@@ -3,15 +3,8 @@
 #include <list>
 
 #include "StompBox.h"
-#include "Gain.h"
-#include "AmpStage.h"
-#include "GuitarConvolver.h"
-#include "ToneStack.h"
-#include "PitchDetector.h"
-#include "AudioFilePlayer.h"
-#include "AudioFileRecorder.h"
 
-
+#include <filesystem>
 #include <unordered_map>
 
 typedef StompBox * (*CreatePluginFunction)(void);

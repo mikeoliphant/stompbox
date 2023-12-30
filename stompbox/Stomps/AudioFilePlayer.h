@@ -8,7 +8,7 @@
 #include <limits.h>
 
 #include "StompBox.h"
-#include "WaveReader.h"
+#include "AudioFile.h"
 
 enum
 {
@@ -31,7 +31,7 @@ private:
 	int audioBufferSize = 0;
 	bool needUpdate = false;
 	WaveReader* waveReader = nullptr;
-	char* waveBuffer = nullptr;
+	float* waveBuffer = nullptr;
 	double* recordBuffer = nullptr;
 	bool recordArmed = false;
 	bool recording = false;

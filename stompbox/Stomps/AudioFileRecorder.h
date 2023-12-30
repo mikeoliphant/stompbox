@@ -8,7 +8,7 @@
 #include <limits.h>
 
 #include "StompBox.h"
-#include "WaveReader.h"
+#include "AudioFile.h"
 
 enum
 {

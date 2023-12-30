@@ -15,7 +15,10 @@ set(NAM_SOURCES "${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/activations.h"
 	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/wavenet.cpp"
 	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/wavenet.h")
 
-add_library(stompbox STATIC ${SOURCES} ${NAM_SOURCES})
+set(OTHER_SOURCES "${STOMPBOX_DEPS_PATH}/r8brain-free-src/r8bbase.cpp"
+	"${STOMPBOX_DEPS_PATH}/r8brain-free-src/pffft.cpp")
+
+add_library(stompbox STATIC ${SOURCES} ${NAM_SOURCES} ${OTHER_SOURCES})
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 source_group(NAM ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NAM_SOURCES})
@@ -24,6 +27,8 @@ include_directories(stompbox ${STOMPBOX_DEPS_PATH}/eigen)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/json)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/denormal)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/dr_libs)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
 include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps Stomps/Clipping Stomps/TubeTables )
 
 target_compile_features(stompbox PUBLIC cxx_std_17)

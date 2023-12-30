@@ -3,6 +3,13 @@
 
 #include "PluginFactory.h"
 
+#include "Gain.h"
+#include "AmpStage.h"
+#include "GuitarConvolver.h"
+#include "ToneStack.h"
+#include "PitchDetector.h"
+#include "AudioFilePlayer.h"
+#include "AudioFileRecorder.h"
 #include "NAM.h"
 #include "Tremolo.h"
 #include "Screamer.h"

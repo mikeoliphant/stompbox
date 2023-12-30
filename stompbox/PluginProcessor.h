@@ -44,14 +44,14 @@ protected:
 	PluginFactory pluginFactory;
 	StompboxServer stompboxServer;
 	SerialDisplayInterface serialDisplayInterface;
-	Gain* inputGain;
+	StompBox* inputGain;
 	StompBox* amp;
 	StompBox* tonestack;
-	Gain* masterVolume;
+	StompBox* masterVolume;
 	StompBox* cabinet;
-	PitchDetector* tuner;
-	AudioFilePlayer* audioFilePlayer = nullptr;
-	AudioFileRecorder* audioFileRecorder = nullptr;
+	StompBox* tuner;
+	StompBox* audioFilePlayer = nullptr;
+	StompBox* audioFileRecorder = nullptr;
 	std::list<StompBox*> inputChain;
 	std::list<StompBox*> fxLoop;
 	std::list<StompBox*> outputChain;
@@ -111,11 +111,11 @@ public:
 	{
 		return &pluginFactory;
 	}
-	Gain* GetInputGain()
+	StompBox* GetInputGain()
 	{
 		return inputGain;
 	}
-	Gain* GetMasterVolume()
+	StompBox* GetMasterVolume()
 	{
 		return masterVolume;
 	}

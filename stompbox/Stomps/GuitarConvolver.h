@@ -18,6 +18,7 @@
 #include "WDL/convoengine.h"
 
 #include "StompBox.h"
+#include "AudioFile.h"
 
 enum
 {
@@ -43,9 +44,10 @@ private:
 	//WDL_ConvolutionEngine_Div convolutionEngine;
 //#endif
 
-	double *newImpulseData[1];
-	int newImpulseSamples;
+	double* impulseData = nullptr;
+	bool haveNewImpulseData = false;
 	bool haveImpulseData = false;
+	uint32_t impulseSamples;
 	double impulseIndex = -1;
 	double wet = 1;
 	double dry = 0;
@@ -60,6 +62,6 @@ public:
 	void IndexImpulses(std::filesystem::path path);
 	void SetParameterValue(int id, double value);
 	void SetImpulse(const std::string filename);
-	void SetImpulse(double** impulseData, int numSamples);
+	void SetImpulse();
 	virtual void compute(int count, double* input, double* output);
 };

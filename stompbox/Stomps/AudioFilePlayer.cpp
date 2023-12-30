@@ -109,7 +109,7 @@ void AudioFilePlayer::SetFile(const std::string filename)
 		recordBuffer = nullptr;
 	}
 
-	waveReader = new WaveReader(filename);
+	waveReader = new WaveReader(filename, samplingFreq);
 
 	if (waveReader->NumSamples == 0)
 	{
@@ -146,8 +146,6 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 	{
 		double linearLevel = (pow(10, level) - 1) / 9;
 
-		double mult = (SHRT_MAX * waveReader->NumChannels) / linearLevel;
-
 		unsigned int leftToRead = count;
 		unsigned int outputPos = 0;
 
@@ -155,8 +153,6 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 
 		while (leftToRead > 0)
 		{			
-			unsigned int readBufPos = readPosition * waveReader->NumChannels * 2;
-
 			int toRead = std::min(leftToRead, waveReader->NumSamples - readPosition);
 
 			if (recording)
@@ -166,9 +162,7 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 				recordInput += toRead;
 			}
 
-			char* readPtr = waveBuffer + readBufPos;
-			int16_t intVal;
-			char* intPtr = (char*)&intVal;
+			float* readPtr = waveBuffer + (readPosition * waveReader->NumChannels);
 
 			for (int i = 0; i < toRead; i++)
 			{
@@ -176,15 +170,12 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 
 				for (int channel = 0; channel < waveReader->NumChannels; channel++)
 				{
-					intPtr[0] = readPtr[0];
-					intPtr[1] = readPtr[1];
+					outputVal += *readPtr;
 
-					outputVal += intVal;
-
-					readPtr += 2;
+					readPtr++;
 				}
 
-				output[outputPos] = input[outputPos] + (outputVal / mult);
+				output[outputPos] = input[outputPos] + (outputVal * linearLevel);
 
 				if (haveRecording)
 				{
