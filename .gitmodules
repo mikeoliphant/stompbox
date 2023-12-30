@@ -11,3 +11,6 @@
 [submodule "Dependencies/dr_libs"]
 	path = Dependencies/dr_libs
 	url = https://github.com/mackron/dr_libs
+[submodule "Dependencies/r8brain-free-src"]
+	path = Dependencies/r8brain-free-src
+	url = https://github.com/avaneev/r8brain-free-src
