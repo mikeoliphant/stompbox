@@ -34,6 +34,9 @@ include_directories(stompbox ${STOMPBOX_DEPS_PATH}/dr_libs)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
 include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps Stomps/Clipping Stomps/TubeTables )
 
+add_definitions(-DWDL_FFT_REALSIZE=8)
+add_definitions(-DWDL_CONVO_THREAD)
+
 target_compile_features(stompbox PUBLIC cxx_std_17)
 
 set_target_properties(stompbox
