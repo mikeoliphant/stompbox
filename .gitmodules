@@ -14,3 +14,6 @@
 [submodule "Dependencies/r8brain-free-src"]
 	path = Dependencies/r8brain-free-src
 	url = https://github.com/avaneev/r8brain-free-src
+[submodule "Dependencies/WDL"]
+	path = Dependencies/WDL
+	url = https://github.com/mikeoliphant/WDL
