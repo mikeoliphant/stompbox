@@ -13,7 +13,9 @@
 #include <fstream>
 #include <limits.h>
 
-#include "WDL/convoengine.h"
+#define WDL_FFT_REALSIZE 8
+#define WDL_CONVO_THREAD
+#include "convoengine.h"
 
 #include "StompBox.h"
 

@@ -16,7 +16,9 @@ set(NAM_SOURCES "${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/activations.h"
 	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/wavenet.h")
 
 set(OTHER_SOURCES "${STOMPBOX_DEPS_PATH}/r8brain-free-src/r8bbase.cpp"
-	"${STOMPBOX_DEPS_PATH}/r8brain-free-src/pffft.cpp")
+	"${STOMPBOX_DEPS_PATH}/r8brain-free-src/pffft.cpp"
+	"${STOMPBOX_DEPS_PATH}/WDL/WDL/convoengine.cpp"
+	"${STOMPBOX_DEPS_PATH}/WDL/WDL/fft.c")
 
 add_library(stompbox STATIC ${SOURCES} ${NAM_SOURCES} ${OTHER_SOURCES})
 
@@ -27,6 +29,7 @@ include_directories(stompbox ${STOMPBOX_DEPS_PATH}/eigen)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/json)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/denormal)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/WDL/WDL)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/dr_libs)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
 include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps Stomps/Clipping Stomps/TubeTables )
