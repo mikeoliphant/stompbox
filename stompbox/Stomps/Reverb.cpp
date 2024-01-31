@@ -21,6 +21,7 @@ FreeVerb::FreeVerb()
 
 	Parameters[REVERB_ROOMSIZE].Name = "Size";
 	Parameters[REVERB_ROOMSIZE].SourceVariable = &fVslider1;
+	Parameters[REVERB_ROOMSIZE].DisplayFormat = "{0:0.00}";
 
 	Parameters[REVERB_DECAY].Name = "Decay";
 	Parameters[REVERB_DECAY].SourceVariable = &fVslider2;
@@ -33,7 +34,8 @@ FreeVerb::FreeVerb()
 	Parameters[REVERB_WETDRY].SourceVariable = &fVslider0;
 	Parameters[REVERB_WETDRY].DefaultValue = fVslider0;
 	Parameters[REVERB_WETDRY].MaxValue = 100;
-	Parameters[REVERB_WETDRY].Step = 0.1;
+	Parameters[REVERB_WETDRY].Step = 1;
+	Parameters[REVERB_WETDRY].DisplayFormat = "{0:0}";
 }
 
 void FreeVerb::init(int samplingFreq)

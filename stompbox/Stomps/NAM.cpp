@@ -102,20 +102,22 @@ void NAM::compute(int count, double* input, double* output)
     activeModel->process(input, output, count);
     activeModel->finalize_(count);
 
+    double modelLoudnessAdjustmentGain = 1.0;
+
     if (activeModel->HasLoudness())
     {
         // Normalize model to -18dB
-        double modelLoudnessAdjustmentDB = -18 - activeModel->GetLoudness();
+        modelLoudnessAdjustmentGain = pow(10.0, (-18 - activeModel->GetLoudness()) / 20.0);
+    }
 
-        for (int i = 0; i < count; i++)
-        {
-            float dcInput = output[i] * modelLoudnessAdjustmentDB;
+    for (int i = 0; i < count; i++)
+    {
+        float dcInput = output[i] * modelLoudnessAdjustmentGain;
 
-            // dc blocker
-            output[i] = dcInput - prevDCInput + 0.995 * prevDCOutput;
+        // dc blocker
+        output[i] = dcInput - prevDCInput + 0.995 * prevDCOutput;
 
-            prevDCInput = dcInput;
-            prevDCOutput = output[i];
-        }
+        prevDCInput = dcInput;
+        prevDCOutput = output[i];
     }
 }

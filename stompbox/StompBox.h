@@ -53,7 +53,7 @@ protected:
 	//OverSampler<double>* overSampler = nullptr;
 
 public:
-	bool Enabled = false;
+	bool Enabled = true;
 	StompBoxParameter* Parameters = nullptr;
 	double* OutputValue = nullptr;
 	int NumParameters;
