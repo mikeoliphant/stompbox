@@ -57,7 +57,7 @@ if (MSVC)
 	)
 else()
 	target_compile_options(stompbox PRIVATE
-		-Wall
+		-Wall -Wno-narrowing
 		"$<$<CONFIG:DEBUG>:-Og;-ggdb;-Werror>"
 		"$<$<CONFIG:RELEASE>:-Ofast>"
 	)
