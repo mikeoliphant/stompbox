@@ -36,6 +36,7 @@ include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps Stomps/Clipping 
 
 add_definitions(-DWDL_FFT_REALSIZE=8)
 add_definitions(-DWDL_CONVO_THREAD)
+add_definitions(-DWDL_ALLOW_UNSIGNED_DEFAULT_CHAR)
 
 target_compile_features(stompbox PUBLIC cxx_std_17)
 
@@ -57,7 +58,7 @@ if (MSVC)
 	)
 else()
 	target_compile_options(stompbox PRIVATE
-		-Wall -DWDL_ALLOW_UNSIGNED_DEFAULT_CHAR
+		-Wall
 		"$<$<CONFIG:DEBUG>:-Og;-ggdb;-Werror>"
 		"$<$<CONFIG:RELEASE>:-Ofast>"
 	)
