@@ -57,7 +57,7 @@ if (MSVC)
 	)
 else()
 	target_compile_options(stompbox PRIVATE
-		-Wall -fsigned-char
+		-Wall -DWDL_ALLOW_UNSIGNED_DEFAULT_CHAR
 		"$<$<CONFIG:DEBUG>:-Og;-ggdb;-Werror>"
 		"$<$<CONFIG:RELEASE>:-Ofast>"
 	)
