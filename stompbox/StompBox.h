@@ -26,7 +26,7 @@ enum
 struct StompBoxParameter
 {
 	std::string Name = "Unnamed";
-	double* SourceVariable;
+	double* SourceVariable = nullptr;
 	double MinValue = 0;
 	double MaxValue = 1;
 	double DefaultValue = 0.5;
