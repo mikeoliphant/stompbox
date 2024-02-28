@@ -567,9 +567,9 @@ std::string PluginProcessor::DumpProgram()
 {
     std::string dump;
 
-    //dump.append("SetPreset ");
-    //dump.append(currentPreset);
-    //dump.append("\r\n");
+    dump.append("SetPreset ");
+    dump.append(currentPreset);
+    dump.append("\r\n");
 
     if (amp != nullptr)
         dump.append("SetPluginSlot Amp " + amp->ID + "\r\n");
