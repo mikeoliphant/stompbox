@@ -980,7 +980,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                LoadPreset(commandWords[1]);
+                LoadPreset(commandWords[1], false);
             }
         }
         else if (commandWords[0] == "SaveSettings")
@@ -1240,7 +1240,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                 }
                 else if ((stompCC[2] != -1) && (midiData1 == stompCC[2]))
                 {
-                    LoadPreset(previewPreset);
+                    LoadPreset(previewPreset, true);
                 }
                 break;
 
@@ -1269,14 +1269,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
 
             if (atoi(preset.substr(0, 2).c_str()) == (midiData1 + 1))
             {
-                LoadPreset(preset);
-
-                if (stompboxServer.HaveClient())
-                {
-                    std::string dump = DumpProgram();
-
-                    SendClientMessage(dump);
-                }
+                LoadPreset(preset, true);
 
                 break;
             }
@@ -1337,7 +1330,7 @@ void PluginProcessor::SyncPreset()
     }
 }
 
-void PluginProcessor::LoadPreset(std::string preset)
+void PluginProcessor::LoadPreset(std::string preset, bool updateClient)
 {
     fprintf(stderr, "Loading preset %s\n", preset.c_str());
 
@@ -1359,6 +1352,13 @@ void PluginProcessor::LoadPreset(std::string preset)
         }
 
         currentMidiMode = MIDI_MODE_STOMP;
+    }
+
+    if (updateClient && stompboxServer.HaveClient())
+    {
+        std::string dump = DumpProgram();
+
+        SendClientMessage(dump);
     }
 }
 

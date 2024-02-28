@@ -170,7 +170,7 @@ public:
 	bool HandleMidiCommand(int midiCommand, int midiData1, int midiData2);
 	bool CheckMidiCommand(StompBox* plugin, int parameter);
 	void SyncPreset();
-	void LoadPreset(std::string preset);
+	void LoadPreset(std::string preset, bool updateClient);
 	void LoadSettings();
 	bool LoadCommandsFromFile(std::filesystem::path filePath);
 	void AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
