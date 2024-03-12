@@ -9,8 +9,16 @@ PitchDetector::PitchDetector(int bufferSize)
 
 	Name = "PitchDetector";
 
-	NumParameters = 0;
-	Parameters = new StompBoxParameter[0];
+	NumParameters = PITCHDETECTOR_NUMPARAMETERS;
+	Parameters = new StompBoxParameter[NumParameters];
+
+	Parameters[PITCHDETECTOR_MUTE].Name = "Mute";
+	Parameters[PITCHDETECTOR_MUTE].SourceVariable = &muteOutput;
+	Parameters[PITCHDETECTOR_MUTE].IsAdvanced = true;
+	Parameters[PITCHDETECTOR_MUTE].ParameterType = PARAMETER_TYPE_BOOL;
+	Parameters[PITCHDETECTOR_MUTE].MinValue = 0;
+	Parameters[PITCHDETECTOR_MUTE].MaxValue = 1;
+	Parameters[PITCHDETECTOR_MUTE].DefaultValue = 1;
 
 	pitchMPM = new PitchMPM(bufferSize);
 	buffer = new float[bufferSizeTimesTwo];
@@ -36,13 +44,6 @@ long sampsSoFar = 0;
 
 void PitchDetector::compute(int count, double* input0, double* output0)
 {
-	//for (int i = 0; i < count; i++)
-	//{
-	//	output0[i] = input0[i];
-	//}
-
-	//return;
-
 	for (int i = 0; i < count; i++)
 	{
 		float val = (float)input0[i];
@@ -50,7 +51,7 @@ void PitchDetector::compute(int count, double* input0, double* output0)
 		buffer[(bufIndex + bufferSize) % bufferSizeTimesTwo] = val;
 		buffer[bufIndex++] = val;
 
-		output0[i] = input0[i];
+		output0[i] = (muteOutput == 1) ? 0 : input0[i];
 
 		if (bufIndex == bufferSize)
 		{

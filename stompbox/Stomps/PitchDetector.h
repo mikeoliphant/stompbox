@@ -3,6 +3,12 @@
 #include "StompBox.h"
 #include "PitchMPM.h"
 
+enum
+{
+	PITCHDETECTOR_MUTE,
+	PITCHDETECTOR_NUMPARAMETERS
+};
+
 class PitchDetector : public StompBox
 {
 private:
@@ -16,6 +22,7 @@ private:
 	int numFailures = 0;
 	bool noteOn = false;
 	int lastNote = 0;
+	double muteOutput = 1;
 public:
 	PitchDetector(int bufferSize);
 	~PitchDetector()
