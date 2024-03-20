@@ -11,8 +11,6 @@
 #include "AudioFileRecorder.h"
 #include "NAM.h"
 #include "Tremolo.h"
-#include "Screamer.h"
-#include "Overdrive.h"
 #include "AutoWah.h"
 #include "Wah.h"
 #include "Delay.h"
@@ -137,24 +135,6 @@ StompBox* CreateWahPlugin()
 	wah->ForegroundColor = "#ffffff";
 
 	return wah;
-}
-
-StompBox* CreateScreamerPlugin()
-{
-	screamer::TS9* ts9 = new screamer::TS9();
-
-	ts9->BackgroundColor = "#01b434";
-
-	return ts9;
-}
-
-StompBox* CreateOverdrivePlugin()
-{
-	BossSD1* sd1 = new BossSD1();
-
-	sd1->BackgroundColor = "#ece400";
-
-	return sd1;
 }
 
 StompBox* CreatePhaserPlugin()
@@ -299,8 +279,6 @@ PluginFactory::PluginFactory()
 	AddPlugin("Fuzz", &CreateFuzzPlugin, true);
 	AddPlugin("AutoWah", &CreateAutoWahPlugin, true);
 	AddPlugin("Wah", &CreateWahPlugin, true);
-	AddPlugin("Screamer", &CreateScreamerPlugin, true);
-	AddPlugin("Overdrive", &CreateOverdrivePlugin, true);
 	AddPlugin("Phaser", &CreatePhaserPlugin, true);
 	AddPlugin("Vibrato", &CreateVibratoPlugin, true);
 	AddPlugin("Flanger", &CreateFlangerPlugin, true);
