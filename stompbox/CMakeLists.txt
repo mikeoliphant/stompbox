@@ -32,7 +32,7 @@ include_directories(stompbox ${STOMPBOX_DEPS_PATH}/denormal)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/WDL/WDL)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/dr_libs)
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
-include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps Stomps/Clipping Stomps/TubeTables )
+include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps)
 
 add_definitions(-DWDL_FFT_REALSIZE=8)
 add_definitions(-DWDL_CONVO_THREAD)

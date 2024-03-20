@@ -4,7 +4,6 @@
 #include "PluginFactory.h"
 
 #include "Gain.h"
-#include "AmpStage.h"
 #include "GuitarConvolver.h"
 #include "ToneStack.h"
 #include "PitchDetector.h"
@@ -13,7 +12,6 @@
 #include "NAM.h"
 #include "Tremolo.h"
 #include "Screamer.h"
-#include "Distortion.h"
 #include "Overdrive.h"
 #include "AutoWah.h"
 #include "Wah.h"
@@ -46,62 +44,6 @@ StompBox* CreateMasterVolumePlugin()
 	return master;
 }
 
-std::vector<std::string> preampStages
-{
-	"12AX7",
-	"JJECC83S"
-};
-
-std::vector<int> preampStageMap
-{
-	AMPSTAGE_12AX7,
-	AMPSTAGE_JJECC83S
-};
-
-StompBox* CreatePreampPlugin()
-{
-	AmpStage* preamp = new AmpStage();
-
-	preamp->Parameters[AMPSTAGE_STAGETYPE].EnumValues = &preampStages;
-	preamp->Parameters[AMPSTAGE_STAGETYPE].MaxValue = preampStages.size();
-	preamp->stageMap = &preampStageMap;
-
-	preamp->Parameters[AMPSTAGE_NUMSTAGES].MaxValue = 3;
-	preamp->Parameters[AMPSTAGE_NUMSTAGES].DefaultValue = 1;
-	preamp->SetParameterValue(AMPSTAGE_NUMSTAGES, 1);
-
-	return preamp;
-}
-
-std::vector<std::string> powerampStages
-{
-	"6V6",
-	"EL34",
-	"EL84",
-	"6L6CG"
-};
-
-std::vector<int> powerampStageMap
-{
-	AMPSTAGE_6V6,
-	AMPSTAGE_EL34,
-	AMPSTAGE_EL84,
-	AMPSTAGE_6L6CG,
-};
-
-StompBox* CreatePowerampPlugin()
-{
-	AmpStage* poweramp = new AmpStage();
-	poweramp->Parameters[AMPSTAGE_GAIN].Name = "Volume";
-	poweramp->Parameters[AMPSTAGE_STAGETYPE].EnumValues = &powerampStages;
-	poweramp->Parameters[AMPSTAGE_STAGETYPE].MaxValue = powerampStages.size();
-	poweramp->stageMap = &powerampStageMap;
-	poweramp->gainType = AMPSTAGE_GAIN_LOG;
-
-	poweramp->SetParameterValue(AMPSTAGE_NUMSTAGES, 1);
-
-	return poweramp;
-}
 
 StompBox* CreateTonestackPlugin()
 {
@@ -204,15 +146,6 @@ StompBox* CreateScreamerPlugin()
 	ts9->BackgroundColor = "#01b434";
 
 	return ts9;
-}
-
-StompBox* CreateDistortionPlugin()
-{
-	BossDS1 *ds1 = new BossDS1();
-
-	ds1->BackgroundColor = "#d15f00";
-
-	return ds1;
 }
 
 StompBox* CreateOverdrivePlugin()
@@ -367,7 +300,6 @@ PluginFactory::PluginFactory()
 	AddPlugin("AutoWah", &CreateAutoWahPlugin, true);
 	AddPlugin("Wah", &CreateWahPlugin, true);
 	AddPlugin("Screamer", &CreateScreamerPlugin, true);
-	AddPlugin("Distortion", &CreateDistortionPlugin, true);
 	AddPlugin("Overdrive", &CreateOverdrivePlugin, true);
 	AddPlugin("Phaser", &CreatePhaserPlugin, true);
 	AddPlugin("Vibrato", &CreateVibratoPlugin, true);
