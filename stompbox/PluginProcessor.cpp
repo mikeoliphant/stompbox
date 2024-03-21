@@ -79,6 +79,7 @@ PluginProcessor::PluginProcessor(bool dawMode)
     //cabinet->Enabled = true;
 
     tuner = CreatePlugin("Tuner");
+    tuner->Enabled = false;
 
     audioFilePlayer = CreatePlugin("AudioFilePlayer");
 
@@ -760,6 +761,8 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                 {
                     cabinet = CreatePlugin(commandWords[2]);
                 }
+
+                UpdatePlugins();
             }
         }
         else if (commandWords[0] == "SetParam")
