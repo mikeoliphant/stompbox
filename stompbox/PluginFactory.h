@@ -32,14 +32,26 @@ public:
 		cabinetPath.assign(path);
 		cabinetPath.append("Cabinets");
 
+		if (!std::filesystem::exists(cabinetPath))
+			std::filesystem::create_directory(cabinetPath);
+
 		reverbPath.assign(path);
 		reverbPath.append("Reverb");
+
+		if (!std::filesystem::exists(reverbPath))
+			std::filesystem::create_directory(reverbPath);
 
 		musicPath.assign(path);
 		musicPath.append("Music");
 
+		if (!std::filesystem::exists(musicPath))
+			std::filesystem::create_directory(musicPath);
+
 		namModelPath.assign(path);
 		namModelPath.append("NAM");
+
+		if (!std::filesystem::exists(namModelPath))
+			std::filesystem::create_directory(namModelPath);
 	}
 	std::list<std::string> GetUserPlugins();
 	std::list<std::string> GetAllPlugins();
