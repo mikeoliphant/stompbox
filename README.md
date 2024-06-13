@@ -44,3 +44,9 @@ The following folders are epected to exist in the same folder as the stompbox-ja
 **Reverb** - folder containing .wav format convolution reverb files
 
 **Music** - folder containing .wav audio files for the built-in audio looper
+
+### How to Configure Presets?
+
+In order to configure presets, you need to use the remote user-interface in the [StompboxUI](https://github.com/mikeoliphant/StompboxUI) repository.
+
+If you have a Windows machine, you can grab the StompboxRemote application from the [the latest release](https://github.com/mikeoliphant/StompboxUI/releases/latest).
