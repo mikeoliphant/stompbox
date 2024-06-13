@@ -31,10 +31,16 @@ After building, the binary will be in build/stompbox-jack.
 
 You must have [jack](https://github.com/jackaudio) installed and configured to run on your audio device. If jack is running (as the same user you run stompbox with), the running instance will be used, otherwise jack will be started using your default configuration.
 
+stompbox-jack takes a single optional command-line argument - the name of the preset to start with.
+
 The following folders are epected to exist in the same folder as the stompbox-jack executable:
 
 **Presets** - folder to store configuration presets
+
 **NAM** - folder containing .nam amp models
+
 **Cabinets** - folder containing .wav format cabinet impulse responses
+
 **Reverb** - folder containing .wav format convolution reverb files
+
 **Music** - folder containing .wav audio files for the built-in audio looper
