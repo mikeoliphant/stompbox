@@ -41,4 +41,6 @@ if(JACK_LIB)
 		${CMAKE_COMMAND} -E copy "$<TARGET_FILE:stompbox-jack>" stompbox-jack/
 		DEPENDS stompbox-jack
 	)
+else()
+        message("Jack libraries not found - stombox-jack will not be built")
 endif()
