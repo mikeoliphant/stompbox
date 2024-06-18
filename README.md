@@ -22,7 +22,7 @@ Then compile the plugin using:
 
 ```bash
 cmake .. -DCMAKE_BUILD_TYPE="Release"
-make -j4
+make
 ```
 
 ### Running in Linux
