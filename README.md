@@ -18,6 +18,12 @@ git clone --recurse-submodules -j4 https://github.com/mikeoliphant/stompbox
 cd stompbox/build
 ```
 
+To build the stombox-jack client, you need to have the jack development libraries installed:
+
+```bash
+sudo apt-get install libjack-jackd2-dev
+```
+
 Then compile the plugin using:
 
 ```bash
