@@ -10,7 +10,7 @@
 #include "AudioFilePlayer.h"
 #include "AudioFileRecorder.h"
 #include "NAM.h"
-#include "NAMMultiband.h"
+#include "NAMMultiBand.h"
 #include "Tremolo.h"
 #include "AutoWah.h"
 #include "Wah.h"
