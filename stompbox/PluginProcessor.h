@@ -77,11 +77,7 @@ protected:
 	int clientUpdateFrame = 0;
 
 public:
-#if _WIN32
 	PluginProcessor(std::filesystem::path dataPath, bool dawMode);
-#else
-	PluginProcessor(bool dawMode);
-#endif
 	~PluginProcessor();
 	void Init(double sampleRate);
 	void SetBPM(double bpm);
