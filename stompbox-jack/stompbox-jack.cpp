@@ -58,16 +58,16 @@ process(jack_nframes_t nframes, void* arg)
 {
     guitarProcessor->ReportDSPLoad(jack_cpu_load(client) / 100);
 
-    if (!haveSentMidiStartMessage)
-    {
-        void* port_buf = jack_port_get_buffer(midi_output_port, nframes);
-        jack_midi_clear_buffer(port_buf);
+    //if (!haveSentMidiStartMessage)
+    //{
+    //    void* port_buf = jack_port_get_buffer(midi_output_port, nframes);
+    //    jack_midi_clear_buffer(port_buf);
 
-        unsigned char* buffer = jack_midi_event_reserve(port_buf, 0, sizeof(midiStartMessage));
-        memcpy(buffer, midiStartMessage, sizeof(midiStartMessage));
+    //    unsigned char* buffer = jack_midi_event_reserve(port_buf, 0, sizeof(midiStartMessage));
+    //    memcpy(buffer, midiStartMessage, sizeof(midiStartMessage));
 
-        haveSentMidiStartMessage = true;
-    }
+    //    haveSentMidiStartMessage = true;
+    //}
 
     int i;
 
@@ -77,6 +77,7 @@ process(jack_nframes_t nframes, void* arg)
         jack_midi_event_t in_event;
         jack_nframes_t event_index = 0;
         jack_nframes_t event_count = jack_midi_get_event_count(port_buf);
+
         if (event_count > 0)
         {
             for (i = 0; i < event_count; i++)
@@ -282,11 +283,9 @@ main(int argc, char* argv[])
     }
 
     midi_input_port = jack_port_register(client, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
-    midi_output_port = jack_port_register(client, "midi_out", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
+    //midi_output_port = jack_port_register(client, "midi_out", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
 
     guitarProcessor = new PluginProcessor(std::filesystem::current_path(), false);
-
-    fprintf(stderr, "here\n");
 
     guitarProcessor->Init(jack_get_sample_rate(client));
 
@@ -322,72 +321,108 @@ main(int argc, char* argv[])
         exit(1);
     }
 
-    int numPorts = 0;
+    int numAudioInputPorts = 0;
 
-    while (ports[numPorts] != NULL)
-        numPorts++;
+    while (ports[numAudioInputPorts] != NULL)
+        numAudioInputPorts++;
 
-    fprintf(stderr, "%d input ports found\n", numPorts);
+    fprintf(stderr, "%d audio input ports found\n", numAudioInputPorts);
+
+    if (numAudioInputPorts < 1)
+    {
+        jack_free(ports);
+
+        fprintf(stderr, "Less than 1 audio input ports\n");
+        exit(1);
+    }
 
     for (i = 0; i < 1; i++)
     {
-        fprintf(stderr, "connect to input port [%s]\n", jack_port_name(input_ports[i]));
+        fprintf(stderr, "connecting to input port [%s]\n", ports[i]);
 
         if (jack_connect(client, ports[i], jack_port_name(input_ports[i])))
-            fprintf(stderr, "cannot connect input port [%s]\n", jack_port_name(input_ports[i]));
+            fprintf(stderr, "cannot connect port\n");
     }
 
     jack_free(ports);
 
     ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsInput);
+
     if (ports == NULL)
     {
         fprintf(stderr, "no physical playback ports\n");
         exit(1);
     }
 
+    int numAudioOutputPorts = 0;
+
+    while (ports[numAudioOutputPorts] != NULL)
+        numAudioOutputPorts++;
+
+    fprintf(stderr, "%d audio output ports found\n", numAudioInputPorts);
+
+    if (numAudioOutputPorts < 2)
+    {
+        jack_free(ports);
+
+        fprintf(stderr, "Less than 2 audio output ports\n");
+        exit(1);
+    }
+
     for (i = 0; i < 2; i++)
+    {
+        fprintf(stderr, "connecting to output port [%s]\n", ports[i]);
+
         if (jack_connect(client, jack_port_name(output_ports[i]), ports[i]))
-            fprintf(stderr, "cannot connect output port [%d]\n", i);
+            fprintf(stderr, "cannot connect port\n");
+    }
 
     jack_free(ports);
 
     ports = jack_get_ports(client, NULL, JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput);
+
     if (ports == NULL)
     {
         fprintf(stderr, "no midi output port\n");
     }
     else
     {
-        if (jack_connect(client, ports[1], jack_port_name(midi_input_port)))
-        {
-            fprintf(stderr, "cannot connect midi input port\n");
+        int numMIDIInputPorts = 0;
 
-            jack_free(ports);
-        }
-        else
-        {
-            free(ports);
+        while (ports[numMIDIInputPorts] != NULL)
+            numMIDIInputPorts++;
 
-            ports = jack_get_ports(client, NULL, JACK_DEFAULT_MIDI_TYPE, JackPortIsInput);
-            if (ports == NULL)
+        fprintf(stderr, "%d midi input ports found\n", numMIDIInputPorts);
+
+        for (int i = 0; i < numMIDIInputPorts; i++)
+        {
+            fprintf(stderr, "connecting to midi input port [%s]\n", ports[i]);
+
+            if (jack_connect(client, ports[i], jack_port_name(midi_input_port)))
             {
-                fprintf(stderr, "no midi input port\n");
+                fprintf(stderr, "cannot connect port\n");
             }
             else
             {
-                if (jack_connect(client, jack_port_name(midi_output_port), ports[1]))
-                {
-                    fprintf(stderr, "cannot connect midi output port\n");
-                }
-                else
-                {
-                    haveMidi = true;
-                }
+                haveMidi = true;
             }
-
-            jack_free(ports);
         }
+
+        jack_free(ports);
+
+            //ports = jack_get_ports(client, NULL, JACK_DEFAULT_MIDI_TYPE, JackPortIsInput);
+            //if (ports == NULL)
+            //{
+            //    fprintf(stderr, "no midi input port\n");
+            //}
+            //else
+            //{
+            //    if (jack_connect(client, jack_port_name(midi_output_port), ports[1]))
+            //    {
+            //        fprintf(stderr, "cannot connect midi output port\n");
+            //    }
+            //}
+
     }
 
 
@@ -405,7 +440,7 @@ main(int argc, char* argv[])
 
     /* keep running until the transport stops */
 
-    fprintf(stderr, "stompbox is now running");
+    fprintf(stderr, "stompbox is now running\n");
 
     while (1)
     {
