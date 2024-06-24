@@ -19,8 +19,6 @@ endif()
 
 set(STOMPBOX_DEPS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies")
 
-link_libraries(stdc++fs pthread)
-
 add_subdirectory(stompbox)
 
 file(MAKE_DIRECTORY build/stompbox)
@@ -30,9 +28,18 @@ add_custom_target(copy_library ALL
 	DEPENDS stompbox
 )
 
-find_library(JACK_LIB libjack.so)
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+	find_library(JACK_LIB
+		NAMES libjack64.lib
+		PATHS C:/Program\ Files/JACK2/lib)
+else()
+	find_library(JACK_LIB libjack.so)
+	link_libraries(stdc++fs pthread)
+endif()
 
 if(JACK_LIB)
+	message("Jack library found - stombox-jack will be built")
+
 	add_subdirectory(stompbox-jack)
 
 	file(MAKE_DIRECTORY build/stompbox-jack)
@@ -42,5 +49,5 @@ if(JACK_LIB)
 		DEPENDS stompbox-jack
 	)
 else()
-        message("Jack libraries not found - stombox-jack will not be built")
+        message("Jack library not found - stombox-jack will not be built")
 endif()

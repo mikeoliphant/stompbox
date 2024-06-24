@@ -44,12 +44,12 @@ protected:
 	PluginFactory pluginFactory;
 	StompboxServer stompboxServer;
 	SerialDisplayInterface serialDisplayInterface;
-	StompBox* inputGain;
-	StompBox* amp;
-	StompBox* tonestack;
-	StompBox* masterVolume;
-	StompBox* cabinet;
-	StompBox* tuner;
+	StompBox* inputGain = nullptr;
+	StompBox* amp = nullptr;
+	StompBox* tonestack = nullptr;
+	StompBox* masterVolume = nullptr;
+	StompBox* cabinet = nullptr;
+	StompBox* tuner = nullptr;
 	StompBox* audioFilePlayer = nullptr;
 	StompBox* audioFileRecorder = nullptr;
 	std::list<StompBox*> inputChain;

@@ -45,15 +45,9 @@ void GetDataPathFromModule(std::filesystem::path& dataPath)
 }
 #endif
 
-#if _WIN32
 PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
 {
     this->dataPath.assign(dataPath);
-#else
-PluginProcessor::PluginProcessor(bool dawMode)
-{
-    dataPath.assign(std::filesystem::current_path());
-#endif    
 
     presetPath.assign(dataPath);
     presetPath.append("Presets");    

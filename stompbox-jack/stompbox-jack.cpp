@@ -185,7 +185,7 @@ main(int argc, char* argv[])
     jack_options_t options = JackNullOption;
     jack_status_t status;
 
-    client_name = argv[0];
+    client_name = "stompbox";
 
     if (argc > 1)        /* client name specified? */
     {
@@ -273,6 +273,7 @@ main(int argc, char* argv[])
         input_ports[i] = jack_port_register(client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
         sprintf(port_name, "output_%d", i + 1);
         output_ports[i] = jack_port_register(client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+
         if ((input_ports[i] == NULL) || (output_ports[i] == NULL))
         {
             fprintf(stderr, "no more JACK ports available\n");
@@ -283,7 +284,9 @@ main(int argc, char* argv[])
     midi_input_port = jack_port_register(client, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
     midi_output_port = jack_port_register(client, "midi_out", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
 
-    guitarProcessor = new PluginProcessor(false);
+    guitarProcessor = new PluginProcessor(std::filesystem::current_path(), false);
+
+    fprintf(stderr, "here\n");
 
     guitarProcessor->Init(jack_get_sample_rate(client));
 
@@ -312,17 +315,29 @@ main(int argc, char* argv[])
      */
 
     ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput);
+
     if (ports == NULL)
     {
         fprintf(stderr, "no physical capture ports\n");
         exit(1);
     }
 
-    for (i = 0; i < 1; i++)
-        if (jack_connect(client, ports[i], jack_port_name(input_ports[i])))
-            fprintf(stderr, "cannot connect input port [%s]\n", i);
+    int numPorts = 0;
 
-    free(ports);
+    while (ports[numPorts] != NULL)
+        numPorts++;
+
+    fprintf(stderr, "%d input ports found\n", numPorts);
+
+    for (i = 0; i < 1; i++)
+    {
+        fprintf(stderr, "connect to input port [%s]\n", jack_port_name(input_ports[i]));
+
+        if (jack_connect(client, ports[i], jack_port_name(input_ports[i])))
+            fprintf(stderr, "cannot connect input port [%s]\n", jack_port_name(input_ports[i]));
+    }
+
+    jack_free(ports);
 
     ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsInput);
     if (ports == NULL)
@@ -335,7 +350,7 @@ main(int argc, char* argv[])
         if (jack_connect(client, jack_port_name(output_ports[i]), ports[i]))
             fprintf(stderr, "cannot connect output port [%d]\n", i);
 
-    free(ports);
+    jack_free(ports);
 
     ports = jack_get_ports(client, NULL, JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput);
     if (ports == NULL)
@@ -348,7 +363,7 @@ main(int argc, char* argv[])
         {
             fprintf(stderr, "cannot connect midi input port\n");
 
-            free(ports);
+            jack_free(ports);
         }
         else
         {
@@ -371,7 +386,7 @@ main(int argc, char* argv[])
                 }
             }
 
-            free(ports);
+            jack_free(ports);
         }
     }
 
@@ -389,6 +404,8 @@ main(int argc, char* argv[])
 #endif
 
     /* keep running until the transport stops */
+
+    fprintf(stderr, "stompbox is now running");
 
     while (1)
     {
