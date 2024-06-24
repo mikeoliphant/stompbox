@@ -23,6 +23,12 @@ void NAM::init(int samplingFreq)
 }
 
 void NAM::IndexModels(std::filesystem::path path)
+
+
+
+
+
+
 {
     modelNames.clear();
 
@@ -110,14 +116,14 @@ void NAM::compute(int count, double* input, double* output)
         modelLoudnessAdjustmentGain = pow(10.0, (-18 - activeModel->GetLoudness()) / 20.0);
     }
 
-    for (int i = 0; i < count; i++)
-    {
-        float dcInput = output[i] * modelLoudnessAdjustmentGain;
+    //for (int i = 0; i < count; i++)
+    //{
+    //    float dcInput = output[i] * modelLoudnessAdjustmentGain;
 
-        // dc blocker
-        output[i] = dcInput - prevDCInput + 0.995 * prevDCOutput;
+    //    // dc blocker
+    //    output[i] = dcInput - prevDCInput + 0.995 * prevDCOutput;
 
-        prevDCInput = dcInput;
-        prevDCOutput = output[i];
-    }
+    //    prevDCInput = dcInput;
+    //    prevDCOutput = output[i];
+    //}
 }

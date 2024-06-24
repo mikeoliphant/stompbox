@@ -10,6 +10,7 @@
 #include "AudioFilePlayer.h"
 #include "AudioFileRecorder.h"
 #include "NAM.h"
+#include "NAMMultiband.h"
 #include "Tremolo.h"
 #include "AutoWah.h"
 #include "Wah.h"
@@ -22,6 +23,7 @@
 #include "Chorus.h"
 #include "Fuzz.h"
 #include "GraphicEqualizer.h"
+#include "NoiseGate.h"
 
 StompBox* CreateInputGainPlugin()
 {
@@ -82,6 +84,15 @@ std::filesystem::path namModelPath;
 StompBox* CreateNAMPlugin()
 {
 	NAM* nam = new NAM();
+
+	nam->IndexModels(namModelPath);
+
+	return nam;
+}
+
+StompBox* CreateNAMMultiBandPlugin()
+{
+	NAMMultiBand* nam = new NAMMultiBand();
 
 	nam->IndexModels(namModelPath);
 
@@ -240,6 +251,16 @@ StompBox* CreateBassEQ7Plugin()
 	return beq7;
 }
 
+StompBox* CreateNoiseGatePlugin()
+{
+	NoiseGate* gate = new NoiseGate();
+
+	gate->BackgroundColor = "#111111";
+	gate->ForegroundColor = "#ffffff";
+
+	return gate;
+}
+
 StompBox* CreateTunerPlugin()
 {
 	PitchDetector *tuner = new PitchDetector(4096);
@@ -288,8 +309,10 @@ PluginFactory::PluginFactory()
 	AddPlugin("Reverb", &CreateReverbPlugin, true);
 	AddPlugin("ConvoReverb", &CreateConvolutionReverbPlugin, true);
 	AddPlugin("NAM", &CreateNAMPlugin, true);
+	AddPlugin("NAMMulti", &CreateNAMMultiBandPlugin, true);
 	AddPlugin("EQ-7", &CreateEQ7Plugin, true);
 	AddPlugin("BEQ-7", &CreateBassEQ7Plugin, true);
+	AddPlugin("NoiseGate", &CreateNoiseGatePlugin, true);
 	AddPlugin("CabConvolver", &CreateGuitarConvolverPlugin, true);
 	AddPlugin("Input", &CreateInputGainPlugin, false);
 	AddPlugin("Master", &CreateMasterVolumePlugin, false);
