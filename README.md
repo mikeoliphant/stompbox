@@ -4,7 +4,7 @@ Stompbox is a guitar amplification and effects library.
 
 This repository is the core codebase. It can be run as a headless [jack](https://github.com/jackaudio) client using the stompbox-jack application. 
 
-[StompboxUI](https://github.com/mikeoliphant/StompboxUI) is the front-end GUI repository for stompbox. It can be used as a remote application to connect and control stompbox-jack, or it can be built with the along with the core code into a VST3 plugin.
+[StompboxUI](https://github.com/mikeoliphant/StompboxUI) is the front-end GUI repository for stompbox. It can be used as a remote application to connect and control stompbox-jack, or it can be built along with the core code into a VST3 plugin.
 
 I run it as both a VST3 plugin in a DAW on my PC, and on my Raspberry Pi pedalboard.
 
