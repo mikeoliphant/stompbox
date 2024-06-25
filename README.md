@@ -12,6 +12,12 @@ Here is a video of it running on my pedalboard:
 
 [![Neural Amp Modeler on Raspberry Pi](https://img.youtube.com/vi/2I_bxxzQs2s/0.jpg)](https://www.youtube.com/watch?v=2I_bxxzQs2s)
 
+This is the hardware I'm using:
+- Raspberry Pi 4
+- Hotone Jogg audio interface
+- Hotone Ampero Control MIDI Controller
+- Wio Terminal (used for a display using my [SerialTFT](https://github.com/mikeoliphant/SerialTFT) app)
+
 ### Building stompbox-jack in Linux
 
 First clone the repository:
