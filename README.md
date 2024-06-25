@@ -18,14 +18,14 @@ This is the hardware I'm using:
 - Hotone Ampero Control MIDI Controller
 - Wio Terminal (used for a display using my [SerialTFT](https://github.com/mikeoliphant/SerialTFT) app)
 
-## Building
+# Building
 
 First clone the repository:
 ```bash
 git clone --recurse-submodules -j4 https://github.com/mikeoliphant/stompbox
 ```
 
-### Building stompbox-jack in Linux
+## Building stompbox-jack in Linux
 
 To build the stombox-jack client, you need to have the jack development libraries installed:
 
@@ -41,7 +41,7 @@ cmake .. -DCMAKE_BUILD_TYPE="Release"
 make
 ```
 
-### Building stompbox-jack in Windows
+## Building stompbox-jack in Windows
 
 You need to have jack for windows installed:
 
@@ -56,7 +56,7 @@ cmake.exe -G "Visual Studio 17 2022" -A x64 ..
 
 This will get you a Visual Studio solution with projects for the core library and stompbox-jack.
 
-### Running stompbox-jack
+# Running stompbox-jack
 
 After building, the binary will be in build/stompbox-jack.
 
