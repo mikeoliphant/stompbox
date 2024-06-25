@@ -1,8 +1,10 @@
 # What is it?
 
-Stompbox is a guitar amplification and effects application. It is designed to run either under [jack](https://github.com/jackaudio) or as an audio plugin.
+Stompbox is a guitar amplification and effects library.
 
-This repository is the core codebase. You can find more information about it in the front-end repository, [StompboxUI](https://github.com/mikeoliphant/StompboxUI).
+This repository is the core codebase. It can be run as a headless [jack](https://github.com/jackaudio) client using the stompbox-jack application. 
+
+[StompboxUI](https://github.com/mikeoliphant/StompboxUI) is the front-end GUI repository for stompbox. It can be used as a remote application to connect and control stompbox-jack, or it can be built with the along with the core code into a VST3 plugin.
 
 I run it as both a VST3 plugin in a DAW on my PC, and on my Raspberry Pi pedalboard.
 
@@ -10,7 +12,7 @@ Here is a video of it running on my pedalboard:
 
 [![Neural Amp Modeler on Raspberry Pi](https://img.youtube.com/vi/2I_bxxzQs2s/0.jpg)](https://www.youtube.com/watch?v=2I_bxxzQs2s)
 
-### Building in Linux
+### Building stompbox-jack in Linux
 
 First clone the repository:
 ```bash
@@ -31,13 +33,15 @@ cmake .. -DCMAKE_BUILD_TYPE="Release"
 make
 ```
 
-### Running in Linux
+### Running stompbox-jack
 
 After building, the binary will be in build/stompbox-jack.
 
 You must have [jack](https://github.com/jackaudio) installed and configured to run on your audio device. If jack is running (as the same user you run stompbox with), the running instance will be used, otherwise jack will be started using your default configuration.
 
 stompbox-jack takes a single optional command-line argument - the name of the preset to start with.
+
+Currently it will connect to the first available jack audio input, and the first two available jack audio outputs. It will also connect to any available jack midi inputs.
 
 The following folders are epected to exist in the same folder as the stompbox-jack executable:
 
