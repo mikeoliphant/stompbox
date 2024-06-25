@@ -8,15 +8,6 @@ static double mydsp_faustpower2_f(double value) {
 
 }
 
-static double mydsp_faustpower3_f(double value) {
-	return ((value * value) * value);
-
-}
-static double mydsp_faustpower4_f(double value) {
-	return (((value * value) * value) * value);
-
-}
-
 Phaser::Phaser()
 {
 	Name = "Phaser";

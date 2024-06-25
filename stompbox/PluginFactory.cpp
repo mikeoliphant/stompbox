@@ -24,6 +24,7 @@
 #include "Fuzz.h"
 #include "GraphicEqualizer.h"
 #include "NoiseGate.h"
+#include "Screamer.h"
 
 StompBox* CreateInputGainPlugin()
 {
@@ -107,6 +108,15 @@ StompBox* CreateBoostPlugin()
 	gain->ForegroundColor = "#ffffff";
 
 	return gain;
+}
+
+StompBox* CreateScreamerPlugin()
+{
+	TS9* ts9 = new TS9();
+
+	ts9->BackgroundColor = "#01b434";
+
+	return ts9;
 }
 
 StompBox* CreateCompressorPlugin()
@@ -296,6 +306,7 @@ StompBox* CreateAudioFileRecorderPlugin()
 PluginFactory::PluginFactory()
 {
 	AddPlugin("Boost", &CreateBoostPlugin, true);
+	AddPlugin("Screamer", &CreateScreamerPlugin, true);
 	AddPlugin("Compressor", &CreateCompressorPlugin, true);
 	AddPlugin("Fuzz", &CreateFuzzPlugin, true);
 	AddPlugin("AutoWah", &CreateAutoWahPlugin, true);
