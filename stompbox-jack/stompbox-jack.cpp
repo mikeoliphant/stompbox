@@ -29,7 +29,6 @@ PluginProcessor *guitarProcessor;
 //char trashme2[1024];
 SysExMapper sysExMapper;
 
-bool haveMidi = false;
 bool haveSentMidiStartMessage = false;
 unsigned char midiStartMessage[15] = { 0xF0, 0x41, 0x00, 0x00, 0x00, 0x00, 0x30, 0x12,
  0x7F, 0x00, 0x00, 0x01, 0x01, 0x7F, 0xF7 };
@@ -71,7 +70,7 @@ process(jack_nframes_t nframes, void* arg)
 
     int i;
 
-    if (haveMidi)
+    if (jack_port_connected(midi_input_port) > 0)
     {
         void* port_buf = jack_port_get_buffer(midi_input_port, nframes);
         jack_midi_event_t in_event;
@@ -401,10 +400,6 @@ main(int argc, char* argv[])
             if (jack_connect(client, ports[i], jack_port_name(midi_input_port)))
             {
                 fprintf(stderr, "cannot connect port\n");
-            }
-            else
-            {
-                haveMidi = true;
             }
         }
 
