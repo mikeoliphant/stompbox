@@ -24,9 +24,7 @@ jack_port_t **output_ports;
 jack_port_t *midi_input_port;
 jack_port_t *midi_output_port;
 jack_client_t *client;
-//char trashme[1024];
 PluginProcessor *guitarProcessor;
-//char trashme2[1024];
 SysExMapper sysExMapper;
 
 bool haveSentMidiStartMessage = false;
@@ -52,8 +50,7 @@ static void signal_handler ( int sig )
 double* doubleBuf;
 unsigned int bufferSize = 0;
 
-int
-process(jack_nframes_t nframes, void* arg)
+int process(jack_nframes_t nframes, void* arg)
 {
     guitarProcessor->ReportDSPLoad(jack_cpu_load(client) / 100);
 
@@ -159,6 +156,7 @@ process(jack_nframes_t nframes, void* arg)
             out[samp] = doubleBuf[samp];
         }
     }
+
     return 0;
 }
 
@@ -166,16 +164,15 @@ process(jack_nframes_t nframes, void* arg)
  * JACK calls this shutdown_callback if the server ever shuts down or
  * decides to disconnect the client.
  */
-void
-jack_shutdown ( void *arg )
+void jack_shutdown ( void *arg )
 {
-    free ( input_ports );
-    free ( output_ports );
-    exit ( 1 );
+    jack_free( input_ports);
+    jack_free( output_ports);
+
+    exit( 1);
 }
 
-int
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     int i;
     const char** ports;
@@ -192,7 +189,13 @@ main(int argc, char* argv[])
         preset_name = argv[1];
     }
 
+    guitarProcessor = new PluginProcessor(std::filesystem::current_path(), false);
 
+    fprintf(stderr, guitarProcessor->GetVersion().c_str());
+    fprintf(stderr, "\n\n");
+
+    // Old stuff for working with BOSS GT-1 sysex messages
+    
     // Expression pedal
     SysExCC cc;
     cc.SysExData[0] = 0x60; cc.SysExData[1] = 0x00; cc.SysExData[2] = 0x06; cc.SysExData[3] = 0x2a;
@@ -239,10 +242,12 @@ main(int argc, char* argv[])
         }
         exit(1);
     }
+
     if (status & JackServerStarted)
     {
         fprintf(stderr, "JACK server started\n");
     }
+
     if (status & JackNameNotUnique)
     {
         client_name = jack_get_client_name(client);
@@ -267,6 +272,7 @@ main(int argc, char* argv[])
     output_ports = (jack_port_t**)calloc(2, sizeof(jack_port_t*));
 
     char port_name[16];
+
     for (i = 0; i < 2; i++)
     {
         sprintf(port_name, "input_%d", i + 1);
@@ -283,8 +289,6 @@ main(int argc, char* argv[])
 
     midi_input_port = jack_port_register(client, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
     //midi_output_port = jack_port_register(client, "midi_out", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
-
-    guitarProcessor = new PluginProcessor(std::filesystem::current_path(), false);
 
     guitarProcessor->Init(jack_get_sample_rate(client));
 

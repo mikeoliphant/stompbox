@@ -935,6 +935,10 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                 {
                     SendClientMessage(DumpConfig());
                 }
+                else if (commandWords[1] == "Version")
+                {
+                    SendClientMessage("Version " + stompboxVersion);
+                }
             }
         }
         else if (commandWords[0] == "List")
