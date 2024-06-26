@@ -45,6 +45,11 @@ void GetDataPathFromModule(std::filesystem::path& dataPath)
 }
 #endif
 
+std::string PluginProcessor::GetVersion()
+{
+    return "stompbox v0.1.4 - Copyright (c) Mike Oliphant";
+}
+
 PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
 {
     this->dataPath.assign(dataPath);
@@ -937,7 +942,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                 }
                 else if (commandWords[1] == "Version")
                 {
-                    SendClientMessage("Version " + stompboxVersion);
+                    SendClientMessage("Version " + GetVersion());
                 }
             }
         }

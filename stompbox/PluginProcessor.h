@@ -32,7 +32,6 @@ protected:
 	void UpdateClient();
 	void SendClientMessage(const std::string message);
 
-	std::string stompboxVersion = "stompbox v0.1.4 - Copyright (c) Mike Oliphant";
 	double sampleRate;
 	double bpm = 120;
 	std::list<StompBox *> pluginList1;
@@ -80,11 +79,8 @@ protected:
 public:
 	PluginProcessor(std::filesystem::path dataPath, bool dawMode);
 	~PluginProcessor();
+	static std::string GetVersion();
 	void Init(double sampleRate);
-	std::string GetVersion()
-	{
-		return stompboxVersion;
-	};
 	void SetBPM(double bpm);
 	void StartServer();
 	StompBox* CreatePlugin(std::string const& id);
