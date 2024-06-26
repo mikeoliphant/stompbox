@@ -1262,7 +1262,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
     }
     else if (midiCommand == 0xC0) // Patch change
     {
-        fprintf(stderr, "Patch change to %d\n", midiData1);
+        fprintf(stderr, "MIDI program change to %d\n", midiData1);
 
         for (const auto& entry : std::filesystem::directory_iterator(presetPath))
         {

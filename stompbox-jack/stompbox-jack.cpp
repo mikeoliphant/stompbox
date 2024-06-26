@@ -92,36 +92,33 @@ int process(jack_nframes_t nframes, void* arg)
 
                 fprintf(stderr, "\n");
 
-                if (sysExMapper.HandleMidiMessage(in_event.buffer, in_event.size, midiEvents))
-                {
-                    for (const auto& event : midiEvents)
-                    {
-                        fprintf(stderr, "Command: %d  Data1: %d  Data2: %d\n", event.MidiCommand, event.MidiData1, event.MidiData2);
+                //if (sysExMapper.HandleMidiMessage(in_event.buffer, in_event.size, midiEvents))
+                //{
+                //    for (const auto& event : midiEvents)
+                //    {
+                //        fprintf(stderr, "Command: %d  Data1: %d  Data2: %d\n", event.MidiCommand, event.MidiData1, event.MidiData2);
 
-                        int data2 = event.MidiData2;
+                //        int data2 = event.MidiData2;
 
-                        if (event.MidiData2MaxValue != 0)
-                        {
-                            data2 = (int)(((double)data2 / (double)event.MidiData2MaxValue) * 127);
-                        }
+                //        if (event.MidiData2MaxValue != 0)
+                //        {
+                //            data2 = (int)(((double)data2 / (double)event.MidiData2MaxValue) * 127);
+                //        }
 
-                        guitarProcessor->HandleMidiCommand(event.MidiCommand, event.MidiData1, data2);
-                    }
+                //        guitarProcessor->HandleMidiCommand(event.MidiCommand, event.MidiData1, data2);
+                //    }
 
-                    midiEvents.clear();
-                }
-                else
-                {
+                //    midiEvents.clear();
+                //}
+                //else
+                //{
                     int commandCode = (in_event.buffer[0] & 0xF0);
                     int channel = (in_event.buffer[0] & 0x0F) + 1;
 
-                    if (commandCode == 0xB0) // Control change
-                    {
-                        fprintf(stderr, "Midi CC Channel: %d  Data1: %d  Data2: %d\n", channel, in_event.buffer[1], in_event.buffer[2]);
+                    fprintf(stderr, "Midi Channel: %d Command: %d  Data1: %d  Data2: %d\n", channel, commandCode, in_event.buffer[1], in_event.buffer[2]);
 
-                        guitarProcessor->HandleMidiCommand(in_event.buffer[0], in_event.buffer[1], in_event.buffer[2]);
-                    }
-                }
+                    guitarProcessor->HandleMidiCommand(commandCode, in_event.buffer[1], in_event.buffer[2]);
+                //}
             }
         }
     }
