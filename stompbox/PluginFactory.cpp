@@ -324,7 +324,7 @@ PluginFactory::PluginFactory()
 	AddPlugin("EQ-7", &CreateEQ7Plugin, true);
 	AddPlugin("BEQ-7", &CreateBassEQ7Plugin, true);
 	AddPlugin("NoiseGate", &CreateNoiseGatePlugin, true);
-	AddPlugin("CabConvolver", &CreateGuitarConvolverPlugin, true);
+	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin, true);
 	AddPlugin("Input", &CreateInputGainPlugin, false);
 	AddPlugin("Master", &CreateMasterVolumePlugin, false);
 	AddPlugin("Tuner", &CreateTunerPlugin, false);
