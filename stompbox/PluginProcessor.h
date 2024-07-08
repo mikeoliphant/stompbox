@@ -169,6 +169,7 @@ public:
 	void SyncPreset();
 	void LoadPreset(std::string preset, bool updateClient);
 	void LoadSettings();
+	void SaveSettings();
 	bool LoadCommandsFromFile(std::filesystem::path filePath);
 	void AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 	std::string DumpSettings();

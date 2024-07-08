@@ -991,18 +991,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         }
         else if (commandWords[0] == "SaveSettings")
         {
-            std::string settings = DumpSettings();
-
-            std::filesystem::path outPath;
-
-            outPath.assign(dataPath);
-            outPath.append(".stompbox");
-
-            std::ofstream outFile(outPath, std::ios::binary);
-
-            outFile << settings;
-
-            outFile.close();
+            SaveSettings();
         }
         else if (commandWords[0] == "MapController")
         {
@@ -1373,9 +1362,25 @@ void PluginProcessor::LoadSettings()
     std::filesystem::path settingsPath;
 
     settingsPath.assign(dataPath);
-    settingsPath.append(".GuitarSimSettings");
+    settingsPath.append("StompboxSettings");
 
     LoadCommandsFromFile(settingsPath);
+}
+
+void PluginProcessor::SaveSettings()
+{
+    std::string dump = DumpSettings();
+
+    std::filesystem::path settingsPath;
+
+    settingsPath.assign(dataPath);
+    settingsPath.append("StompboxSettings");
+
+    std::ofstream outFile(settingsPath, std::ios::binary);
+
+    outFile << dump;
+
+    outFile.close();
 }
 
 bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
