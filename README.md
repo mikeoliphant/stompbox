@@ -78,13 +78,13 @@ The following folders are epected to exist in the same folder as the stompbox-ja
 
 **Music** - folder containing .wav audio files for the built-in audio looper
 
-### How to Configure Presets?
+## How to Configure Presets?
 
 In order to configure presets, you need to use the remote user interface in the [StompboxUI](https://github.com/mikeoliphant/StompboxUI) repository.
 
 If you have a Windows machine, you can grab the StompboxRemote application from the [the latest release](https://github.com/mikeoliphant/StompboxUI/releases/latest).
 
-### MIDI Support
+## MIDI Support
 
 If you have MIDI enabled in jack, MIDI devices can be used to control stompbox behavior.
 
@@ -93,3 +93,10 @@ Via the remote user interface, you can configure ("..." -> "MIDI CC Map" in the 
 In addition, if you send a MIDI patch change event, stompbox will attempt to load a preset starting with the patch number (ie: MIDI patch change to 2 would load "02MyCoolPreset").
 
 Some more complicated MIDI stomp-based UI is also available if you are running the serial display interface - it gives interactive access to patch changes, tuner, stomps, etc.
+
+## Display Options
+
+There are a number of display options for interfacing with stompbox:
+
+- [StompboxUI](https://github.com/mikeoliphant/StompboxUI) - that repo has apps that can run as remote displays on Windows, Linux and Android. The Android interface also has a display mode designed for a phone or tablet mounted on a pedalboard.
+- Serial display. Stompbox has built-in support for talking to a USB-connected microcontroller with display. I'm using a [Wio Terminal ](https://www.seeedstudio.com/Wio-Terminal-p-4509.html), but any Arduino-compatible microcontroller with an SPI display should work. It requires installing my [SerialTFT](https://github.com/mikeoliphant/SerialTFT) Arduino sketch on the microcontroller.
