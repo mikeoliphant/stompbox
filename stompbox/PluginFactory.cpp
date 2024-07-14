@@ -45,7 +45,6 @@ StompBox* CreateMasterVolumePlugin()
 	return master;
 }
 
-
 StompBox* CreateTonestackPlugin()
 {
 	Tonestack* tonestack = new Tonestack();
@@ -327,6 +326,7 @@ PluginFactory::PluginFactory()
 	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin, true);
 	AddPlugin("Input", &CreateInputGainPlugin, false);
 	AddPlugin("Master", &CreateMasterVolumePlugin, false);
+	AddPlugin("Level", &CreateMasterVolumePlugin, true);
 	AddPlugin("Tuner", &CreateTunerPlugin, false);
 	AddPlugin("AudioFilePlayer", &CreateAudioFilePlayerPlugin, false);
 	AddPlugin("AudioFileRecorder", &CreateAudioFileRecorderPlugin, false);
