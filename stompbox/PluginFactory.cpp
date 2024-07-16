@@ -30,6 +30,8 @@ StompBox* CreateInputGainPlugin()
 {
 	Gain *input = new Gain(0, -40, 40);
 
+	input->IsUserSelectable = false;
+
 	return input;
 }
 
@@ -38,6 +40,8 @@ StompBox* CreateMasterVolumePlugin()
 	Gain* master = new Gain(0, -40, 40);
 
 	master->Parameters[GAIN_GAIN].Name = "Volume";
+
+	master->IsUserSelectable = false;
 
 	return master;
 }
@@ -94,6 +98,15 @@ StompBox* CreateNAMMultiBandPlugin()
 	nam->IndexModels(namModelPath);
 
 	return nam;
+}
+
+StompBox* CreateLevelPlugin()
+{
+	Gain* level = new Gain(0, -40, 40);
+
+	level->Parameters[GAIN_GAIN].Name = "Volume";
+
+	return level;
 }
 
 StompBox* CreateBoostPlugin()
@@ -271,6 +284,8 @@ StompBox* CreateTunerPlugin()
 {
 	PitchDetector *tuner = new PitchDetector(4096);
 
+	tuner->IsUserSelectable = false;
+
 	return tuner;
 }
 
@@ -282,6 +297,8 @@ StompBox* CreateAudioFilePlayerPlugin()
 
 	player->IndexFiles(musicPath);
 
+	player->IsUserSelectable = false;
+
 	return player;
 }
 
@@ -289,62 +306,53 @@ StompBox* CreateAudioFileRecorderPlugin()
 {
 	AudioFileRecorder* recorder = new AudioFileRecorder(musicPath);
 
+	recorder->IsUserSelectable = false;
+
 	return recorder;
 }
 
 
 PluginFactory::PluginFactory()
 {
-	AddPlugin("Boost", &CreateBoostPlugin, true);
-	AddPlugin("Screamer", &CreateScreamerPlugin, true);
-	AddPlugin("Compressor", &CreateCompressorPlugin, true);
-	AddPlugin("Fuzz", &CreateFuzzPlugin, true);
-	AddPlugin("AutoWah", &CreateAutoWahPlugin, true);
-	AddPlugin("Wah", &CreateWahPlugin, true);
-	AddPlugin("Phaser", &CreatePhaserPlugin, true);
-	AddPlugin("Vibrato", &CreateVibratoPlugin, true);
-	AddPlugin("Flanger", &CreateFlangerPlugin, true);
-	AddPlugin("Chorus", &CreateChorusPlugin, true);
-	AddPlugin("Tremolo", &CreateTremoloPlugin, true);
-	AddPlugin("Delay", &CreateDelayPlugin, true);
-	AddPlugin("Reverb", &CreateReverbPlugin, true);
-	AddPlugin("ConvoReverb", &CreateConvolutionReverbPlugin, true);
-	AddPlugin("NAM", &CreateNAMPlugin, true);
-	AddPlugin("NAMMulti", &CreateNAMMultiBandPlugin, true);
-	AddPlugin("EQ-7", &CreateEQ7Plugin, true);
-	AddPlugin("BEQ-7", &CreateBassEQ7Plugin, true);
-	AddPlugin("NoiseGate", &CreateNoiseGatePlugin, true);
-	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin, true);
-	AddPlugin("Input", &CreateInputGainPlugin, false);
-	AddPlugin("Master", &CreateMasterVolumePlugin, false);
-	AddPlugin("Level", &CreateMasterVolumePlugin, true);
-	AddPlugin("Tuner", &CreateTunerPlugin, false);
-	AddPlugin("AudioFilePlayer", &CreateAudioFilePlayerPlugin, false);
-	AddPlugin("AudioFileRecorder", &CreateAudioFileRecorderPlugin, false);
+	AddPlugin("Boost", &CreateBoostPlugin);
+	AddPlugin("Screamer", &CreateScreamerPlugin);
+	AddPlugin("Compressor", &CreateCompressorPlugin);
+	AddPlugin("Fuzz", &CreateFuzzPlugin);
+	AddPlugin("AutoWah", &CreateAutoWahPlugin);
+	AddPlugin("Wah", &CreateWahPlugin);
+	AddPlugin("Phaser", &CreatePhaserPlugin);
+	AddPlugin("Vibrato", &CreateVibratoPlugin);
+	AddPlugin("Flanger", &CreateFlangerPlugin);
+	AddPlugin("Chorus", &CreateChorusPlugin);
+	AddPlugin("Tremolo", &CreateTremoloPlugin);
+	AddPlugin("Delay", &CreateDelayPlugin);
+	AddPlugin("Reverb", &CreateReverbPlugin);
+	AddPlugin("ConvoReverb", &CreateConvolutionReverbPlugin);
+	AddPlugin("NAM", &CreateNAMPlugin);
+	AddPlugin("NAMMulti", &CreateNAMMultiBandPlugin);
+	AddPlugin("EQ-7", &CreateEQ7Plugin);
+	AddPlugin("BEQ-7", &CreateBassEQ7Plugin);
+	AddPlugin("NoiseGate", &CreateNoiseGatePlugin);
+	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin);
+	AddPlugin("Level", &CreateLevelPlugin);
+	AddPlugin("Input", &CreateInputGainPlugin);
+	AddPlugin("Master", &CreateMasterVolumePlugin);
+	AddPlugin("Tuner", &CreateTunerPlugin);
+	AddPlugin("AudioFilePlayer", &CreateAudioFilePlayerPlugin);
+	AddPlugin("AudioFileRecorder", &CreateAudioFileRecorderPlugin);
 }
 
-void PluginFactory::AddPlugin(std::string name, CreatePluginFunction function, bool isUserSelectable)
+void PluginFactory::AddPlugin(std::string name, CreatePluginFunction function)
 {
 	pluginMap[name] = function;
 
 	allPluginList.push_back(name);
-
-	if (isUserSelectable)
-	{
-		userPluginList.push_back(name);
-	}
-}
-
-std::list<std::string> PluginFactory::GetUserPlugins()
-{
-	return userPluginList;
 }
 
 std::list<std::string> PluginFactory::GetAllPlugins()
 {
 	return allPluginList;
 }
-
 
 void PluginFactory::LoadAllPlugins()
 {

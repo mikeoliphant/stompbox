@@ -19,10 +19,9 @@ class PluginFactory
 protected:
 	std::unordered_map<std::string, CreatePluginFunction> pluginMap;
 	std::unordered_map<std::string, StompBox*> loadedPlugins;
-	std::list<std::string> userPluginList;
 	std::list<std::string> allPluginList;
 
-	void AddPlugin(std::string name, CreatePluginFunction function, bool isUserSelectable);
+	void AddPlugin(std::string name, CreatePluginFunction function);
 
 public:
 	PluginFactory();
@@ -53,7 +52,6 @@ public:
 		if (!std::filesystem::exists(namModelPath))
 			std::filesystem::create_directory(namModelPath);
 	}
-	std::list<std::string> GetUserPlugins();
 	std::list<std::string> GetAllPlugins();
 	void LoadAllPlugins();
 	StompBox* CreatePlugin(std::string const& name, std::string const& id);
