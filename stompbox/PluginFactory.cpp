@@ -30,8 +30,6 @@ StompBox* CreateInputGainPlugin()
 {
 	Gain *input = new Gain(0, -40, 40);
 
-	input->IsUserSelectable = false;
-
 	return input;
 }
 
@@ -40,7 +38,6 @@ StompBox* CreateMasterVolumePlugin()
 	Gain* master = new Gain(0, -40, 40);
 
 	master->Parameters[GAIN_GAIN].Name = "Volume";
-	master->IsUserSelectable = false;
 
 	return master;
 }
@@ -274,8 +271,6 @@ StompBox* CreateTunerPlugin()
 {
 	PitchDetector *tuner = new PitchDetector(4096);
 
-	tuner->IsUserSelectable = false;
-
 	return tuner;
 }
 
@@ -287,16 +282,12 @@ StompBox* CreateAudioFilePlayerPlugin()
 
 	player->IndexFiles(musicPath);
 
-	player->IsUserSelectable = false;
-
 	return player;
 }
 
 StompBox* CreateAudioFileRecorderPlugin()
 {
 	AudioFileRecorder* recorder = new AudioFileRecorder(musicPath);
-
-	//recorder->IsUserSelectable = false;
 
 	return recorder;
 }
