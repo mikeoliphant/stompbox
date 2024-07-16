@@ -989,6 +989,19 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                 LoadPreset(commandWords[1], false);
             }
         }
+        else if (commandWords[0] == "DeletePreset")
+        {
+            if (commandWords.size() > 1)
+            {
+                std::filesystem::path outPath;
+
+                outPath.assign(presetPath);
+                outPath.append(commandWords[1]);
+
+                if (std::filesystem::exists(outPath))
+                    std::filesystem::remove(outPath);
+            }
+        }
         else if (commandWords[0] == "SaveSettings")
         {
             SaveSettings();
