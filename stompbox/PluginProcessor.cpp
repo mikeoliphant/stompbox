@@ -225,7 +225,7 @@ void PluginProcessor::UpdateClient()
                 }
             }
 
-            if ((HaveClient() && pluginOutputOn) || (messageCallback == nullptr))
+            if ((HaveClient() || (messageCallback != nullptr)) && pluginOutputOn)
             {
                 clientUpdateFrame++;
 
