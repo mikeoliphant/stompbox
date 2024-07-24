@@ -411,7 +411,7 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
         StompBoxParameter* param = plugin->GetParameter(i);
 
         dump.append("ParameterConfig ");
-        dump.append(plugin->Name);
+        dump.append(plugin->ID);
         dump.append(" ");
         dump.append(param->Name);
 
