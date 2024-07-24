@@ -5,7 +5,7 @@ GuitarConvolver::GuitarConvolver()
     Name = "Cabinet";
 
     NumParameters = CONVOLVER_NUMPARAMETERS;
-    Parameters = new StompBoxParameter[NumParameters];
+    CreateParameters(NumParameters);
 
     Parameters[CONVOLVER_IMPULSE].Name = "Impulse";
     Parameters[CONVOLVER_IMPULSE].SourceVariable = &impulseIndex;
@@ -53,11 +53,11 @@ void GuitarConvolver::IndexImpulses(std::filesystem::path path)
     Parameters[CONVOLVER_IMPULSE].MaxValue = (int)impulseNames.size() - 1;
 }
 
-void GuitarConvolver::SetParameterValue(int id, double value)
+void GuitarConvolver::SetParameterValue(StompBoxParameter *parameter, double value)
 {
-    StompBox::SetParameterValue(id, value);
+    StompBox::SetParameterValue(parameter, value);
 
-    if (id == CONVOLVER_IMPULSE)
+    if (parameter == &Parameters[CONVOLVER_IMPULSE])
     {
         if (!NeedsInit)
             SetImpulse(impulsePaths[(int)impulseIndex]);

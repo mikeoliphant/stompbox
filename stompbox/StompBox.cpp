@@ -1,24 +1,77 @@
 #include "StompBox.h"
 #include <algorithm>
 
-StompBoxParameter* StompBox::GetParameter(int id)
-{
-	return &Parameters[id];
-}
-
 StompBox::StompBox()
 {
 	doubleBuffer[0] = nullptr;
 }
 
-void StompBox::SetParameterValue(int index, double value)
+StompBox::~StompBox()
 {
-	*(Parameters[index].SourceVariable) = std::clamp(value, Parameters[index].MinValue, Parameters[index].MaxValue);
+	if (Parameters != nullptr)
+	{
+		delete[] Parameters;
+	}
 }
 
-double StompBox::GetParameterValue(int index)
+void StompBox::CreateParameters(int numParameters)
 {
-	return *(Parameters[index].SourceVariable);
+	Parameters = new StompBoxParameter[NumParameters];
+
+	for (int i = 0; i < NumParameters; i++)
+	{
+		Parameters[i].Stomp = this;
+	}
+}
+
+StompBoxParameter* StompBox::GetParameter(int id)
+{
+	return &Parameters[id];
+}
+
+StompBoxParameter* StompBox::GetParameter(std::string name)
+{
+	for (int i = 0; i < NumParameters; i++)
+	{
+		if (Parameters[i].Name == name)
+			return &Parameters[i];
+	}
+
+	StompBoxParameter* parameter = nullptr;
+
+	if (InputGain != nullptr)
+		parameter = InputGain->GetParameter(name);
+
+	if ((parameter == nullptr) && (OutputVolume != nullptr))
+		parameter = OutputVolume->GetParameter(name);
+
+	return parameter;
+}
+
+void StompBox::init(int samplingFreq)
+{
+	this->samplingFreq = samplingFreq;
+}
+
+
+void StompBox::SetParameterValue(int id, double value)
+{
+	SetParameterValue(&(Parameters[id]), value);
+}
+
+void StompBox::SetParameterValue(StompBoxParameter *param, double value)
+{
+	*(param->SourceVariable) = std::clamp(value, param->MinValue, param->MaxValue);
+}
+
+double StompBox::GetParameterValue(int id)
+{
+	return GetParameterValue(&(Parameters[id]));
+}
+
+double StompBox::GetParameterValue(StompBoxParameter* param)
+{
+	return *(param->SourceVariable);
 }
 
 void StompBox::SetBPM(double bpm)

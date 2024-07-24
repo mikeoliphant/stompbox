@@ -23,7 +23,7 @@ struct CCMap
 {
 	int CCNumber;
 	StompBox* Plugin;
-	int Parameter;
+	std::string Parameter;
 };
 
 class PluginProcessor
@@ -31,6 +31,9 @@ class PluginProcessor
 protected:
 	void UpdateClient();
 	void SendClientMessage(const std::string message);
+	void AppendParamDefs(std::string& dump, StompBox* plugin);
+	void AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
+	void AppendParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 
 	double sampleRate;
 	double bpm = 120;
@@ -165,13 +168,12 @@ public:
 	void ReportDSPLoad(float currentLoad);
 	std::string HandleCommand(const std::string& line);
 	bool HandleMidiCommand(int midiCommand, int midiData1, int midiData2);
-	bool CheckMidiCommand(StompBox* plugin, int parameter);
+	bool CheckMidiCommand(StompBox* plugin, StompBoxParameter* parameter);
 	void SyncPreset();
 	void LoadPreset(std::string preset, bool updateClient);
 	void LoadSettings();
 	void SaveSettings();
 	bool LoadCommandsFromFile(std::filesystem::path filePath);
-	void AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 	std::string DumpSettings();
 	std::string DumpProgram();
 	std::string DumpConfig();

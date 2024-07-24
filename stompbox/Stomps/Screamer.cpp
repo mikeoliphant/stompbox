@@ -80,7 +80,7 @@ TS9::TS9()
 	fVslider2 = FAUSTFLOAT(0.5);
 
 	NumParameters = SCREAMER_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[SCREAMER_DRIVE].Name = "Drive";
 	Parameters[SCREAMER_DRIVE].SourceVariable = &fVslider2;

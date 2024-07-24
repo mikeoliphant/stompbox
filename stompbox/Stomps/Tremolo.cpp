@@ -9,7 +9,7 @@ Tremolo::Tremolo()
 	Name = "Tremolo";
 
 	NumParameters = TREMOLO_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	speed = 5;
 	Parameters[TREMOLO_SPEED].Name = "Speed";

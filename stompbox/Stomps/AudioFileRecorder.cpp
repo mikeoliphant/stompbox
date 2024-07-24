@@ -7,7 +7,7 @@ AudioFileRecorder::AudioFileRecorder(std::filesystem::path savePath)
 	Name = "AudioFileRecorder";
 
 	NumParameters = AUDIOFILERECORDER_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[AUDIOFILERECORDER_SECONDSRECORDED].Name = "SecsRecorded";
 	Parameters[AUDIOFILERECORDER_SECONDSRECORDED].SourceVariable = &recordSeconds;

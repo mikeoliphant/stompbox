@@ -18,7 +18,7 @@ PeakingFilter::PeakingFilter(double freq, double q)
 	this->q = q;
 
 	NumParameters = PEAKINGFILTER_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[PEAKINGFILTER_LEVEL].Name = "Level";
 	Parameters[PEAKINGFILTER_LEVEL].MaxValue = -15;

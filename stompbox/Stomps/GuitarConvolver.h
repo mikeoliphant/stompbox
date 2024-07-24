@@ -62,7 +62,7 @@ public:
 	virtual ~GuitarConvolver() {}
 	virtual void init(int samplingFreq);
 	void IndexImpulses(std::filesystem::path path);
-	void SetParameterValue(int id, double value);
+	void SetParameterValue(StompBoxParameter* parameter, double value);
 	void SetImpulse(const std::string filename);
 	void SetImpulse();
 	virtual void compute(int count, double* input, double* output);

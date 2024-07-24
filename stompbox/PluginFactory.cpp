@@ -71,9 +71,9 @@ StompBox* CreateConvolutionReverbPlugin()
 {
 	GuitarConvolver* reverb = new GuitarConvolver();
 
-	reverb->SetParameterValue(CONVOLVER_DRY, 1);
-	reverb->SetParameterValue(CONVOLVER_WET, 0.3);
-	reverb->Parameters[CONVOLVER_WET].DefaultValue = 0.3f;
+	reverb->GetParameter(CONVOLVER_DRY)->SetValue(1);
+	reverb->GetParameter(CONVOLVER_WET)->SetValue(0.3);
+	reverb->GetParameter(CONVOLVER_WET)->DefaultValue = 0.3f;
 
 	reverb->IndexImpulses(reverbPath);
 
@@ -87,6 +87,11 @@ StompBox* CreateNAMPlugin()
 	NAM* nam = new NAM();
 
 	nam->IndexModels(namModelPath);
+
+	nam->InputGain = CreateInputGainPlugin();
+	nam->InputGain->ID = "NAM";
+	nam->OutputVolume = CreateMasterVolumePlugin();
+	nam->OutputVolume->ID = "NAM";
 
 	return nam;
 }

@@ -15,7 +15,7 @@ Wah::Wah()
 	fVslider0 = FAUSTFLOAT(0.5);
 
 	NumParameters = WAH_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 	Parameters[WAH_LEVEL].Name = "Wah";
 	Parameters[WAH_LEVEL].DefaultValue = fVslider0;
 	Parameters[WAH_LEVEL].SourceVariable = &fVslider0;

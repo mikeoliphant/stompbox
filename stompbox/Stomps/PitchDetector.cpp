@@ -10,7 +10,7 @@ PitchDetector::PitchDetector(int bufferSize)
 	Name = "PitchDetector";
 
 	NumParameters = PITCHDETECTOR_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[PITCHDETECTOR_MUTE].Name = "Mute";
 	Parameters[PITCHDETECTOR_MUTE].SourceVariable = &muteOutput;

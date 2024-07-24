@@ -12,7 +12,7 @@ GraphicEqualizer::GraphicEqualizer(int numBands, double* frequencies, double q)
 	volume = 0;
 
 	NumParameters = numBands + 1;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	peakingFilters = new PeakingFilter*[numBands];
 

@@ -7,7 +7,7 @@ Fuzz::Fuzz()
 	Name = "Fuzz";
 
 	NumParameters = FUZZ_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	level = 0.5;
 	fuzz = 0.5;

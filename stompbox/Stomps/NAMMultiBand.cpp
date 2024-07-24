@@ -5,7 +5,7 @@ NAMMultiBand::NAMMultiBand()
     Name = "NAMMulti";
 
     NumParameters = NAMMULTIBAND_NUMPARAMETERS;
-    Parameters = new StompBoxParameter[NumParameters];
+    CreateParameters(NumParameters);
 
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].Name = "Freq";
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].MinValue = 10;
@@ -28,13 +28,13 @@ void NAMMultiBand::IndexModels(std::filesystem::path path)
 	nam.IndexModels(path);
 }
 
-void NAMMultiBand::SetParameterValue(int id, double value)
+void NAMMultiBand::SetParameterValue(StompBoxParameter *parameter, double value)
 {
-	StompBox::SetParameterValue(id, value);
+	StompBox::SetParameterValue(parameter, value);
 
-	if (id == NAMMULTIBAND_MODEL)
+	if (parameter == &Parameters[NAMMULTIBAND_MODEL])
 	{
-		nam.SetParameterValue(NAM_MODEL, value);
+		nam.GetParameter(NAM_MODEL)->SetValue(value);
 	}
 }
 

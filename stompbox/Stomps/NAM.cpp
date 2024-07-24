@@ -6,7 +6,7 @@ NAM::NAM()
     Name = "NAM";
 
     NumParameters = NAM_NUMPARAMETERS;
-    Parameters = new StompBoxParameter[NumParameters];
+    CreateParameters(NumParameters);
 
     Parameters[NAM_MODEL].Name = "Model";
     Parameters[NAM_MODEL].SourceVariable = &modelIndex;
@@ -23,12 +23,6 @@ void NAM::init(int samplingFreq)
 }
 
 void NAM::IndexModels(std::filesystem::path path)
-
-
-
-
-
-
 {
     modelNames.clear();
 
@@ -51,11 +45,11 @@ void NAM::IndexModels(std::filesystem::path path)
     Parameters[NAM_MODEL].MaxValue = (int)modelNames.size() - 1;
 }
 
-void NAM::SetParameterValue(int id, double value)
+void NAM::SetParameterValue(StompBoxParameter* parameter, double value)
 {
-    StompBox::SetParameterValue(id, value);
+    StompBox::SetParameterValue(parameter, value);
 
-    if (id == NAM_MODEL)
+    if (parameter == &Parameters[NAM_MODEL])
     {
         SetModel((int)modelIndex);
     }

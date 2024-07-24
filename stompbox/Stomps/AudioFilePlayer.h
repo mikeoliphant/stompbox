@@ -43,7 +43,7 @@ public:
 	~AudioFilePlayer() {}
 	void IndexFiles(std::filesystem::path path);
 	void SetFile(const std::string filename);
-	void SetParameterValue(int id, double value);
+	void SetParameterValue(StompBoxParameter* parameter, double value);
 	virtual void HandleCommand(std::vector<std::string> commandWords);
 
 	virtual void init(int samplingFreq);

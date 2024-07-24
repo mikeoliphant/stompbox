@@ -358,20 +358,6 @@ void PluginProcessor::InitPlugin(StompBox* plugin)
         plugin->init(sampleRate);
         plugin->SetBPM(bpm);
 
-        if (plugin->RampTime > 0)
-        {
-            plugin->RampSamples = sampleRate * plugin->RampTime;
-            plugin->RampPos = 0; // -plugin->RampSamples;
-            //int numPasses = ceil((sampleRate * 0.5) / (double)tmpBufSize);
-
-            //fprintf(stderr, "**Ramp %d passes of %d samples\n", numPasses, tmpBufSize);
-
-            //for (int pass = 0; pass < numPasses; pass++)
-            //{
-            //    plugin->compute(tmpBufSize, tmpBuf1, tmpBuf2);
-            //}
-        }
-
         plugin->NeedsInit = false;
     }
 }
@@ -380,103 +366,114 @@ std::string PluginProcessor::DumpConfig()
 {
     std::string dump;
 
-    for (const auto& plugin : pluginFactory.GetAllPlugins())
+    for (const auto& pluginName : pluginFactory.GetAllPlugins())
     {
-        StompBox* component = pluginFactory.CreatePlugin(plugin, plugin);
+        StompBox* plugin = pluginFactory.CreatePlugin(pluginName, pluginName);
 
         dump.append("PluginConfig ");
-        dump.append(component->Name);
+        dump.append(plugin->Name);
 
-        if (!component->BackgroundColor.empty())
+        if (!plugin->BackgroundColor.empty())
         {
             dump.append(" BackgroundColor ");
-            dump.append(component->BackgroundColor);
+            dump.append(plugin->BackgroundColor);
         }
 
-        if (!component->ForegroundColor.empty())
+        if (!plugin->ForegroundColor.empty())
         {
             dump.append(" ForegroundColor ");
-            dump.append(component->ForegroundColor);
+            dump.append(plugin->ForegroundColor);
         }
 
         dump.append(" IsUserSelectable ");
-        dump.append(component->IsUserSelectable ? "1" : "0");
+        dump.append(plugin->IsUserSelectable ? "1" : "0");
 
         dump.append("\r\n");
 
-        for (int i = 0; i < component->NumParameters; i++)
-        {
-            StompBoxParameter* param = component->GetParameter(i);
+        if (plugin->InputGain != nullptr)
+            AppendParamDefs(dump, plugin->InputGain);
 
-            dump.append("ParameterConfig ");
-            dump.append(component->Name);
-            dump.append(" ");
-            dump.append(param->Name);
-            
-            dump.append(" Type ");
+        AppendParamDefs(dump, plugin);
 
-            switch (param->ParameterType)
-            {
-            case PARAMETER_TYPE_KNOB:
-                dump.append("Knob");
-                break;
-            case PARAMETER_TYPE_BOOL:
-                dump.append("Bool");
-                break;
-            case PARAMETER_TYPE_INT:
-                dump.append("Int");
-                break;
-            case PARAMETER_TYPE_VSLIDER:
-                dump.append("VSlider");
-                break;
-            case PARAMETER_TYPE_ENUM:
-                dump.append("Enum");
-                break;
-            }
-
-            dump.append(" MinValue ");
-            dump.append(std::to_string(param->MinValue));
-
-            dump.append(" MaxValue ");
-            dump.append(std::to_string(param->MaxValue));
-
-            dump.append(" DefaultValue ");
-            dump.append(std::to_string(param->DefaultValue));
-
-            dump.append(" ValueFormat ");
-            dump.append(param->DisplayFormat);
-
-            dump.append(" CanSyncToHostBPM ");
-            dump.append(param->CanSyncToHostBPM ? "1" : "0");
-
-            dump.append(" IsAdvanced ");
-            dump.append(param->IsAdvanced ? "1" : "0");
-
-            dump.append("\r\n");
-
-            if (param->ParameterType == PARAMETER_TYPE_ENUM)
-            {
-                dump.append("ParameterEnumValues ");
-
-                dump.append(component->Name);
-                dump.append(" ");
-                dump.append(param->Name);
-
-
-                for (const auto& enumValue : *(param->EnumValues))
-                {
-                    dump.append(" ");
-                    dump.append(enumValue);
-                }
-
-                dump.append("\r\n");
-            }           
-        }
+        if (plugin->OutputVolume != nullptr)
+            AppendParamDefs(dump, plugin->OutputVolume);
 
         dump.append("EndConfig\r\n");
     }
 
     return dump;
+}
+
+void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
+{
+    for (int i = 0; i < plugin->NumParameters; i++)
+    {
+        StompBoxParameter* param = plugin->GetParameter(i);
+
+        dump.append("ParameterConfig ");
+        dump.append(plugin->Name);
+        dump.append(" ");
+        dump.append(param->Name);
+
+        dump.append(" Type ");
+
+        switch (param->ParameterType)
+        {
+        case PARAMETER_TYPE_KNOB:
+            dump.append("Knob");
+            break;
+        case PARAMETER_TYPE_BOOL:
+            dump.append("Bool");
+            break;
+        case PARAMETER_TYPE_INT:
+            dump.append("Int");
+            break;
+        case PARAMETER_TYPE_VSLIDER:
+            dump.append("VSlider");
+            break;
+        case PARAMETER_TYPE_ENUM:
+            dump.append("Enum");
+            break;
+        }
+
+        dump.append(" MinValue ");
+        dump.append(std::to_string(param->MinValue));
+
+        dump.append(" MaxValue ");
+        dump.append(std::to_string(param->MaxValue));
+
+        dump.append(" DefaultValue ");
+        dump.append(std::to_string(param->DefaultValue));
+
+        dump.append(" ValueFormat ");
+        dump.append(param->DisplayFormat);
+
+        dump.append(" CanSyncToHostBPM ");
+        dump.append(param->CanSyncToHostBPM ? "1" : "0");
+
+        dump.append(" IsAdvanced ");
+        dump.append(param->IsAdvanced ? "1" : "0");
+
+        dump.append("\r\n");
+
+        if (param->ParameterType == PARAMETER_TYPE_ENUM)
+        {
+            dump.append("ParameterEnumValues ");
+
+            dump.append(plugin->Name);
+            dump.append(" ");
+            dump.append(param->Name);
+
+
+            for (const auto& enumValue : *(param->EnumValues))
+            {
+                dump.append(" ");
+                dump.append(enumValue);
+            }
+
+            dump.append("\r\n");
+        }
+    }
 }
 
 void PluginProcessor::AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly)
@@ -490,6 +487,21 @@ void PluginProcessor::AppendPluginParams(std::string& dump, StompBox* plugin, bo
         dump.append("\r\n");
     }
 
+    if (plugin->InputGain != nullptr)
+    {
+        AppendParams(dump, plugin->InputGain, dirtyOnly);
+    }
+
+    if (plugin->OutputVolume != nullptr)
+    {
+        AppendParams(dump, plugin->OutputVolume, dirtyOnly);
+    }
+
+    AppendParams(dump, plugin, dirtyOnly);
+}
+
+void PluginProcessor::AppendParams(std::string& dump, StompBox* plugin, bool dirtyOnly)
+{
     for (int i = 0; i < plugin->NumParameters; i++)
     {
         StompBoxParameter* param = plugin->GetParameter(i);
@@ -641,14 +653,14 @@ std::string PluginProcessor::DumpProgram()
         dump.append(" ");
         dump.append(entry.Plugin->ID);
 
-        if (entry.Parameter == -1)
+        if (entry.Parameter.empty())
         {
             dump.append(" Enabled");
         }
         else
         {
             dump.append(" ");
-            dump.append((entry.Plugin->Parameters + entry.Parameter)->Name);
+            dump.append(entry.Parameter);
         }
 
         dump.append("\r\n");
@@ -790,79 +802,74 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                             {
                                 component->Enabled = (atoi(commandWords[3].c_str()) == 1);
 
-                                CheckMidiCommand(component, -1);
+                                CheckMidiCommand(component, nullptr);
                             }
 
                             gotParam = true;
                         }
                         else
                         {
-                            for (int i = 0; i < component->NumParameters; i++)
+                            StompBoxParameter* param = component->GetParameter(commandWords[2]);
+
+                            if (param != nullptr)
                             {
-                                StompBoxParameter* param = component->GetParameter(i);
+                                std::cerr << "Set on parameter: " << commandWords[2] << "\n";
 
-                                if (param->Name == commandWords[2])
+                                if (commandWords.size() > 3)
                                 {
-                                    std::cerr << "Set on parameter: " << commandWords[2] << "\n";
-
-                                    if (commandWords.size() > 3)
+                                    if (param->ParameterType == PARAMETER_TYPE_ENUM)
                                     {
-                                        if (component->GetParameter(i)->ParameterType == PARAMETER_TYPE_ENUM)
+                                        std::string paramValue = commandWords[3];
+
+                                        // Concatenate any additional words - should probably enclose in quotes or something instead
+                                        for (int i = 4; i < commandWords.size(); i++)
                                         {
-                                            std::string paramValue = commandWords[3];
-
-                                            // Concatenate any additional words - should probably enclose in quotes or something instead
-                                            for (int i = 4; i < commandWords.size(); i++)
-                                            {
-                                                paramValue += " " + commandWords[i];
-                                            }
-
-                                            std::vector<std::string>* enumValues = param->EnumValues;
-
-                                            bool gotEnum = false;
-
-                                            for (int e = 0; e < (int)enumValues->size(); e++)
-                                            {
-                                                if ((*enumValues)[e] == paramValue)
-                                                {
-                                                    component->SetParameterValue(i, e);
-
-                                                    gotEnum = true;
-
-                                                    break;
-                                                }
-                                            }
-
-                                            if (!gotEnum)
-                                            {
-                                                err.append("Bad Enum Value");
-                                            }
-                                        }
-                                        else if (param->CanSyncToHostBPM && (commandWords[3].find('/') != std::string::npos))
-                                        {
-                                            size_t pos = commandWords[3].find('/');
-
-                                            param->BPMSyncNumerator = atoi(commandWords[3].substr(0, pos).c_str());
-                                            param->BPMSyncDenominator = atoi(commandWords[3].c_str() + pos + 1);
-
-                                            component->UpdateBPM();
-                                        }
-                                        else
-                                        {
-                                            if (param->CanSyncToHostBPM)
-                                            {
-                                                param->BPMSyncNumerator = param->BPMSyncDenominator = 0;
-                                            }
-
-                                            component->SetParameterValue(i, atof(commandWords[3].c_str()));
-
-                                            CheckMidiCommand(component, i);
+                                            paramValue += " " + commandWords[i];
                                         }
 
-                                        gotParam = true;
+                                        std::vector<std::string>* enumValues = param->EnumValues;
+
+                                        bool gotEnum = false;
+
+                                        for (int e = 0; e < (int)enumValues->size(); e++)
+                                        {
+                                            if ((*enumValues)[e] == paramValue)
+                                            {
+                                                param->SetValue(e);
+
+                                                gotEnum = true;
+
+                                                break;
+                                            }
+                                        }
+
+                                        if (!gotEnum)
+                                        {
+                                            err.append("Bad Enum Value");
+                                        }
+                                    }
+                                    else if (param->CanSyncToHostBPM && (commandWords[3].find('/') != std::string::npos))
+                                    {
+                                        size_t pos = commandWords[3].find('/');
+
+                                        param->BPMSyncNumerator = atoi(commandWords[3].substr(0, pos).c_str());
+                                        param->BPMSyncDenominator = atoi(commandWords[3].c_str() + pos + 1);
+
+                                        component->UpdateBPM();
+                                    }
+                                    else
+                                    {
+                                        if (param->CanSyncToHostBPM)
+                                        {
+                                            param->BPMSyncNumerator = param->BPMSyncDenominator = 0;
+                                        }
+
+                                        param->SetValue(atof(commandWords[3].c_str()));
+
+                                        CheckMidiCommand(component, param);
                                     }
 
-                                    break;
+                                    gotParam = true;
                                 }
                             }
                         }
@@ -1024,25 +1031,15 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                     {
                         if (commandWords[3] == "Enabled")
                         {
-                            ccMap.Parameter = -1;
+                            ccMap.Parameter = "";
 
                             ccMapEntries.push_back(ccMap);
                         }
                         else
                         {
-                            for (int i = 0; i < plugin->NumParameters; i++)
-                            {
-                                StompBoxParameter* param = plugin->GetParameter(i);
+                            ccMap.Parameter.assign(commandWords[3]);
 
-                                if (param->Name == commandWords[3])
-                                {
-                                    ccMap.Parameter = i;
-
-                                    ccMapEntries.push_back(ccMap);
-
-                                    break;
-                                }
-                            }
+                            ccMapEntries.push_back(ccMap);
                         }
                     }
                 }
@@ -1208,26 +1205,29 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
 
                         fprintf(stderr, "Plugin is %s\n", ccMap.Plugin->Name.c_str());
 
-                        if (ccMap.Parameter == -1) // Enabled
+                        if (ccMap.Parameter.empty()) // Enabled
                         {
                             ccMap.Plugin->Enabled = !ccMap.Plugin->Enabled; // (midiData2 > 1);
 
-                            CheckMidiCommand(ccMap.Plugin, -1);
+                            CheckMidiCommand(ccMap.Plugin, nullptr);
 
                             ccMap.Plugin->EnabledIsDirty = true;
                         }
                         else
                         {
-                            StompBoxParameter* parameter = ccMap.Plugin->Parameters + ccMap.Parameter;
+                            StompBoxParameter* parameter = ccMap.Plugin->GetParameter(ccMap.Parameter);
 
-                            double value = parameter->MinValue + ((parameter->MaxValue - parameter->MinValue) * ((double)midiData2 / 127.0));
+                            if (parameter != nullptr)
+                            {
+                                double value = parameter->MinValue + ((parameter->MaxValue - parameter->MinValue) * ((double)midiData2 / 127.0));
 
-                            ccMap.Plugin->SetParameterValue(ccMap.Parameter, value);
+                                parameter->SetValue(value);
 
-                            CheckMidiCommand(ccMap.Plugin, ccMap.Parameter);
+                                CheckMidiCommand(ccMap.Plugin, parameter);
 
-                            ccMap.Plugin->ParamIsDirty = true;
-                            parameter->IsDirty = true;
+                                ccMap.Plugin->ParamIsDirty = true;
+                                parameter->IsDirty = true;
+                            }
                         }
 
                         handled = true;
@@ -1287,11 +1287,11 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
     return false;
 }
 
-bool PluginProcessor::CheckMidiCommand(StompBox* plugin, int parameter)
+bool PluginProcessor::CheckMidiCommand(StompBox* plugin, StompBoxParameter* parameter)
 {
     for (auto& ccMap : ccMapEntries)
     {
-        if ((ccMap.Plugin == plugin) && (ccMap.Parameter == parameter))
+        if ((ccMap.Plugin == plugin) && ((ccMap.Parameter.empty() && (parameter == nullptr)) || (ccMap.Parameter == parameter->Name)))
         {
             int stomp = -1;
 
@@ -1309,14 +1309,14 @@ bool PluginProcessor::CheckMidiCommand(StompBox* plugin, int parameter)
             {
                 if (serialDisplayInterface.IsConnected())
                 {
-                    if (ccMap.Parameter == -1)
+                    if (ccMap.Parameter.empty())
                     {
                         serialDisplayInterface.HandleStomp(stomp, ccMap.Plugin->Enabled, ccMap.Plugin->Name.c_str(), "Enabled",
                             ccMap.Plugin->BackgroundColor.c_str(), ccMap.Plugin->ForegroundColor.c_str());
                     }
                     else
                     {
-                        serialDisplayInterface.HandleStomp(stomp, (ccMap.Plugin->GetParameterValue(ccMap.Parameter) > 0), ccMap.Plugin->Name.c_str(), ccMap.Plugin->Parameters[ccMap.Parameter].Name.c_str(),
+                        serialDisplayInterface.HandleStomp(stomp, (parameter->GetValue()) > 0, ccMap.Plugin->Name.c_str(), parameter->Name.c_str(),
                             ccMap.Plugin->BackgroundColor.c_str(), ccMap.Plugin->ForegroundColor.c_str());
                     }
                 }
@@ -1334,7 +1334,7 @@ void PluginProcessor::SyncPreset()
 
     for (auto& ccMap : ccMapEntries)
     {
-        CheckMidiCommand(ccMap.Plugin, ccMap.Parameter);
+        CheckMidiCommand(ccMap.Plugin, ccMap.Plugin->GetParameter(ccMap.Parameter));
     }
 }
 
@@ -1435,32 +1435,24 @@ void PluginProcessor::Process(double* input, double* output, int count)
     {
         if (plugin->NeedsInit)
         {
+            if (plugin->InputGain != nullptr)
+                InitPlugin(plugin->InputGain);
+
+            if (plugin->OutputVolume != nullptr)
+                InitPlugin(plugin->OutputVolume);
+
             InitPlugin(plugin);
         }
 
         if (plugin->Enabled)
         {
+            if (plugin->InputGain != nullptr)
+                plugin->InputGain->compute(count, output, output);
+
             plugin->compute(count, output, output);
-        }
 
-        if (plugin->RampSamples != 0)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                double gain = abs((double)plugin->RampPos) / (double)plugin->RampSamples;
-
-                output[i] *= gain;
-
-                plugin->RampPos++;
-
-                if (plugin->RampPos >= plugin->RampSamples)
-                {
-                    plugin->RampPos = 0;
-                    plugin->RampSamples = 0;
-
-                    break;
-                }
-            }
+            if (plugin->OutputVolume != nullptr)
+                plugin->OutputVolume->compute(count, output, output);
         }
 
         // restore previous floating point state

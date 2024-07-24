@@ -42,7 +42,7 @@ public:
 	virtual ~NAM() {}
 	virtual void init(int samplingFreq);
 	void IndexModels(std::filesystem::path path);
-	void SetParameterValue(int id, double value);
+	void SetParameterValue(StompBoxParameter* parameter, double value);
 	void SetModel(int index);
 	void SetModel(const std::string filename);
 	virtual void compute(int count, double* input, double* output);

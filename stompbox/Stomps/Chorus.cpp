@@ -21,7 +21,7 @@ namespace chorus
 		fVslider0 = FAUSTFLOAT(100.0);
 
 		NumParameters = CHORUS_NUMPARAMETERS;
-		Parameters = new StompBoxParameter[NumParameters];
+		CreateParameters(NumParameters);
 
 		//Parameters[CHORUS_LEVEL].Name = "Level";
 		//Parameters[CHORUS_LEVEL].SourceVariable = &fHslider0;

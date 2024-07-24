@@ -5,7 +5,7 @@ AudioFilePlayer::AudioFilePlayer()
 	Name = "AudioFilePlayer";
 
 	NumParameters = AUDIOFILEPLAYER_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[AUDIOFILEPLAYER_FILE].Name = "File";
 	Parameters[AUDIOFILEPLAYER_FILE].SourceVariable = &fileIndex;
@@ -59,15 +59,15 @@ void AudioFilePlayer::IndexFiles(std::filesystem::path path)
 	Parameters[AUDIOFILEPLAYER_FILE].MaxValue = (int)fileNames.size() - 1;
 }
 
-void AudioFilePlayer::SetParameterValue(int id, double value)
+void AudioFilePlayer::SetParameterValue(StompBoxParameter* param, double value)
 {
-	StompBox::SetParameterValue(id, value);
+	StompBox::SetParameterValue(param, value);
 
-	if (id == AUDIOFILEPLAYER_FILE)
+	if (param == &Parameters[AUDIOFILEPLAYER_FILE])
 	{
 		needWaveLoad = true;
 	}
-	else if (id == AUDIOFILEPLAYER_POSITION)
+	else if (param == &Parameters[AUDIOFILEPLAYER_POSITION])
 	{
 		if (waveReader)
 		{

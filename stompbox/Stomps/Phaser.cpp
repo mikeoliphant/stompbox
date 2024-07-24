@@ -20,7 +20,7 @@ Phaser::Phaser()
 	frqwidth = 0.3;
 	
 	NumParameters = PHASER_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 	Parameters[PHASER_SPEED].Name = "Speed";
 	Parameters[PHASER_SPEED].MaxValue = 10;
 	Parameters[PHASER_SPEED].SourceVariable = &freq;

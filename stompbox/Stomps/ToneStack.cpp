@@ -40,7 +40,7 @@ Tonestack::Tonestack()
 	fVslider2 = FAUSTFLOAT(5);
 
 	NumParameters = TONESTACK_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[TONESTACK_BASS].Name = "Bass";
 	Parameters[TONESTACK_BASS].SourceVariable = &fVslider1;
@@ -73,11 +73,11 @@ Tonestack::Tonestack()
 	}
 }
 
-void Tonestack::SetParameterValue(int id, double value)
+void Tonestack::SetParameterValue(StompBoxParameter *parameter, double value)
 {
-	StompBox::SetParameterValue(id, value);
+	StompBox::SetParameterValue(parameter, value);
 
-	if (id == TONESTACK_PRESET)
+	if (parameter == &Parameters[TONESTACK_PRESET])
 	{
 		needUpdate = true;
 	}

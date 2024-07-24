@@ -15,7 +15,7 @@ AutoWah::AutoWah()
 	fVslider0 = FAUSTFLOAT(0.5);
 
 	NumParameters = AUTOWAH_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 	Parameters[AUTOWAH_LEVEL].Name = "Level";
 	Parameters[AUTOWAH_LEVEL].DefaultValue = fVslider0;
 	Parameters[AUTOWAH_LEVEL].SourceVariable = &fVslider0;

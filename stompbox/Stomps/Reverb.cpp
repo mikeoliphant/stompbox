@@ -17,7 +17,7 @@ FreeVerb::FreeVerb()
 	fVslider2 = FAUSTFLOAT(5);
 
 	NumParameters = REVERB_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[REVERB_ROOMSIZE].Name = "Size";
 	Parameters[REVERB_ROOMSIZE].SourceVariable = &fVslider1;

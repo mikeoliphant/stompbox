@@ -13,7 +13,7 @@ NoiseGate::NoiseGate()
 	releaseMS = 50;
 
 	NumParameters = NOISEGATE_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[NOISEGATE_THRESHOLD].Name = "Thresh";
 	Parameters[NOISEGATE_THRESHOLD].MinValue = -100;

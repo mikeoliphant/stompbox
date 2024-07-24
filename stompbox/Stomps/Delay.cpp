@@ -20,7 +20,7 @@ Delay::Delay()
 	hilo = 0.5;
 
 	NumParameters = DELAY_NUMPARAMETERS;
-	Parameters = new StompBoxParameter[NumParameters];
+	CreateParameters(NumParameters);
 
 	Parameters[DELAY_DELAY].Name = "Delay";
 	Parameters[DELAY_DELAY].MinValue = 1;
