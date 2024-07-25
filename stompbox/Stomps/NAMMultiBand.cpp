@@ -23,6 +23,7 @@ NAMMultiBand::NAMMultiBand()
 	memcpy(&Parameters[NAMMULTIBAND_MODEL_VOLUME], &nam.OutputVolume->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));
 
 	memcpy(&Parameters[NAMMULTIBAND_MODEL], &nam.Parameters[NAM_MODEL], sizeof(StompBoxParameter));
+	Parameters[NAMMULTIBAND_MODEL].Stomp = this;
 }
 
 void NAMMultiBand::init(int samplingFreq)
