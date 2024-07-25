@@ -1,8 +1,13 @@
 #include "NAMMultiBand.h"
+#include "Gain.h"
 
 NAMMultiBand::NAMMultiBand()
 {
     Name = "NAMMulti";
+
+	nam.InputGain = new Gain(0, -40, 40);
+	nam.OutputVolume = new Gain(0, -40, 40);
+	nam.OutputVolume->Parameters[GAIN_GAIN].Name = "Volume";
 
     NumParameters = NAMMULTIBAND_NUMPARAMETERS;
     CreateParameters(NumParameters);
@@ -14,12 +19,18 @@ NAMMultiBand::NAMMultiBand()
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].DefaultValue = crossoverFreq;
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].DisplayFormat = "{0:0}hz";
 
+	memcpy(&Parameters[NAMMULTIBAND_MODEL_GAIN], &nam.InputGain->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));
+	memcpy(&Parameters[NAMMULTIBAND_MODEL_VOLUME], &nam.OutputVolume->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));
+
 	memcpy(&Parameters[NAMMULTIBAND_MODEL], &nam.Parameters[NAM_MODEL], sizeof(StompBoxParameter));
 }
 
 void NAMMultiBand::init(int samplingFreq)
 {
     nam.init(samplingFreq);
+	nam.InputGain->init(samplingFreq);
+	nam.OutputVolume->init(samplingFreq);
+
 	crossover.init(samplingFreq);
 }
 
@@ -43,8 +54,12 @@ void NAMMultiBand::compute(int count, double* input, double* output)
 	crossover.SetCrossoverFrequency(crossoverFreq);
 	crossover.compute(count, input, splitBuf[0], splitBuf[1]);
 
+	nam.InputGain->compute(count, splitBuf[1], splitBuf[1]);
+
 	// Run nam on high frequencies
 	nam.compute(count, splitBuf[1], output);
+
+	nam.OutputVolume->compute(count, output, output);
 
 	// Blend in passthrough of low frequencies
 	for (int i = 0; i < count; i++)
