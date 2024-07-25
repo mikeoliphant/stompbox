@@ -358,6 +358,12 @@ void PluginProcessor::InitPlugin(StompBox* plugin)
         plugin->init(sampleRate);
         plugin->SetBPM(bpm);
 
+        if (plugin->InputGain != nullptr)
+            InitPlugin(plugin->InputGain);
+
+        if (plugin->OutputVolume != nullptr)
+            InitPlugin(plugin->OutputVolume);
+
         plugin->NeedsInit = false;
     }
 }
@@ -1435,12 +1441,6 @@ void PluginProcessor::Process(double* input, double* output, int count)
     {
         if (plugin->NeedsInit)
         {
-            if (plugin->InputGain != nullptr)
-                InitPlugin(plugin->InputGain);
-
-            if (plugin->OutputVolume != nullptr)
-                InitPlugin(plugin->OutputVolume);
-
             InitPlugin(plugin);
         }
 
