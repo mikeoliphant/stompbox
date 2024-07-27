@@ -451,6 +451,9 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
         dump.append(" DefaultValue ");
         dump.append(std::to_string(param->DefaultValue));
 
+        dump.append(" RangePower ");
+        dump.append(std::to_string(param->RangePower));
+
         dump.append(" ValueFormat ");
         dump.append(param->DisplayFormat);
 

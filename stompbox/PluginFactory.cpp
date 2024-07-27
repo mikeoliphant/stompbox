@@ -23,6 +23,7 @@
 #include "Chorus.h"
 #include "Fuzz.h"
 #include "GraphicEqualizer.h"
+#include "HighLowFilter.h"
 #include "NoiseGate.h"
 #include "Screamer.h"
 
@@ -275,6 +276,13 @@ StompBox* CreateBassEQ7Plugin()
 	return beq7;
 }
 
+StompBox* CreateHighLowFilter()
+{
+	HighLowFilter* filter = new HighLowFilter();
+
+	return filter;
+}
+
 StompBox* CreateNoiseGatePlugin()
 {
 	NoiseGate* gate = new NoiseGate();
@@ -337,6 +345,7 @@ PluginFactory::PluginFactory()
 	AddPlugin("NAMMulti", &CreateNAMMultiBandPlugin);
 	AddPlugin("EQ-7", &CreateEQ7Plugin);
 	AddPlugin("BEQ-7", &CreateBassEQ7Plugin);
+	AddPlugin("HighLow", &CreateHighLowFilter);
 	AddPlugin("NoiseGate", &CreateNoiseGatePlugin);
 	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin);
 	AddPlugin("Level", &CreateLevelPlugin);

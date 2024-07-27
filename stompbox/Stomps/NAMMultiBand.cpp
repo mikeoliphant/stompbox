@@ -17,6 +17,7 @@ NAMMultiBand::NAMMultiBand()
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].MaxValue = 1000;
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].SourceVariable = &crossoverFreq;
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].DefaultValue = crossoverFreq;
+	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].RangePower = 3;
 	Parameters[NAMMULTIBAND_CROSSOVER_FREQ].DisplayFormat = "{0:0}hz";
 
 	memcpy(&Parameters[NAMMULTIBAND_MODEL_GAIN], &nam.InputGain->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));

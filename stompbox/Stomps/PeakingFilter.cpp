@@ -10,7 +10,7 @@ static double mydsp_faustpower2_f(double value) {
 
 PeakingFilter::PeakingFilter(double freq, double q)
 {
-	Name = "Phaser";
+	Name = "Peaking";
 
 	fVslider0 = 0;
 		

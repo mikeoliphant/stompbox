@@ -78,6 +78,7 @@ struct StompBoxParameter
 	double MinValue = 0;
 	double MaxValue = 1;
 	double DefaultValue = 0.5;
+	double RangePower = 1;
 	const char* DisplayFormat = "{0:0.00}";
 	double Step = 0.01;
 	int ParameterType = PARAMETER_TYPE_KNOB;
