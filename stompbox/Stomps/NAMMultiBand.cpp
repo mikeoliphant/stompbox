@@ -22,9 +22,6 @@ NAMMultiBand::NAMMultiBand()
 
 	memcpy(&Parameters[NAMMULTIBAND_MODEL_GAIN], &nam.InputGain->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));
 	memcpy(&Parameters[NAMMULTIBAND_MODEL_VOLUME], &nam.OutputVolume->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));
-
-	memcpy(&Parameters[NAMMULTIBAND_MODEL], &nam.Parameters[NAM_MODEL], sizeof(StompBoxParameter));
-	Parameters[NAMMULTIBAND_MODEL].Stomp = this;
 }
 
 void NAMMultiBand::init(int samplingFreq)
@@ -39,7 +36,21 @@ void NAMMultiBand::init(int samplingFreq)
 void NAMMultiBand::IndexModels(std::filesystem::path path)
 {
 	nam.IndexModels(path);
+
+	memcpy(&Parameters[NAMMULTIBAND_MODEL], &nam.Parameters[NAM_MODEL], sizeof(StompBoxParameter));
+	Parameters[NAMMULTIBAND_MODEL].Stomp = this;
 }
+
+double NAMMultiBand::GetParameterValue(StompBoxParameter* parameter)
+{
+	if (parameter == &Parameters[NAMMULTIBAND_MODEL])
+	{
+		return nam.GetParameter(NAM_MODEL)->GetValue();
+	}
+
+	return *(parameter->SourceVariable);
+}
+
 
 void NAMMultiBand::SetParameterValue(StompBoxParameter *parameter, double value)
 {

@@ -29,6 +29,7 @@ public:
 	virtual ~NAMMultiBand() {}
 	virtual void init(int samplingFreq);
 	void IndexModels(std::filesystem::path path);
-	void SetParameterValue(StompBoxParameter* parameter, double value);
+	double GetParameterValue(StompBoxParameter* parameter) override;
+	void SetParameterValue(StompBoxParameter* parameter, double value) override;
 	virtual void compute(int count, double* input, double* output);
 };
