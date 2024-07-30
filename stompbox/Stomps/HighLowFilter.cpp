@@ -3,6 +3,11 @@
 
 #include "HighLowFilter.h"
 
+static double mydsp_faustpower2_f(double value) {
+	return value * value;
+}
+
+
 HighLowFilter::HighLowFilter()
 {
 	Name = "HighPass";
@@ -19,7 +24,7 @@ HighLowFilter::HighLowFilter()
 	Parameters[HIGHLOWFILTER_LOW_FREQUENCY].DisplayFormat = "{0:0}hz";
 
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].Name = "High";
-	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].MinValue = 5000;
+	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].MinValue = 2000;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].MaxValue = 20000;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].SourceVariable = &highFreq;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].DefaultValue = highFreq;
@@ -47,19 +52,16 @@ void HighLowFilter::instanceConstants(int samplingFreq)
 
 void HighLowFilter::instanceClear() {
 	for (int l0 = 0; l0 < 2; l0 = l0 + 1) {
-		fRec1[l0] = 0.0;
+		fRec0[l0] = 0.0;
 	}
 	for (int l1 = 0; l1 < 2; l1 = l1 + 1) {
-		fRec3[l1] = 0.0;
+		fRec2[l1] = 0.0;
 	}
-	for (int l2 = 0; l2 < 2; l2 = l2 + 1) {
-		fVec0[l2] = 0.0;
+	for (int l2 = 0; l2 < 3; l2 = l2 + 1) {
+		fRec3[l2] = 0.0;
 	}
-	for (int l3 = 0; l3 < 2; l3 = l3 + 1) {
-		fRec2[l3] = 0.0;
-	}
-	for (int l4 = 0; l4 < 2; l4 = l4 + 1) {
-		fRec0[l4] = 0.0;
+	for (int l3 = 0; l3 < 3; l3 = l3 + 1) {
+		fRec1[l3] = 0.0;
 	}
 }
 
@@ -67,21 +69,24 @@ void HighLowFilter::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output0) 
 	double fSlow0 = fConst1 * highFreq;
 	double fSlow1 = fConst1 * lowFreq;
 	for (int i0 = 0; i0 < count; i0 = i0 + 1) {
-		fRec1[0] = fSlow0 + fConst2 * fRec1[1];
-		double fTemp0 = 1.0 / std::tan(fConst3 * fRec1[0]);
-		fRec3[0] = fSlow1 + fConst2 * fRec3[1];
-		double fTemp1 = std::tan(fConst3 * fRec3[0]);
-		double fTemp2 = 1.0 / fTemp1;
-		double fTemp3 = double(input0[i0]);
-		fVec0[0] = fTemp3;
-		fRec2[0] = -((fRec2[1] * (1.0 - fTemp2) - (fTemp3 - fVec0[1]) / fTemp1) / (fTemp2 + 1.0));
-		fRec0[0] = -((fRec0[1] * (1.0 - fTemp0) - (fRec2[0] + fRec2[1])) / (fTemp0 + 1.0));
-		output0[i0] = FAUSTFLOAT(fRec0[0]);
-		fRec1[1] = fRec1[0];
-		fRec3[1] = fRec3[0];
-		fVec0[1] = fVec0[0];
-		fRec2[1] = fRec2[0];
+		fRec0[0] = fSlow0 + fConst2 * fRec0[1];
+		double fTemp0 = std::tan(fConst3 * fRec0[0]);
+		double fTemp1 = 1.0 / fTemp0;
+		double fTemp2 = (fTemp1 + 1.414213562373095) / fTemp0 + 1.0;
+		fRec2[0] = fSlow1 + fConst2 * fRec2[1];
+		double fTemp3 = std::tan(fConst3 * fRec2[0]);
+		double fTemp4 = 1.0 / fTemp3;
+		double fTemp5 = (fTemp4 + 1.414213562373095) / fTemp3 + 1.0;
+		double fTemp6 = mydsp_faustpower2_f(fTemp3);
+		fRec3[0] = double(input0[i0]) - (fRec3[2] * ((fTemp4 + -1.414213562373095) / fTemp3 + 1.0) + 2.0 * fRec3[1] * (1.0 - 1.0 / fTemp6)) / fTemp5;
+		fRec1[0] = (fRec3[2] + (fRec3[0] - 2.0 * fRec3[1])) / (fTemp6 * fTemp5) - (fRec1[2] * ((fTemp1 + -1.414213562373095) / fTemp0 + 1.0) + 2.0 * fRec1[1] * (1.0 - 1.0 / mydsp_faustpower2_f(fTemp0))) / fTemp2;
+		output0[i0] = FAUSTFLOAT((fRec1[2] + fRec1[0] + 2.0 * fRec1[1]) / fTemp2);
 		fRec0[1] = fRec0[0];
+		fRec2[1] = fRec2[0];
+		fRec3[2] = fRec3[1];
+		fRec3[1] = fRec3[0];
+		fRec1[2] = fRec1[1];
+		fRec1[1] = fRec1[0];
 	}
 }
 
