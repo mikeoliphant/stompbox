@@ -24,7 +24,7 @@ HighLowFilter::HighLowFilter()
 	Parameters[HIGHLOWFILTER_LOW_FREQUENCY].DisplayFormat = "{0:0}hz";
 
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].Name = "High";
-	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].MinValue = 2000;
+	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].MinValue = 1000;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].MaxValue = 20000;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].SourceVariable = &highFreq;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].DefaultValue = highFreq;

@@ -25,6 +25,7 @@
 #include "GraphicEqualizer.h"
 #include "HighLowFilter.h"
 #include "NoiseGate.h"
+#include "MultiGate.h"
 #include "Screamer.h"
 
 StompBox* CreateInputGainPlugin()
@@ -293,6 +294,16 @@ StompBox* CreateNoiseGatePlugin()
 	return gate;
 }
 
+StompBox* CreateMultiGatePlugin()
+{
+	MultiGate* gate = new MultiGate();
+
+	gate->BackgroundColor = "#111111";
+	gate->ForegroundColor = "#ffffff";
+
+	return gate;
+}
+
 StompBox* CreateTunerPlugin()
 {
 	PitchDetector *tuner = new PitchDetector(4096);
@@ -347,6 +358,7 @@ PluginFactory::PluginFactory()
 	AddPlugin("BEQ-7", &CreateBassEQ7Plugin);
 	AddPlugin("HighLow", &CreateHighLowFilter);
 	AddPlugin("NoiseGate", &CreateNoiseGatePlugin);
+	AddPlugin("MultiGate", &CreateMultiGatePlugin);
 	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin);
 	AddPlugin("Level", &CreateLevelPlugin);
 	AddPlugin("Input", &CreateInputGainPlugin);
