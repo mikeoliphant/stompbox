@@ -357,8 +357,8 @@ PluginFactory::PluginFactory()
 	AddPlugin("EQ-7", &CreateEQ7Plugin);
 	AddPlugin("BEQ-7", &CreateBassEQ7Plugin);
 	AddPlugin("HighLow", &CreateHighLowFilter);
-	AddPlugin("NoiseGate", &CreateNoiseGatePlugin);
-	AddPlugin("MultiGate", &CreateMultiGatePlugin);
+	AddPlugin("NoiseGate", &CreateMultiGatePlugin);
+	AddPlugin("SimpleGate", &CreateNoiseGatePlugin);
 	AddPlugin("Cabinet", &CreateGuitarConvolverPlugin);
 	AddPlugin("Level", &CreateLevelPlugin);
 	AddPlugin("Input", &CreateInputGainPlugin);
