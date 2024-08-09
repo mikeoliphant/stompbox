@@ -478,6 +478,7 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
 
             dump.append("\"");
             dump.append(param->Description);
+            dump.append("\"");
         }
 
         dump.append("\r\n");
