@@ -394,6 +394,15 @@ std::string PluginProcessor::DumpConfig()
         dump.append(" IsUserSelectable ");
         dump.append(plugin->IsUserSelectable ? "1" : "0");
 
+        if (!plugin->Description.empty())
+        {
+            dump.append(" Description ");
+
+            dump.append("\"");
+            dump.append(plugin->Description);
+            dump.append("\"");
+        }
+
         dump.append("\r\n");
 
         if (plugin->InputGain != nullptr)
@@ -462,6 +471,14 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
 
         dump.append(" IsAdvanced ");
         dump.append(param->IsAdvanced ? "1" : "0");
+
+        if (!param->Description.empty())
+        {
+            dump.append(" Description ");
+
+            dump.append("\"");
+            dump.append(param->Description);
+        }
 
         dump.append("\r\n");
 
@@ -753,6 +770,11 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
     std::vector<std::string> commandWords;
     std::istringstream iss(line);
+    std::string s;
+
+    while (iss >> std::quoted(s)) {
+        commandWords.push_back(s);
+    }
 
     for (std::string word; iss >> word; )
     {

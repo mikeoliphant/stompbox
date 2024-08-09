@@ -4,6 +4,7 @@
 NAM::NAM()
 {
     Name = "NAM";
+    Description = "Neural Amp Modeler capture playback";
 
     NumParameters = NAM_NUMPARAMETERS;
     CreateParameters(NumParameters);

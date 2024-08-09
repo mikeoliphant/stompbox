@@ -44,6 +44,7 @@ public:
 	int NumParameters;
 	std::string Name;
 	std::string ID;
+	std::string Description;
 	std::string BackgroundColor;
 	std::string ForegroundColor;
 	bool IsUserSelectable = true;
@@ -73,6 +74,7 @@ public:
 struct StompBoxParameter
 {
 	std::string Name = "Unnamed";
+	std::string Description;
 	StompBox* Stomp = nullptr;
 	double* SourceVariable = nullptr;
 	double MinValue = 0;

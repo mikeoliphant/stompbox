@@ -6,6 +6,7 @@
 MultiGate::MultiGate()
 {
 	Name = "MultiGate";
+	Description = "Multi-band noise gate";
 
 	threshold = -70;
 	attackMS = 10;
@@ -23,6 +24,7 @@ MultiGate::MultiGate()
 	Parameters[MULTIGATE_THRESHOLD].DefaultValue = threshold;
 	Parameters[MULTIGATE_THRESHOLD].RangePower = 2;
 	Parameters[MULTIGATE_THRESHOLD].DisplayFormat = "{0:0}db";
+	Parameters[MULTIGATE_THRESHOLD].Description = "Gate threshold";
 
 	Parameters[MULTIGATE_STRENGTH].Name = "Strength";
 	Parameters[MULTIGATE_STRENGTH].MinValue = 1;
@@ -30,6 +32,7 @@ MultiGate::MultiGate()
 	Parameters[MULTIGATE_STRENGTH].SourceVariable = &strength;
 	Parameters[MULTIGATE_STRENGTH].DefaultValue = strength;
 	Parameters[MULTIGATE_STRENGTH].DisplayFormat = "{0:0}dB";
+	Parameters[MULTIGATE_STRENGTH].Description = "Amount of gate attenuation";
 	Parameters[MULTIGATE_STRENGTH].IsAdvanced = false;
 
 	Parameters[MULTIGATE_ATTACK].Name = "Attack";
@@ -38,6 +41,7 @@ MultiGate::MultiGate()
 	Parameters[MULTIGATE_ATTACK].SourceVariable = &attackMS;
 	Parameters[MULTIGATE_ATTACK].DefaultValue = attackMS;
 	Parameters[MULTIGATE_ATTACK].DisplayFormat = "{0:0}ms";
+	Parameters[MULTIGATE_ATTACK].Description = "Reaction time for gate opening";
 	Parameters[MULTIGATE_ATTACK].IsAdvanced = true;
 
 	Parameters[MULTIGATE_RELEASE].Name = "Release";
@@ -46,6 +50,7 @@ MultiGate::MultiGate()
 	Parameters[MULTIGATE_RELEASE].SourceVariable = &releaseMS;
 	Parameters[MULTIGATE_RELEASE].DefaultValue = releaseMS;
 	Parameters[MULTIGATE_RELEASE].DisplayFormat = "{0:0}ms";
+	Parameters[MULTIGATE_RELEASE].Description = "Reaction time for gate closing";
 	Parameters[MULTIGATE_RELEASE].IsAdvanced = true;
 
 	Parameters[MULTIGATE_SOFTNESS].Name = "Soft";
@@ -54,6 +59,7 @@ MultiGate::MultiGate()
 	Parameters[MULTIGATE_SOFTNESS].SourceVariable = &softness;
 	Parameters[MULTIGATE_SOFTNESS].DefaultValue = softness;
 	Parameters[MULTIGATE_SOFTNESS].DisplayFormat = "{0:0}dB";
+	Parameters[MULTIGATE_SOFTNESS].Description = "dB range above threshold for smooth open/close";
 	Parameters[MULTIGATE_SOFTNESS].IsAdvanced = true;
 }
 
