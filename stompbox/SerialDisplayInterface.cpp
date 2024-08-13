@@ -186,7 +186,7 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 
 		bool isNegative = centDelta < 0;
 
-		centDelta = abs(centDelta);
+		centDelta = abs(centDelta) / 2.5;
 
 		int intDelta = (int)centDelta;
 
@@ -219,7 +219,7 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 					{
 						uint16_t color = (i == intDelta) ? ColorRGBto565(tint, 0, 0) : TFT_RED;
 
-						serialTFT->fillRect(xCenter - tunerCenterWidth + (tunerDeltaWidth * (-i - 1) * 2),
+						serialTFT->fillRect(xCenter - tunerCenterWidth + (tunerDeltaWidth * -i * 2),
 							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, color);
 					}
 				}
@@ -229,7 +229,7 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 					{
 						uint16_t color = (i == intDelta) ? ColorRGBto565(tint, tint, 0) : TFT_YELLOW;
 
-						serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * i * 2),
+						serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * (i - 1) * 2),
 							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, color);
 					}
 				}
