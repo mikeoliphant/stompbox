@@ -215,9 +215,9 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 			{
 				if (isNegative)
 				{
-					uint16_t color = ColorRGBto565(tint, 0, 0);
+					uint16_t color = (intDelta == 1) ? ColorRGBto565(tint, 0, 0) : TFT_RED;
 
-					for (int i = 0; i < intDelta; i++)
+					for (int i = 1; i <= intDelta; i++)
 					{
 						serialTFT->fillRect(xCenter - tunerCenterWidth + (tunerDeltaWidth * (-i - 1) * 2),
 							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, color);
@@ -225,9 +225,9 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 				}
 				else
 				{
-					uint16_t color = ColorRGBto565(tint, tint, 0);
+					uint16_t color = (intDelta == 1) ? ColorRGBto565(tint, tint, 0) : TFT_YELLOW;
 
-					for (int i = 0; i < intDelta; i++)
+					for (int i = 1; i <= intDelta; i++)
 					{
 						serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * i * 2),
 							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, TFT_YELLOW);
