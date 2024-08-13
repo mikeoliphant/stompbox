@@ -180,13 +180,19 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 
 		float targetFreq = 440.0 * pow(2.0, ((double)midiNote - 69) / 12);
 
-		fprintf(stderr, "Tuner frequency: %f Target frequency: %f Running Frequency: %f\n", frequency, targetFreq, runningFrequency);
+		//fprintf(stderr, "Tuner frequency: %f Target frequency: %f Running Frequency: %f\n", frequency, targetFreq, runningFrequency);
 
 		double centDelta = 1200 * (log(runningFrequency / targetFreq) / log(2));
 
-		int intDelta = round(centDelta / 2.5);
+		bool isNegative = centDelta < 0;
 
-		fprintf(stderr, "Midi Note: %d centDelta: %f\n", midiNote, centDelta);
+		centDelta = abs(centDelta);
+
+		int intDelta = (int)centDelta;
+
+		uint8_t tint = (uint8_t)((centDelta - intDelta) * 255.0);
+
+		//fprintf(stderr, "Midi Note: %d centDelta: %f\n", midiNote, centDelta);
 
 		if ((intDelta == lastTunerDelta) && (midiNote == lastTunerNote))
 		{
@@ -201,25 +207,31 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 
 			serialTFT->fillRect(0, yCenter - tunerHeight, screenWidth, tunerHeight * 2, BACKGROUND_COLOR);
 
-			if ((intDelta >= -1) && (intDelta <= 1))
+			if (intDelta == 0)
 			{
 				serialTFT->fillRect(xCenter - tunerCenterWidth, yCenter - tunerHeight, tunerCenterWidth * 2, tunerHeight * 2, TFT_BLUE);
 			}
+			else
+			{
+				if (isNegative)
+				{
+					uint16_t color = ColorRGBto565(tint, 0, 0);
 
-			if (intDelta < 0)
-			{
-				for (int i = 0; i > intDelta; i--)
-				{
-					serialTFT->fillRect(xCenter - tunerCenterWidth + (tunerDeltaWidth * (i - 1) * 2),
-						yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, TFT_RED);
+					for (int i = 0; i < intDelta; i++)
+					{
+						serialTFT->fillRect(xCenter - tunerCenterWidth + (tunerDeltaWidth * (-i - 1) * 2),
+							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, color);
+					}
 				}
-			}
-			else if (intDelta > 0)
-			{
-				for (int i = 0; i < intDelta; i++)
+				else
 				{
-					serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * i * 2),
-						yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, TFT_YELLOW);
+					uint16_t color = ColorRGBto565(tint, tint, 0);
+
+					for (int i = 0; i < intDelta; i++)
+					{
+						serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * i * 2),
+							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, TFT_YELLOW);
+					}
 				}
 			}
 
