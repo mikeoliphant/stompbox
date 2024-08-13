@@ -45,8 +45,8 @@ public:
 	std::string Name;
 	std::string ID;
 	std::string Description;
-	std::string BackgroundColor;
-	std::string ForegroundColor;
+	std::string BackgroundColor = "#eeeeee";
+	std::string ForegroundColor = "#000000";
 	bool IsUserSelectable = true;
 	bool NeedsInit = true;
 	bool EnabledIsDirty = false;
