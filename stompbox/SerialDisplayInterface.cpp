@@ -230,7 +230,7 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 					for (int i = 1; i <= intDelta; i++)
 					{
 						serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * i * 2),
-							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, TFT_YELLOW);
+							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, color);
 					}
 				}
 			}
