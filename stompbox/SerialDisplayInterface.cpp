@@ -123,7 +123,7 @@ void SerialDisplayInterface::HandleStomp(int stompNumber, bool enabled, const ch
 
 	int xCenter = stompWidth * (stompNumber + 0.5);
 
-	serialTFT->setTextFont("FSSB12");
+	serialTFT->setTextFont("FSSB9");
 
 	//int textWidth = max(screen.textWidth(text1), screen.textWidth(text2));
 
