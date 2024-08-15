@@ -20,6 +20,7 @@ static double mydsp_faustpower4_f(double value) {
 Vibrato::Vibrato()
 {
 	Name = "Vibrato";
+	Description = "Pitch modulation effect";
 
 	freq = 2;
 	depth = 0.5;
@@ -34,10 +35,12 @@ Vibrato::Vibrato()
 	Parameters[VIBRATO_SPEED].MaxValue = 10;
 	Parameters[VIBRATO_SPEED].SourceVariable = &freq;
 	Parameters[VIBRATO_SPEED].DefaultValue = freq;
+	Parameters[VIBRATO_SPEED].Description = "Rate of the pitch modulation";
 
 	Parameters[VIBRATO_DEPTH].Name = "Depth";
 	Parameters[VIBRATO_DEPTH].SourceVariable = &depth;
 	Parameters[VIBRATO_DEPTH].DefaultValue = depth;
+	Parameters[VIBRATO_DEPTH].Description = "Strength of the pitch modulation";
 
 	Parameters[VIBRATO_FEEDBACK].Name = "FBack";
 	Parameters[VIBRATO_FEEDBACK].MinValue = 0;
@@ -45,6 +48,7 @@ Vibrato::Vibrato()
 	Parameters[VIBRATO_FEEDBACK].SourceVariable = &fb;
 	Parameters[VIBRATO_FEEDBACK].DefaultValue = fb;
 	Parameters[VIBRATO_FEEDBACK].IsAdvanced = true;
+	Parameters[VIBRATO_FEEDBACK].Description = "Amount of feedback applied";
 
 	Parameters[VIBRATO_RATIO].Name = "Ratio";
 	Parameters[VIBRATO_RATIO].MinValue = 1.1;
@@ -52,6 +56,7 @@ Vibrato::Vibrato()
 	Parameters[VIBRATO_RATIO].SourceVariable = &fratio;
 	Parameters[VIBRATO_RATIO].DefaultValue = fratio;
 	Parameters[VIBRATO_RATIO].IsAdvanced = true;
+	Parameters[VIBRATO_RATIO].Description = "Modulation frequency ratio";
 }
 
 void Vibrato::init(int samplingFreq)

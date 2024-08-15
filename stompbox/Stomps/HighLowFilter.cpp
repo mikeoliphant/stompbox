@@ -11,6 +11,7 @@ static double mydsp_faustpower2_f(double value) {
 HighLowFilter::HighLowFilter()
 {
 	Name = "HighPass";
+	Description = "Dual high/low pass filter";
 
 	NumParameters = HIGHLOWFILTER_NUMPARAMETERS;
 	CreateParameters(NumParameters);
@@ -22,6 +23,8 @@ HighLowFilter::HighLowFilter()
 	Parameters[HIGHLOWFILTER_LOW_FREQUENCY].DefaultValue = lowFreq;
 	Parameters[HIGHLOWFILTER_LOW_FREQUENCY].RangePower = 3;
 	Parameters[HIGHLOWFILTER_LOW_FREQUENCY].DisplayFormat = "{0:0}hz";
+	Parameters[HIGHLOWFILTER_LOW_FREQUENCY].Description = "Low cut (high pass) frequency";
+
 
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].Name = "High";
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].MinValue = 1000;
@@ -30,6 +33,7 @@ HighLowFilter::HighLowFilter()
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].DefaultValue = highFreq;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].RangePower = 2;
 	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].DisplayFormat = "{0:0}hz";
+	Parameters[HIGHLOWFILTER_HIGH_FREQUENCY].Description = "High cut (low pass) frequency";
 }
 
 void HighLowFilter::init(int samplingFreq)

@@ -14,6 +14,7 @@ NAM::NAM()
     Parameters[NAM_MODEL].ParameterType = PARAMETER_TYPE_ENUM;
     Parameters[NAM_MODEL].EnumValues = &modelNames;
     Parameters[NAM_MODEL].DefaultValue = -1;
+    Parameters[NAM_MODEL].Description = "Selected NAM model";
 }
 
 void NAM::init(int samplingFreq)

@@ -11,6 +11,7 @@ static double mydsp_faustpower2_f(double value) {
 Wah::Wah()
 {
 	Name = "Wah";
+	Description = "Wah designed for use with a foot pedal";
 
 	fVslider0 = FAUSTFLOAT(0.5);
 
@@ -19,6 +20,7 @@ Wah::Wah()
 	Parameters[WAH_LEVEL].Name = "Wah";
 	Parameters[WAH_LEVEL].DefaultValue = fVslider0;
 	Parameters[WAH_LEVEL].SourceVariable = &fVslider0;
+	Parameters[WAH_LEVEL].Description = "Effect strength";
 }
 
 void Wah::init(int samplingFreq)

@@ -5,6 +5,7 @@
 Fuzz::Fuzz()
 {
 	Name = "Fuzz";
+	Description = "Simple fuzz simulation";
 
 	NumParameters = FUZZ_NUMPARAMETERS;
 	CreateParameters(NumParameters);
@@ -17,20 +18,24 @@ Fuzz::Fuzz()
 	Parameters[FUZZ_FUZZ].Name = "Fuzz";
 	Parameters[FUZZ_FUZZ].SourceVariable = &fuzz;
 	Parameters[FUZZ_FUZZ].DefaultValue = fuzz;
+	Parameters[FUZZ_FUZZ].Description = "Fuzz effect strength";
 
 	Parameters[FUZZ_LEVEL].Name = "Level";
 	Parameters[FUZZ_LEVEL].SourceVariable = &level;
 	Parameters[FUZZ_LEVEL].DefaultValue = level;
+	Parameters[FUZZ_LEVEL].Description = "Effect output level";
 
 	Parameters[FUZZ_OCTAVE].Name = "Octave";
 	Parameters[FUZZ_OCTAVE].ParameterType = PARAMETER_TYPE_BOOL;
 	Parameters[FUZZ_OCTAVE].SourceVariable = &octave;
 	Parameters[FUZZ_OCTAVE].DefaultValue = octave;
+	Parameters[FUZZ_OCTAVE].Description = "Enable/disable octave effect";
 
 	Parameters[FUZZ_ASYMMETRY].Name = "Bias";
 	Parameters[FUZZ_ASYMMETRY].SourceVariable = &asymmetry;
 	Parameters[FUZZ_ASYMMETRY].DefaultValue = asymmetry;
 	Parameters[FUZZ_ASYMMETRY].IsAdvanced = true;
+	Parameters[FUZZ_ASYMMETRY].Description = "DC offset bias";
 }
 
 void Fuzz::init(int samplingFreq)

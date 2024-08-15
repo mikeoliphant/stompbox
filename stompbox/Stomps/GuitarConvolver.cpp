@@ -3,6 +3,7 @@
 GuitarConvolver::GuitarConvolver()
 {
     Name = "Cabinet";
+    Description = "Cabinet impulse response playback";
 
     NumParameters = CONVOLVER_NUMPARAMETERS;
     CreateParameters(NumParameters);
@@ -12,14 +13,17 @@ GuitarConvolver::GuitarConvolver()
     Parameters[CONVOLVER_IMPULSE].ParameterType = PARAMETER_TYPE_ENUM;
     Parameters[CONVOLVER_IMPULSE].EnumValues = &impulseNames;
     Parameters[CONVOLVER_IMPULSE].DefaultValue = -1;
+    Parameters[CONVOLVER_IMPULSE].Description = "Selected impulse response";
 
     Parameters[CONVOLVER_DRY].Name = "Dry";
     Parameters[CONVOLVER_DRY].SourceVariable = &dry;
     Parameters[CONVOLVER_DRY].DefaultValue = 0;
+    Parameters[CONVOLVER_DRY].Description = "Strength of original signal";
 
     Parameters[CONVOLVER_WET].Name = "Wet";
     Parameters[CONVOLVER_WET].SourceVariable = &wet;
     Parameters[CONVOLVER_WET].DefaultValue = 1;
+    Parameters[CONVOLVER_WET].Description = "Strength of impulse response output";
 }
 
 void GuitarConvolver::init(int samplingFreq)

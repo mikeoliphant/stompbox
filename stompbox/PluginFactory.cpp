@@ -72,6 +72,7 @@ std::filesystem::path reverbPath;
 StompBox* CreateConvolutionReverbPlugin()
 {
 	GuitarConvolver* reverb = new GuitarConvolver();
+	reverb->Description = "Convolution reverb (impulse response)";
 
 	reverb->GetParameter(CONVOLVER_DRY)->SetValue(1);
 	reverb->GetParameter(CONVOLVER_WET)->SetValue(0.3);
@@ -119,6 +120,7 @@ StompBox* CreateLevelPlugin()
 StompBox* CreateBoostPlugin()
 {
 	Gain *gain = new Gain(10, 0, 20);
+	gain->Description = "Clean boost effect";
 
 	gain->BackgroundColor = "#e31b00";
 	gain->ForegroundColor = "#ffffff";
@@ -251,6 +253,7 @@ StompBox* CreateEQ7Plugin()
 	}
 
 	GraphicEqualizer *eq7 = new GraphicEqualizer(7, frequencies, 1);
+	eq7->Description = "7-band EQ for guitar frequencies";
 
 	eq7->BackgroundColor = "#d6d3c1";
 
@@ -271,6 +274,7 @@ StompBox* CreateBassEQ7Plugin()
 
 
 	GraphicEqualizer* beq7 = new GraphicEqualizer(7, frequencies, 1);
+	beq7->Description = "7-band EQ for bass frequencies";
 
 	beq7->BackgroundColor = "#a0a0a0";
 

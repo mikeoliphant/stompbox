@@ -6,6 +6,7 @@
 NoiseGate::NoiseGate()
 {
 	Name = "NoiseGate";
+	Description = "Simple noise gate";
 
 	threshold = -60;
 	attackMS = 5;
@@ -22,6 +23,7 @@ NoiseGate::NoiseGate()
 	Parameters[NOISEGATE_THRESHOLD].DefaultValue = threshold;
 	Parameters[NOISEGATE_THRESHOLD].CanSyncToHostBPM = true;
 	Parameters[NOISEGATE_THRESHOLD].DisplayFormat = "{0:0}db";
+	Parameters[NOISEGATE_THRESHOLD].Description = "Signal level that gate closes below";
 
 	Parameters[NOISEGATE_ATTACK].Name = "Attack";
 	Parameters[NOISEGATE_ATTACK].MinValue = 1;
@@ -30,6 +32,7 @@ NoiseGate::NoiseGate()
 	Parameters[NOISEGATE_ATTACK].DefaultValue = attackMS;
 	Parameters[NOISEGATE_ATTACK].DisplayFormat = "{0:0}ms";
 	Parameters[NOISEGATE_ATTACK].IsAdvanced = true;
+	Parameters[NOISEGATE_ATTACK].Description = "Time (ms) for gate to fully open";
 
 	Parameters[NOISEGATE_HOLD].Name = "Hold";
 	Parameters[NOISEGATE_HOLD].MinValue = 1;
@@ -38,6 +41,7 @@ NoiseGate::NoiseGate()
 	Parameters[NOISEGATE_HOLD].DefaultValue = holdMS;
 	Parameters[NOISEGATE_HOLD].DisplayFormat = "{0:0}ms";
 	Parameters[NOISEGATE_HOLD].IsAdvanced = true;
+	Parameters[NOISEGATE_HOLD].Description = "Minimum time (ms) gate stays open";
 
 	Parameters[NOISEGATE_RELEASE].Name = "Release";
 	Parameters[NOISEGATE_RELEASE].MinValue = 1;
@@ -46,6 +50,7 @@ NoiseGate::NoiseGate()
 	Parameters[NOISEGATE_RELEASE].DefaultValue = releaseMS;
 	Parameters[NOISEGATE_RELEASE].DisplayFormat = "{0:0}ms";
 	Parameters[NOISEGATE_RELEASE].IsAdvanced = true;
+	Parameters[NOISEGATE_RELEASE].Description = "Time (ms) for gate to fully close";
 }
 
 void NoiseGate::init(int samplingFreq)

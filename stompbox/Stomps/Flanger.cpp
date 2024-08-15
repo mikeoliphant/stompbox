@@ -6,6 +6,7 @@
 Flanger::Flanger()
 {
 	Name = "Flanger";
+	Description = "Flanging effect";
 
 	fHslider0 = FAUSTFLOAT(1.0);
 	fHslider1 = FAUSTFLOAT(0.5);
@@ -18,18 +19,21 @@ Flanger::Flanger()
 	Parameters[FLANGER_RATE].MaxValue = 5;
 	Parameters[FLANGER_RATE].SourceVariable = &fHslider2;
 	Parameters[FLANGER_RATE].DefaultValue = fHslider2;
+	Parameters[FLANGER_RATE].Description = "Rate of frequency modulation";
 
 	Parameters[FLANGER_DEPTH].Name = "Depth";
 	Parameters[FLANGER_DEPTH].MinValue = 0;
 	Parameters[FLANGER_DEPTH].MaxValue = 1;
 	Parameters[FLANGER_DEPTH].SourceVariable = &fHslider0;
 	Parameters[FLANGER_DEPTH].DefaultValue = fHslider0;
+	Parameters[FLANGER_DEPTH].Description = "Strength of frequency modulation";
 
 	Parameters[FLANGER_FEEDBACK].Name = "FBack";
 	Parameters[FLANGER_FEEDBACK].MinValue = 0;
 	Parameters[FLANGER_FEEDBACK].MaxValue = 1;
 	Parameters[FLANGER_FEEDBACK].SourceVariable = &fHslider1;
 	Parameters[FLANGER_FEEDBACK].DefaultValue = fHslider1;
+	Parameters[FLANGER_FEEDBACK].Description = "System feedback level";
 }
 
 void Flanger::init(int samplingFreq)

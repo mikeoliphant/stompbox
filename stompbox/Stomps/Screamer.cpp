@@ -74,6 +74,7 @@ static double ftbl0mydspSIG0[100];
 TS9::TS9()
 {
 	Name = "Screamer";
+	Description = "Tube screamer drive effect";
 
 	fVslider0 = FAUSTFLOAT(-6.0);
 	fVslider1 = FAUSTFLOAT(1000.0);
@@ -85,6 +86,7 @@ TS9::TS9()
 	Parameters[SCREAMER_DRIVE].Name = "Drive";
 	Parameters[SCREAMER_DRIVE].SourceVariable = &fVslider2;
 	Parameters[SCREAMER_DRIVE].DefaultValue = fVslider2;
+	Parameters[SCREAMER_DRIVE].Description = "Drive/strength";
 
 	Parameters[SCREAMER_TONE].Name = "Tone";
 	Parameters[SCREAMER_TONE].MinValue = 100.0;
@@ -92,12 +94,14 @@ TS9::TS9()
 	Parameters[SCREAMER_TONE].SourceVariable = &fVslider1;
 	Parameters[SCREAMER_TONE].DefaultValue = fVslider1;
 	Parameters[SCREAMER_TONE].DisplayFormat = "{0:0}hz";
+	Parameters[SCREAMER_TONE].Description = "Amount of high frequency roll-off";
 
 	Parameters[SCREAMER_LEVEL].Name = "Level";
 	Parameters[SCREAMER_LEVEL].MinValue = -20.0;
 	Parameters[SCREAMER_LEVEL].MaxValue = 20.0;
 	Parameters[SCREAMER_LEVEL].SourceVariable = &fVslider0;
 	Parameters[SCREAMER_LEVEL].DefaultValue = fVslider0;
+	Parameters[SCREAMER_LEVEL].Description = "Output volume level";
 }
 
 void TS9::init(int samplingFreq)

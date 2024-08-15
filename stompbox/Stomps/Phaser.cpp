@@ -11,6 +11,7 @@ static double mydsp_faustpower2_f(double value) {
 Phaser::Phaser()
 {
 	Name = "Phaser";
+	Description = "Phaser effect";
 
 	freq = 0.5;
 	depth = 0.5;
@@ -25,16 +26,19 @@ Phaser::Phaser()
 	Parameters[PHASER_SPEED].MaxValue = 10;
 	Parameters[PHASER_SPEED].SourceVariable = &freq;
 	Parameters[PHASER_SPEED].DefaultValue = freq;
+	Parameters[PHASER_SPEED].Description = "Rate of phaser sweep";
 
 	Parameters[PHASER_DEPTH].Name = "Depth";
 	Parameters[PHASER_DEPTH].MaxValue = 0.5;
 	Parameters[PHASER_DEPTH].SourceVariable = &depth;
 	Parameters[PHASER_DEPTH].DefaultValue = depth;
+	Parameters[PHASER_DEPTH].Description = "Strength of phaser effect";
 
 	Parameters[PHASER_FREQWIDTH].Name = "FrqWidth";
 	Parameters[PHASER_FREQWIDTH].SourceVariable = &frqwidth;
 	Parameters[PHASER_FREQWIDTH].DefaultValue = frqwidth;
 	Parameters[PHASER_FREQWIDTH].IsAdvanced = true;
+	Parameters[PHASER_FREQWIDTH].Description = "Frequency width of phaser sweep";
 
 	Parameters[PHASER_RATIO].Name = "Ratio";
 	Parameters[PHASER_RATIO].MinValue = 1.1;
@@ -42,6 +46,7 @@ Phaser::Phaser()
 	Parameters[PHASER_RATIO].SourceVariable = &fratio;
 	Parameters[PHASER_RATIO].DefaultValue = fratio;
 	Parameters[PHASER_RATIO].IsAdvanced = true;
+	Parameters[PHASER_RATIO].Description = "Phaser frequency ratio";
 
 	Parameters[PHASER_FEEDBACK].Name = "FBack";
 	Parameters[PHASER_FEEDBACK].MinValue = 0;
@@ -49,7 +54,7 @@ Phaser::Phaser()
 	Parameters[PHASER_FEEDBACK].SourceVariable = &fb;
 	Parameters[PHASER_FEEDBACK].DefaultValue = fb;
 	Parameters[PHASER_FEEDBACK].IsAdvanced = true;
-
+	Parameters[PHASER_FEEDBACK].Description = "Amount of phased signal feed back";
 }
 
 void Phaser::init(int samplingFreq)

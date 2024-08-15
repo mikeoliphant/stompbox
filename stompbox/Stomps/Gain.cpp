@@ -5,6 +5,7 @@
 Gain::Gain(double initialGain, double minGain, double maxGain)
 {
 	Name = "Gain";
+	Description = "Simple volume/gain effect";
 
 	gain = initialGain;
 	this->minGain = minGain;
@@ -19,6 +20,7 @@ Gain::Gain(double initialGain, double minGain, double maxGain)
 	Parameters[GAIN_GAIN].MaxValue = maxGain;
 	Parameters[GAIN_GAIN].DefaultValue = initialGain;
 	Parameters[GAIN_GAIN].DisplayFormat = "{0:0.0}dB";
+	Parameters[GAIN_GAIN].Description = "Gain strength in dB";
 
 	OutputValue = &currentLevel;
 }

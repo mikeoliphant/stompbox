@@ -11,6 +11,7 @@ static double mydsp_faustpower2_f(double value) {
 Delay::Delay()
 {
 	Name = "Delay";
+	Description = "Signal delay effect";
 
 	delay = 250;
 	level = 1;
@@ -29,18 +30,21 @@ Delay::Delay()
 	Parameters[DELAY_DELAY].DefaultValue = delay;
 	Parameters[DELAY_DELAY].CanSyncToHostBPM = true;
 	Parameters[DELAY_DELAY].DisplayFormat = "{0:0}ms";
+	Parameters[DELAY_DELAY].Description = "Delay time";
 
 	Parameters[DELAY_LEVEL].Name = "Mix";
 	Parameters[DELAY_LEVEL].MinValue = 0;
 	Parameters[DELAY_LEVEL].MaxValue = 1.2;
 	Parameters[DELAY_LEVEL].SourceVariable = &wet;
 	Parameters[DELAY_LEVEL].DefaultValue = wet;
+	Parameters[DELAY_LEVEL].Description = "Delay volume";
 
 	Parameters[DELAY_FEEDBACK].Name = "FBack";
 	Parameters[DELAY_FEEDBACK].MinValue = 0;
 	Parameters[DELAY_FEEDBACK].MaxValue = 1;
 	Parameters[DELAY_FEEDBACK].SourceVariable = &feedback;
 	Parameters[DELAY_FEEDBACK].DefaultValue = feedback;
+	Parameters[DELAY_FEEDBACK].Description = "Amount of delay decay";
 
 	Parameters[DELAY_WARMTH].Name = "Warm";
 	Parameters[DELAY_WARMTH].MinValue = 0;
@@ -48,11 +52,13 @@ Delay::Delay()
 	Parameters[DELAY_WARMTH].SourceVariable = &warmth;
 	Parameters[DELAY_WARMTH].DefaultValue = warmth;
 	Parameters[DELAY_WARMTH].IsAdvanced = true;
+	Parameters[DELAY_WARMTH].Description = "Amount of frequency filtering in the decay";
 
 	Parameters[DELAY_LOWCUT].Name = "HiLo";
 	Parameters[DELAY_LOWCUT].SourceVariable = &hilo;
 	Parameters[DELAY_LOWCUT].DefaultValue = hilo;
 	Parameters[DELAY_LOWCUT].IsAdvanced = true;
+	Parameters[DELAY_LOWCUT].Description = "Bias of filtering toward low/high frequencies";
 }
 
 void Delay::init(int samplingFreq)

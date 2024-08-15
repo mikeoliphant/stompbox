@@ -11,6 +11,7 @@ static double mydsp_faustpower2_f(double value) {
 AutoWah::AutoWah()
 {
 	Name = "AutoWah";
+	Description = "Wah effect with auto open/close";
 
 	fVslider0 = FAUSTFLOAT(0.5);
 
@@ -19,6 +20,7 @@ AutoWah::AutoWah()
 	Parameters[AUTOWAH_LEVEL].Name = "Level";
 	Parameters[AUTOWAH_LEVEL].DefaultValue = fVslider0;
 	Parameters[AUTOWAH_LEVEL].SourceVariable = &fVslider0;
+	Parameters[AUTOWAH_LEVEL].Description = "Wah effect strength";
 }
 
 void AutoWah::init(int samplingFreq)

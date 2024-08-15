@@ -11,6 +11,7 @@ static double mydsp_faustpower2_f(double value) {
 Compressor::Compressor()
 {
 	Name = "Compressor";
+	Description = "Audio level compressor";
 
 	fVslider0 = FAUSTFLOAT(1.0);
 	fEntry0 = FAUSTFLOAT(20.0);
@@ -27,6 +28,7 @@ Compressor::Compressor()
 	Parameters[COMPRESSOR_SUSTAIN].MaxValue = 40;
 	Parameters[COMPRESSOR_SUSTAIN].DefaultValue = fEntry0;
 	Parameters[COMPRESSOR_SUSTAIN].DisplayFormat = "{0:0.0}";
+	Parameters[COMPRESSOR_SUSTAIN].Description = "Compression threshold (dB below 0)";
 
 	Parameters[COMPRESSOR_ATTACK].Name = "Attack";
 	Parameters[COMPRESSOR_ATTACK].MinValue = 0.002;
@@ -35,10 +37,12 @@ Compressor::Compressor()
 	Parameters[COMPRESSOR_ATTACK].DefaultValue = fHslider0;
 	Parameters[COMPRESSOR_ATTACK].SourceVariable = &fHslider0;
 	Parameters[COMPRESSOR_ATTACK].DisplayFormat = "{0:.000}s";
+	Parameters[COMPRESSOR_ATTACK].Description = "Compression attack time";
 
 	Parameters[COMPRESSOR_WETDRY].Name = "Blend";
 	Parameters[COMPRESSOR_WETDRY].DefaultValue = fVslider0;
 	Parameters[COMPRESSOR_WETDRY].SourceVariable = &fVslider0;
+	Parameters[COMPRESSOR_WETDRY].Description = "Wet/dry effect blend";
 }
 
 void Compressor::init(int samplingFreq)

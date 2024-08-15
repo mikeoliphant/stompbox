@@ -14,6 +14,7 @@ namespace chorus
 	Chorus::Chorus()
 	{
 		Name = "Chorus";
+		Description = "Chorus effect";
 
 		fHslider0 = FAUSTFLOAT(1.0);
 		fHslider1 = FAUSTFLOAT(0.1);
@@ -31,11 +32,13 @@ namespace chorus
 		Parameters[CHORUS_RATE].MaxValue = 5;
 		Parameters[CHORUS_RATE].SourceVariable = &fHslider2;
 		Parameters[CHORUS_RATE].DefaultValue = fHslider2;
+		Parameters[CHORUS_RATE].Description = "Speed of the chorus effect";
 
 		Parameters[CHORUS_DEPTH].Name = "Depth";
 		Parameters[CHORUS_DEPTH].MaxValue = 0.2;
 		Parameters[CHORUS_DEPTH].SourceVariable = &fHslider1;
 		Parameters[CHORUS_DEPTH].DefaultValue = fHslider1;
+		Parameters[CHORUS_DEPTH].Description = "How pronounced the effect is";
 	}
 
 	void Chorus::init(int samplingFreq)

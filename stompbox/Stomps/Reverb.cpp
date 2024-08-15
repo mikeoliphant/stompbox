@@ -11,6 +11,7 @@ static double mydsp_faustpower2_f(double value) {
 FreeVerb::FreeVerb()
 {
 	Name = "Reverb";
+	Description = "Simple room reverb";
 
 	fVslider0 = FAUSTFLOAT(50.0);
 	fVslider1 = FAUSTFLOAT(0.5);
@@ -22,6 +23,7 @@ FreeVerb::FreeVerb()
 	Parameters[REVERB_ROOMSIZE].Name = "Size";
 	Parameters[REVERB_ROOMSIZE].SourceVariable = &fVslider1;
 	Parameters[REVERB_ROOMSIZE].DisplayFormat = "{0:0.00}";
+	Parameters[REVERB_ROOMSIZE].Description = "Room size";
 
 	Parameters[REVERB_DECAY].Name = "Decay";
 	Parameters[REVERB_DECAY].SourceVariable = &fVslider2;
@@ -29,6 +31,7 @@ FreeVerb::FreeVerb()
 	Parameters[REVERB_DECAY].MaxValue = 10;
 	Parameters[REVERB_DECAY].DefaultValue = fVslider2;
 	Parameters[REVERB_DECAY].DisplayFormat = "{0:0.0}";
+	Parameters[REVERB_DECAY].Description = "Length of reverb decay";
 
 	Parameters[REVERB_WETDRY].Name = "Blend";
 	Parameters[REVERB_WETDRY].SourceVariable = &fVslider0;
@@ -36,6 +39,7 @@ FreeVerb::FreeVerb()
 	Parameters[REVERB_WETDRY].MaxValue = 100;
 	Parameters[REVERB_WETDRY].Step = 1;
 	Parameters[REVERB_WETDRY].DisplayFormat = "{0:0}";
+	Parameters[REVERB_WETDRY].Description = "Dry/wet effect blend";
 }
 
 void FreeVerb::init(int samplingFreq)
