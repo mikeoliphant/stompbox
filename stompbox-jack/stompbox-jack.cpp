@@ -290,7 +290,7 @@ int main(int argc, char* argv[])
 
     if (preset_name != NULL)
     {
-        guitarProcessor->LoadPreset(preset_name, true);
+        guitarProcessor->LoadPreset(preset_name);
     }
 
     guitarProcessor->StartServer();
