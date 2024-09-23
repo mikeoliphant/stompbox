@@ -34,6 +34,7 @@ protected:
 	void AppendParamDefs(std::string& dump, StompBox* plugin);
 	void AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 	void AppendParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
+	void ThreadLoadPreset();
 
 	double sampleRate;
 	double bpm = 120;
@@ -67,6 +68,7 @@ protected:
 	std::filesystem::path dataPath;
 	std::filesystem::path presetPath;
 	std::string currentPreset;
+	std::string loadPreset;
 	std::string previewPreset;
 	std::string clientCommand;
 	bool pluginOutputOn = false;
@@ -78,6 +80,12 @@ protected:
 	float minDSPLoad = 1;
 	float maxDSPLoad = 0;
 	int clientUpdateFrame = 0;
+	std::thread* presetLoadThread = nullptr;
+	int ramp = 0;
+	int rampSamplesSoFar;
+	int rampSamples;
+	float rampMS = 50;
+	bool needPluginUpdate = false;
 
 public:
 	PluginProcessor(std::filesystem::path dataPath, bool dawMode);
@@ -89,6 +97,10 @@ public:
 	StompBox* CreatePlugin(std::string const& id);
 	void UpdatePlugins();
 	void InitPlugin(StompBox* plugin);
+	bool IsPresetLoading()
+	{
+		return (ramp == -1);
+	}
 	double GetBPM()
 	{
 		return bpm;
@@ -170,7 +182,7 @@ public:
 	bool HandleMidiCommand(int midiCommand, int midiData1, int midiData2);
 	bool CheckMidiCommand(StompBox* plugin, StompBoxParameter* parameter);
 	void SyncPreset();
-	void LoadPreset(std::string preset, bool updateClient);
+	void LoadPreset(std::string preset);
 	void LoadSettings();
 	void SaveSettings();
 	bool LoadCommandsFromFile(std::filesystem::path filePath);
@@ -178,4 +190,5 @@ public:
 	std::string DumpProgram();
 	std::string DumpConfig();
 	void Process(double* input, double* output, int count);
+	void StartRamp(int rampDirection, float rampMS);
 };

@@ -101,7 +101,7 @@ PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
         stompCC[i] = -1;
     }
 
-    UpdatePlugins();
+    needPluginUpdate = true;
 
     LoadSettings();
 
@@ -281,6 +281,8 @@ void PluginProcessor::SendClientMessage(const std::string message)
 
 void PluginProcessor::UpdatePlugins()
 {
+    needPluginUpdate = false;
+
     std::list<StompBox*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
 
     fprintf(stderr, "Update Plugins\n");
@@ -329,6 +331,11 @@ void PluginProcessor::UpdatePlugins()
 
     for (const auto& plugin : plugins)
     {
+        if (plugin->NeedsInit)
+        {
+            InitPlugin(plugin);
+        }
+
         fprintf(stderr, "%s ", plugin->ID.c_str());
     }
 
@@ -805,7 +812,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                     cabinet = CreatePlugin(commandWords[2]);
                 }
 
-                UpdatePlugins();
+                needPluginUpdate = true;
             }
         }
         else if (commandWords[0] == "SetParam")
@@ -955,7 +962,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                             chain->push_back(newComponent);
                     }
 
-                    UpdatePlugins();
+                    needPluginUpdate = true;
                 }
             }
         }
@@ -1025,7 +1032,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                LoadPreset(commandWords[1], false);
+                LoadPreset(commandWords[1]);
             }
         }
         else if (commandWords[0] == "DeletePreset")
@@ -1280,7 +1287,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                 }
                 else if ((stompCC[2] != -1) && (midiData1 == stompCC[2]))
                 {
-                    LoadPreset(previewPreset, true);
+                    LoadPreset(previewPreset);
                 }
                 break;
 
@@ -1309,7 +1316,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
 
             if (atoi(preset.substr(0, 2).c_str()) == (midiData1 + 1))
             {
-                LoadPreset(preset, true);
+                LoadPreset(preset);
 
                 break;
             }
@@ -1370,21 +1377,31 @@ void PluginProcessor::SyncPreset()
     }
 }
 
-void PluginProcessor::LoadPreset(std::string preset, bool updateClient)
+void PluginProcessor::LoadPreset(std::string preset)
 {
-    fprintf(stderr, "Loading preset %s\n", preset.c_str());
+    if (ramp == 0)  // Don't allow loading a preset while another is already being loaded
+    {
+        fprintf(stderr, "Loading preset %s\n", preset.c_str());
 
+        loadPreset.assign(preset);
+
+        StartRamp(-1, rampMS);
+    }
+}
+
+void PluginProcessor::ThreadLoadPreset()
+{
     std::filesystem::path inPath;
 
     inPath.assign(presetPath);
-    inPath.append(preset);
+    inPath.append(loadPreset);
 
     // Clear any MIDI CC mappings we have
     ccMapEntries.clear();
 
     if (LoadCommandsFromFile(inPath))
     {
-        currentPreset = preset;
+        currentPreset.assign(loadPreset);
 
         if (serialDisplayInterface.IsConnected())
         {
@@ -1394,7 +1411,19 @@ void PluginProcessor::LoadPreset(std::string preset, bool updateClient)
         currentMidiMode = MIDI_MODE_STOMP;
     }
 
-    if (updateClient && stompboxServer.HaveClient())
+    UpdatePlugins();
+
+    for (const auto& plugin : plugins)
+    {
+        if (plugin->NeedsInit)
+        {
+            InitPlugin(plugin);
+        }
+    }
+
+    StartRamp(1, rampMS);
+
+    if (stompboxServer.HaveClient())
     {
         std::string dump = DumpProgram();
 
@@ -1456,6 +1485,36 @@ bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
 
 void PluginProcessor::Process(double* input, double* output, int count)
 {
+    if (ramp != 0)
+    {
+        if (rampSamplesSoFar == rampSamples)
+        {
+            if (ramp == -1)
+            {
+                if (presetLoadThread == nullptr)
+                {
+                    std::list<StompBox*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
+                    newPlugins.clear();
+                    plugins = newPlugins;
+
+                    presetLoadThread = new std::thread(&PluginProcessor::ThreadLoadPreset, this);
+                }
+            }
+            else
+            {
+                presetLoadThread->join();
+                presetLoadThread = nullptr;
+
+                ramp = 0;
+            }
+        }
+    }
+    else
+    {
+        if (needPluginUpdate)
+            UpdatePlugins();
+    }
+
     // Disable floating point denormals
     std::fenv_t fe_state;
     std::feholdexcept(&fe_state);
@@ -1465,11 +1524,6 @@ void PluginProcessor::Process(double* input, double* output, int count)
 
     for (const auto& plugin : plugins)
     {
-        if (plugin->NeedsInit)
-        {
-            InitPlugin(plugin);
-        }
-
         if (plugin->Enabled)
         {
             if (plugin->InputGain != nullptr)
@@ -1481,12 +1535,31 @@ void PluginProcessor::Process(double* input, double* output, int count)
                 plugin->OutputVolume->compute(count, output, output);
         }
 
-        // restore previous floating point state
-        std::feupdateenv(&fe_state);
-
         if (plugin == monitorPlugin)
         {
             monitorCallback(output, count);
         }
     }
+
+    if (ramp != 0)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            float rampPercent = (float)rampSamplesSoFar / (float)rampSamples;
+
+            rampSamplesSoFar = std::min(rampSamplesSoFar + 1, rampSamples);
+
+            output[i] *= (ramp == -1) ? (1.0f - rampPercent) : rampPercent;
+        }
+    }
+
+    // restore previous floating point state
+    std::feupdateenv(&fe_state);
+}
+
+void PluginProcessor::StartRamp(int rampDirection, float rampMS)
+{
+    rampSamplesSoFar = 0;
+    ramp = rampDirection;
+    rampSamples = sampleRate * (rampMS / 1000.0f);
 }
