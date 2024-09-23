@@ -7,6 +7,12 @@
 #include "PluginProcessor.h"
 #include "AudioFileRecorder.h"
 
+#ifdef __linux__
+#include <unistd.h>
+#include <linux/reboot.h>
+#include <sys/syscall.h>
+#endif
+
 #if _WIN32
 void GetDataPathFromModule(std::filesystem::path& dataPath)
 {
@@ -794,6 +800,15 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         if ((commandWords[0] == "Ok") || (commandWords[0] == "Error"))
         {
             // Handle responses
+        }
+        else if (commandWords[0] == "Shutdown")
+        {
+#ifdef __linux__
+            syscall(SYS_reboot,
+                LINUX_REBOOT_MAGIC1,
+                LINUX_REBOOT_MAGIC2,
+                LINUX_REBOOT_CMD_POWER_OFF, NULL);
+#endif
         }
         else if (commandWords[0] == "SetPluginSlot")
         {
