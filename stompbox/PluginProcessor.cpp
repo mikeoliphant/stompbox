@@ -8,9 +8,7 @@
 #include "AudioFileRecorder.h"
 
 #ifdef __linux__
-#include <unistd.h>
-#include <linux/reboot.h>
-#include <sys/syscall.h>
+#include <cstdlib>
 #endif
 
 #if _WIN32
@@ -804,10 +802,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         else if (commandWords[0] == "Shutdown")
         {
 #ifdef __linux__
-            syscall(SYS_reboot,
-                LINUX_REBOOT_MAGIC1,
-                LINUX_REBOOT_MAGIC2,
-                LINUX_REBOOT_CMD_POWER_OFF, NULL);
+            system("shutdown -P now");
 #endif
         }
         else if (commandWords[0] == "SetPluginSlot")
