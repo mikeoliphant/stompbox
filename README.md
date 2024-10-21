@@ -116,3 +116,11 @@ There are a number of display options for interfacing with stompbox:
 
 - [StompboxUI](https://github.com/mikeoliphant/StompboxUI) - that repo has apps that can run as remote displays on Windows, Linux and Android. The Android interface also has a display mode designed for a phone or tablet mounted on a pedalboard.
 - Serial display. Stompbox has built-in support for talking to a USB-connected microcontroller with display. I'm using a [Wio Terminal ](https://www.seeedstudio.com/Wio-Terminal-p-4509.html), but any Arduino-compatible microcontroller with an SPI display should work. It requires installing my [SerialTFT](https://github.com/mikeoliphant/SerialTFT) Arduino sketch on the microcontroller.
+
+This is what the Windows/Linux remote looks like:
+
+![stompbox](https://github.com/mikeoliphant/StompboxUI/assets/6710799/dd6e9349-ff0d-4437-af42-ef62f1096496)
+
+This is what it looks like running as an Android remote:
+
+![StompboxAndroid](https://github.com/mikeoliphant/StompboxUI/assets/6710799/3189e769-a28c-4e3b-8629-6846fb32de6c)
