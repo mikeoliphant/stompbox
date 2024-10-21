@@ -18,6 +18,28 @@ This is the hardware I'm using:
 - Hotone Ampero Control MIDI Controller
 - Wio Terminal (used for a display using my [SerialTFT](https://github.com/mikeoliphant/SerialTFT) app)
 
+# Features
+
+* Headless operation with a separate UI app that can be run remotely or locally
+* MIDI support for switching presets, toggling effects
+* [Neural Amp Modeler](https://github.com/sdatkinson/neural-amp-modeler) support
+* Cabinet impulse responses
+* Tonestack/EQ
+* Noise Gate
+* Drive (clean boost, tube screamer)
+* Time-based effects
+  - Delay  
+  - Reverb (algorithmic and convolution)
+  - Compressor
+  - Chorus
+  - Phaser
+  - Flanger
+  - Tremolo
+  - Vibrato
+  - Wah/Auto-Wah
+* Tuner
+* Audio file player
+
 # Building
 
 First clone the repository:
