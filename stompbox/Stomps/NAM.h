@@ -15,7 +15,7 @@
 
 #include "StompBox.h"
 
-#include "NAM/dsp.h"
+#include "NeuralAudio/NeuralModel.h"
 
 enum
 {
@@ -31,10 +31,11 @@ private:
 	int loadedModelIndex = -1;
 	std::vector<std::string> modelNames;
 	std::vector<std::string> modelPaths;
-	std::unique_ptr<DSP> stagedModel;
-	std::unique_ptr<DSP> activeModel;
+	NeuralAudio::NeuralModel* stagedModel = nullptr;
+	NeuralAudio::NeuralModel* activeModel = nullptr;
 	double prevDCInput = 0;
 	double prevDCOutput = 0;
+	std::vector<float> namBuffer;
 
 public:
 

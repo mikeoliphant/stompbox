@@ -1,38 +1,27 @@
+add_subdirectory(${STOMPBOX_DEPS_PATH}/NeuralAudio NeuralAudio)
+
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAudio)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/denormal)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/WDL/WDL)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/dr_libs)
+include_directories(stompbox ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
+include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps)
+
 file(GLOB_RECURSE SOURCES *.cpp *.c *.h)
 
-set(NAM_SOURCES "${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/activations.h"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/activations.cpp"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/version.h"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/lstm.h"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/lstm.cpp"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/dsp.h"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/dsp.cpp"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/get_dsp.cpp"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/util.cpp"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/util.h"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/convnet.h"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/convnet.cpp"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/wavenet.cpp"
-	"${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore/NAM/wavenet.h")
+set(NA_SOURCES ${STOMPBOX_DEPS_PATH}/NeuralAudio/NeuralAudio/NeuralModel.h)
 
 set(OTHER_SOURCES "${STOMPBOX_DEPS_PATH}/r8brain-free-src/r8bbase.cpp"
 	"${STOMPBOX_DEPS_PATH}/r8brain-free-src/pffft.cpp"
 	"${STOMPBOX_DEPS_PATH}/WDL/WDL/convoengine.cpp"
 	"${STOMPBOX_DEPS_PATH}/WDL/WDL/fft.c")
 
-add_library(stompbox STATIC ${SOURCES} ${NAM_SOURCES} ${OTHER_SOURCES})
+add_library(stompbox STATIC ${SOURCES} ${NA_SOURCES} ${OTHER_SOURCES})
+
+target_link_libraries(stompbox PRIVATE NeuralAudio)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
-source_group(NAM ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NAM_SOURCES})
-
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/eigen)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAmpModelerCore)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/json)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/denormal)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/WDL/WDL)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/dr_libs)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
-include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps)
+source_group(NeuralAudio ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NA_SOURCES})
 
 add_definitions(-DWDL_FFT_REALSIZE=8)
 add_definitions(-DWDL_CONVO_THREAD)

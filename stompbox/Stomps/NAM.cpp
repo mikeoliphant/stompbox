@@ -1,5 +1,4 @@
 #include "NAM.h"
-#include "NAM/activations.h"
 
 NAM::NAM()
 {
@@ -19,8 +18,6 @@ NAM::NAM()
 
 void NAM::init(int samplingFreq)
 {
-    activations::Activation::enable_fast_tanh();
-
     StompBox::init(samplingFreq);
 }
 
@@ -77,7 +74,7 @@ void NAM::SetModel(const std::string filename)
     {
         try
         {
-            stagedModel = get_dsp(filename);
+            stagedModel = NeuralAudio::NeuralModel::CreateFromFile(filename);
         }
         catch (std::exception& e)
         {
@@ -90,7 +87,10 @@ void NAM::compute(int count, double* input, double* output)
 {
     if (stagedModel != nullptr)
     {
-        activeModel = std::move(stagedModel);
+        if (activeModel != nullptr)
+            delete activeModel;
+
+        activeModel = stagedModel;
         stagedModel = nullptr;
     }
 
@@ -101,25 +101,22 @@ void NAM::compute(int count, double* input, double* output)
         return;
     }
 
-    activeModel->process(input, output, count);
-    activeModel->finalize_(count);
-
-    double modelLoudnessAdjustmentGain = 1.0;
-
-    if (activeModel->HasLoudness())
+    if (namBuffer.size() != count)
     {
-        // Normalize model to -18dB
-        modelLoudnessAdjustmentGain = pow(10.0, (-18 - activeModel->GetLoudness()) / 20.0);
+        namBuffer.resize(count);
     }
 
-    //for (int i = 0; i < count; i++)
-    //{
-    //    float dcInput = output[i] * modelLoudnessAdjustmentGain;
+    for (int i = 0; i < count; i++)
+    {
+        namBuffer[i] = (float)input[i];
+    }
 
-    //    // dc blocker
-    //    output[i] = dcInput - prevDCInput + 0.995 * prevDCOutput;
+    activeModel->Process(namBuffer.data(), namBuffer.data(), count);
 
-    //    prevDCInput = dcInput;
-    //    prevDCOutput = output[i];
-    //}
+    double modelLoudnessAdjustmentGain = pow(10.0, (-18 - activeModel->GetRecommendedOutputDBAdjustment()) / 20.0);
+
+    for (int i = 0; i < count; i++)
+    {
+        output[i] = (double)namBuffer[i];
+    }
 }

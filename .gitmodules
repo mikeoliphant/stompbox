@@ -1,13 +1,3 @@
-[submodule "Depends/eigen"]
-	path = Dependencies/eigen
-	url = https://gitlab.com/libeigen/eigen
-[submodule "NeuralAmpModelerCore"]
-	path = Dependencies/NeuralAmpModelerCore
-	url = https://github.com/mikeoliphant/NeuralAmpModelerCore
-	branch = devel
-[submodule "Dependencies/AudioDSPTools"]
-	path = Dependencies/AudioDSPTools
-	url = https://github.com/sdatkinson/AudioDSPTools
 [submodule "Dependencies/dr_libs"]
 	path = Dependencies/dr_libs
 	url = https://github.com/mackron/dr_libs
@@ -17,3 +7,6 @@
 [submodule "Dependencies/WDL"]
 	path = Dependencies/WDL
 	url = https://github.com/mikeoliphant/WDL
+[submodule "Dependencies/NeuralAudio"]
+	path = Dependencies/NeuralAudio
+	url = https://github.com/mikeoliphant/NeuralAudio
