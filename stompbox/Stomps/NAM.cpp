@@ -31,7 +31,9 @@ void NAM::IndexModels(std::filesystem::path path)
     {
         for (const auto& entry : std::filesystem::directory_iterator(path))
         {
-            if (entry.path().filename().extension() == ".nam")
+            std::filesystem::path ext = entry.path().filename().extension();
+
+            if ((ext == ".nam") || (ext == ".json"))
             {
                 auto filename = entry.path().filename().replace_extension();
 
