@@ -22,7 +22,7 @@ This is the hardware I'm using:
 
 * Headless operation with a separate UI app that can be run remotely or locally
 * MIDI support for switching presets, toggling effects
-* [Neural Amp Modeler](https://github.com/sdatkinson/neural-amp-modeler) support
+* [Neural Amp Modeler](https://github.com/sdatkinson/neural-amp-modeler) and [RTNeural](https://github.com/jatinchowdhury18/RTNeural) model support
 * Cabinet impulse responses
 * Tonestack/EQ
 * Noise Gate
