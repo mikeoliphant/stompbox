@@ -6,7 +6,7 @@ This repository is the core codebase. It can be run as a headless [jack](https:/
 
 [StompboxUI](https://github.com/mikeoliphant/StompboxUI) is the front-end GUI repository for stompbox. It can be used as a remote application to connect and control stompbox-jack, or it can be built along with the core code into a VST3 plugin.
 
-I run it as both a VST3 plugin in a DAW on my PC, and on my Raspberry Pi pedalboard.
+I run it as both a VST3 plugin in a DAW on my PC, and (mostly) headless on my Raspberry Pi pedalboard.
 
 Here is a video of it running on my pedalboard:
 
