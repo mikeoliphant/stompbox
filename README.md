@@ -42,6 +42,10 @@ This is the hardware I'm using:
 
 # Building
 
+If you just want to run Stompbox as a Windows VST plugin, head over to the [StompboxUI](https://github.com/mikeoliphant/StompboxUI) repository and you can download binaries from the Releases section there.
+
+To build it yourself, read on.
+
 First clone the repository:
 ```bash
 git clone --recurse-submodules -j4 https://github.com/mikeoliphant/stompbox
