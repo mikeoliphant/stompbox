@@ -6,7 +6,7 @@ This repository is the core codebase. It can be run as a headless [jack](https:/
 
 [StompboxUI](https://github.com/mikeoliphant/StompboxUI) is the front-end GUI repository for stompbox. It can be used as a remote application to connect and control stompbox-jack, or it can be built along with the core code into a VST3 plugin.
 
-I run it as both a VST3 plugin in a DAW on my PC, and on my Raspberry Pi pedalboard.
+I run it as both a VST3 plugin in a DAW on my PC, and (mostly) headless on my Raspberry Pi pedalboard.
 
 Here is a video of it running on my pedalboard:
 
@@ -22,7 +22,7 @@ This is the hardware I'm using:
 
 * Headless operation with a separate UI app that can be run remotely or locally
 * MIDI support for switching presets, toggling effects
-* [Neural Amp Modeler](https://github.com/sdatkinson/neural-amp-modeler) support
+* [Neural Amp Modeler](https://github.com/sdatkinson/neural-amp-modeler) and [RTNeural](https://github.com/jatinchowdhury18/RTNeural) model support
 * Cabinet impulse responses
 * Tonestack/EQ
 * Noise Gate
@@ -41,6 +41,10 @@ This is the hardware I'm using:
 * Audio file player
 
 # Building
+
+If you just want to run Stompbox as a Windows VST plugin, head over to the [StompboxUI](https://github.com/mikeoliphant/StompboxUI) repository and you can download binaries from the Releases section there.
+
+To build it yourself, read on.
 
 First clone the repository:
 ```bash
