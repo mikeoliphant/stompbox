@@ -10,7 +10,8 @@ GuitarConvolver::GuitarConvolver()
 
     Parameters[CONVOLVER_IMPULSE].Name = "Impulse";
     Parameters[CONVOLVER_IMPULSE].SourceVariable = &impulseIndex;
-    Parameters[CONVOLVER_IMPULSE].ParameterType = PARAMETER_TYPE_ENUM;
+    Parameters[CONVOLVER_IMPULSE].ParameterType = PARAMETER_TYPE_FILE;
+    Parameters[CONVOLVER_IMPULSE].FilePath = "Cabinets";
     Parameters[CONVOLVER_IMPULSE].EnumValues = &impulseNames;
     Parameters[CONVOLVER_IMPULSE].DefaultValue = -1;
     Parameters[CONVOLVER_IMPULSE].Description = "Selected impulse response";

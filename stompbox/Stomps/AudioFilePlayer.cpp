@@ -9,7 +9,8 @@ AudioFilePlayer::AudioFilePlayer()
 
 	Parameters[AUDIOFILEPLAYER_FILE].Name = "File";
 	Parameters[AUDIOFILEPLAYER_FILE].SourceVariable = &fileIndex;
-	Parameters[AUDIOFILEPLAYER_FILE].ParameterType = PARAMETER_TYPE_ENUM;
+	Parameters[AUDIOFILEPLAYER_FILE].ParameterType = PARAMETER_TYPE_FILE;
+	Parameters[AUDIOFILEPLAYER_FILE].FilePath = "Music";
 	Parameters[AUDIOFILEPLAYER_FILE].EnumValues = &fileNames;
 
 	Parameters[AUDIOFILEPLAYER_LEVEL].Name = "Level";

@@ -10,7 +10,8 @@ NAM::NAM()
 
     Parameters[NAM_MODEL].Name = "Model";
     Parameters[NAM_MODEL].SourceVariable = &modelIndex;
-    Parameters[NAM_MODEL].ParameterType = PARAMETER_TYPE_ENUM;
+    Parameters[NAM_MODEL].ParameterType = PARAMETER_TYPE_FILE;
+    Parameters[NAM_MODEL].FilePath = "NAM";
     Parameters[NAM_MODEL].EnumValues = &modelNames;
     Parameters[NAM_MODEL].DefaultValue = -1;
     Parameters[NAM_MODEL].Description = "Selected NAM model";

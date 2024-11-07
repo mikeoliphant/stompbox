@@ -460,6 +460,9 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
         case PARAMETER_TYPE_ENUM:
             dump.append("Enum");
             break;
+        case PARAMETER_TYPE_FILE:
+            dump.append("File");
+            break;
         }
 
         dump.append(" MinValue ");
@@ -511,6 +514,25 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
 
             dump.append("\r\n");
         }
+        else if (param->ParameterType == PARAMETER_TYPE_FILE)
+        {
+            dump.append("ParameterFileTree ");
+
+            dump.append(plugin->Name);
+            dump.append(" ");
+            dump.append(param->Name);
+
+            dump.append(param->FilePath);
+            dump.append(" ");
+
+            for (const auto& enumValue : *(param->EnumValues))
+            {
+                dump.append(" ");
+                dump.append(enumValue);
+            }
+
+            dump.append("\r\n");
+        }
     }
 }
 
@@ -553,6 +575,13 @@ void PluginProcessor::AppendParams(std::string& dump, StompBox* plugin, bool dir
             dump.append(" ");
 
             if (param->ParameterType == PARAMETER_TYPE_ENUM)
+            {
+                int enumIndex = (int)plugin->GetParameterValue(i);
+
+                if ((enumIndex >= 0) && (enumIndex <= param->MaxValue))
+                    dump.append((*param->EnumValues)[enumIndex]);
+            }
+            else if (param->ParameterType == PARAMETER_TYPE_FILE)
             {
                 int enumIndex = (int)plugin->GetParameterValue(i);
 
@@ -897,6 +926,38 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                             err.append("Bad Enum Value");
                                         }
                                     }
+                                    else if (param->ParameterType == PARAMETER_TYPE_FILE)
+                                    {
+                                        std::string paramValue = commandWords[3];
+
+                                        // Concatenate any additional words - should probably enclose in quotes or something instead
+                                        for (int i = 4; i < commandWords.size(); i++)
+                                        {
+                                            paramValue += " " + commandWords[i];
+                                        }
+
+                                        std::vector<std::string>* enumValues = param->EnumValues;
+
+                                        bool gotEnum = false;
+
+                                        for (int e = 0; e < (int)enumValues->size(); e++)
+                                        {
+                                            if ((*enumValues)[e] == paramValue)
+                                            {
+                                                param->SetValue(e);
+
+                                                gotEnum = true;
+
+                                                break;
+                                            }
+                                        }
+
+                                        if (!gotEnum)
+                                        {
+                                            err.append("Bad Enum Value");
+                                        }
+                                    }
+
                                     else if (param->CanSyncToHostBPM && (commandWords[3].find('/') != std::string::npos))
                                     {
                                         size_t pos = commandWords[3].find('/');
