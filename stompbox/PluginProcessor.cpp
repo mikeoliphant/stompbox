@@ -521,7 +521,7 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
             dump.append(plugin->Name);
             dump.append(" ");
             dump.append(param->Name);
-
+            dump.append(" ");
             dump.append(param->FilePath);
             dump.append(" ");
 
