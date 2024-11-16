@@ -116,10 +116,12 @@ void NAM::compute(int count, double* input, double* output)
 
     activeModel->Process(namBuffer.data(), namBuffer.data(), count);
 
-    double modelLoudnessAdjustmentGain = pow(10.0, activeModel->GetRecommendedOutputDBAdjustment() / 20.0);
+    float adjustDB = activeModel->GetRecommendedOutputDBAdjustment();
+
+    double modelLoudnessAdjustmentGain = pow(10.0, adjustDB / 20.0);
 
     for (int i = 0; i < count; i++)
     {
-        output[i] = (double)namBuffer[i];
+        output[i] = (double)namBuffer[i] * modelLoudnessAdjustmentGain;
     }
 }
