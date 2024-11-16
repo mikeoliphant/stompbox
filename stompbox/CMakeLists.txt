@@ -1,3 +1,18 @@
+if (MSVC)
+	add_compile_options(
+		"$<$<CONFIG:DEBUG>:/W4>"
+		"$<$<CONFIG:RELEASE>:/O2>"
+	)
+else()
+	add_compile_options(
+		-Wall 
+		# -Wpedantic -Wextra -Wstrict-aliasing -Wunreachable-code -Weffc++ -Wno-unused-parameter
+		"$<$<CONFIG:DEBUG>:-Og;-ggdb>"
+		"$<$<CONFIG:RELWITHDEBINFO>:-Ofast>"
+		"$<$<CONFIG:RELEASE>:-Ofast>"
+	)
+endif()
+
 add_subdirectory(${STOMPBOX_DEPS_PATH}/NeuralAudio NeuralAudio)
 
 include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAudio)
@@ -38,17 +53,4 @@ set_target_properties(stompbox
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	target_compile_definitions(stompbox PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
-endif()
-
-if (MSVC)
-	target_compile_options(stompbox PRIVATE
-		"$<$<CONFIG:DEBUG>:/W4>"
-		"$<$<CONFIG:RELEASE>:/O2>"
-	)
-else()
-	target_compile_options(stompbox PRIVATE
-		-Wall
-		"$<$<CONFIG:DEBUG>:-Og;-ggdb;-Werror>"
-		"$<$<CONFIG:RELEASE>:-Ofast>"
-	)
 endif()
