@@ -69,82 +69,80 @@ Serial::Serial(const char* portName)
         }
     }
 #else
-    //fprintf(stderr, "Attempting to open serial port: %s\n", portName);
+    fprintf(stderr, "Attempting to open serial port: %s\n", portName);
 
-    //serialFile = fopen(portName, "w");
+    serialFile = fopen(portName, "w");
 
-    //if (serialFile != NULL)
-    //{
-    //    fprintf(stderr, "Serial port opened successfully\n");
-
-    //    WriteString("Set Preset Started\n");
-
-    //    this->connected = true;
-    //}
-    //else
-    //{
-    //    fprintf(stderr, "ERROR: Unable to open serial port\n");
-    //}
-
-    // Standard struct for holding port data/settings
-    struct termios toptions;
-
-    // Read/write, no delays
-    int fd = open(portName, O_RDWR | O_NOCTTY); // | O_NDELAY);
-    if (fd == -1)
+    if (serialFile == NULL)
     {
-        perror("Serial: Unable to open port ");
-        // return -1;
+        fprintf(stderr, "ERROR: Unable to open serial port\n");
     }
-
-    if (tcgetattr(fd, &toptions) < 0)
+    else
     {
-        perror("Serial: Couldn't get term attributes");
-        // return -1;
+        fprintf(stderr, "Serial port opened successfully\n");
+
+        WriteString("Set Preset Started\n");
+
+        this->connected = true;
+
+        // Standard struct for holding port data/settings
+        struct termios toptions;
+
+        // Read/write, no delays
+        int fd = open(portName, O_RDWR | O_NOCTTY); // | O_NDELAY);
+        if (fd == -1)
+        {
+            perror("Serial: Unable to open port ");
+            // return -1;
+        }
+
+        if (tcgetattr(fd, &toptions) < 0)
+        {
+            perror("Serial: Couldn't get term attributes");
+            // return -1;
+        }
+
+        speed_t brate = B9600;
+
+        cfsetispeed(&toptions, brate);
+        cfsetospeed(&toptions, brate);
+
+        // 8N1, no hw flow control, configured for read access as well as write
+        toptions.c_cflag &= ~(PARENB | CSTOPB | CSIZE | CRTSCTS | CREAD | CLOCAL);
+        toptions.c_cflag |= CS8;
+
+        // turn on s/w flow ctrl
+        toptions.c_iflag |= (IXON | IXOFF | IXANY);
+        // make sure the CR and NL aren't mapped to each other on input
+        toptions.c_iflag &= ~(INLCR | ICRNL);
+        // THE ABOVE OPTION'S EXISTENCE IS NECESSARY. IF YOU REMOVE IT
+        //  YOU WILL SPEND HOURS PULLING YOUR HAIR OUR TROUBLESHOOTING
+        //  STRINGS THAT JUST WON'T PARSE BECAUSE '\r' IS REPLACED WITH '\n'
+        //  by the cheap serial->USB adapter you have or the different
+        //  default port settings of your kernel. This bit me.
+
+        // make raw output as well
+        toptions.c_oflag &= ~OPOST;
+        // make sure the CR and NL aren't mapped to each other on output
+        toptions.c_oflag &= ~(INLCR | ICRNL);
+        // make raw input, not line-based canonical
+        toptions.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+        // Not necessary, but peace of mind to set timeouts
+        toptions.c_cc[VMIN] = 0;
+        toptions.c_cc[VTIME] = 2;
+
+        if (tcsetattr(fd, TCSAFLUSH, &toptions) < 0)
+        {
+            // Self explanatory, attempts to set the port attribs
+            perror("Serial: Couldn't set term attributes");
+            // return -1;
+        }
+
+        this->file_descriptor = fd;
+
+        // wait until we're done initializing o do anything else.
+        sleep(1);
     }
-
-    speed_t brate = B9600;
-
-    cfsetispeed(&toptions, brate);
-    cfsetospeed(&toptions, brate);
-
-    // 8N1, no hw flow control, configured for read access as well as write
-    toptions.c_cflag &= ~(PARENB | CSTOPB | CSIZE | CRTSCTS | CREAD | CLOCAL);
-    toptions.c_cflag |= CS8;
-
-    // turn on s/w flow ctrl
-    toptions.c_iflag |= (IXON | IXOFF | IXANY);
-    // make sure the CR and NL aren't mapped to each other on input
-    toptions.c_iflag &= ~(INLCR | ICRNL);
-    // THE ABOVE OPTION'S EXISTENCE IS NECESSARY. IF YOU REMOVE IT
-    //  YOU WILL SPEND HOURS PULLING YOUR HAIR OUR TROUBLESHOOTING
-    //  STRINGS THAT JUST WON'T PARSE BECAUSE '\r' IS REPLACED WITH '\n'
-    //  by the cheap serial->USB adapter you have or the different
-    //  default port settings of your kernel. This bit me.
-
-    // make raw output as well
-    toptions.c_oflag &= ~OPOST;
-    // make sure the CR and NL aren't mapped to each other on output
-    toptions.c_oflag &= ~(INLCR | ICRNL);
-    // make raw input, not line-based canonical
-    toptions.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-    // Not necessary, but peace of mind to set timeouts
-    toptions.c_cc[VMIN] = 0;
-    toptions.c_cc[VTIME] = 2;
-
-    if (tcsetattr(fd, TCSAFLUSH, &toptions) < 0)
-    {
-        // Self explanatory, attempts to set the port attribs
-        perror("Serial: Couldn't set term attributes");
-        // return -1;
-    }
-
-    this->file_descriptor = fd;
-
-    // wait until we're done initializing o do anything else.
-    sleep(1);
-
-    this->connected = true;
 #endif
 }
 
