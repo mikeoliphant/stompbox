@@ -75,9 +75,12 @@ void AudioFileRecorder::init(int samplingFreq)
 
 void AudioFileRecorder::compute(int count, double* input, double* output)
 {
-	waveWriter->AddSamples(input, count);
+	if (waveWriter != nullptr)
+	{
+		waveWriter->AddSamples(input, count);
 
-	recordSeconds = waveWriter->GetRecordSeconds();
+		recordSeconds = waveWriter->GetRecordSeconds();
+	}
 
 	for (int i = 0; i < count; i++)
 	{
