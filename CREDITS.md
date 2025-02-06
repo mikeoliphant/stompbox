@@ -1,16 +1,8 @@
-This repository uses code from a number of sources:
+This repository uses code from a number of sources. Please see the invidual repositories for license information:
 
-https://github.com/sdatkinson/NeuralAmpModelerCore
-
-https://gitlab.com/libeigen/eigen
-
-https://github.com/nlohmann/json
-
-https://github.com/lv2/lv2
+https://github.com/mikeoliphant/NeuralAudio
 
 https://github.com/mackron/dr_libs
-
-https://github.com/mikeoliphant/WDL
 
 https://github.com/avaneev/r8brain-free-src
 
