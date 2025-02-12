@@ -2,8 +2,6 @@ add_library(stompbox-capi StompboxCAPI.h StompboxCAPI.cpp)
 
 include_directories(stompbox-jack ../stompbox)
 
-target_link_libraries(stompbox-capi PUBLIC ${JACK_LIB} PRIVATE stompbox)
-
 target_compile_features(stompbox-capi PUBLIC cxx_std_17)
 
 if (MSVC)
