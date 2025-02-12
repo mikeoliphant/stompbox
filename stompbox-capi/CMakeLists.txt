@@ -2,7 +2,7 @@ add_library(stompbox-capi SHARED StompboxCAPI.h StompboxCAPI.cpp)
 
 include_directories(stompbox-capi ../stompbox)
 
-target_link_libraries(stompbox-capi PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,stompbox>")
+target_link_libraries(stompbox-capi PRIVATE $<LINK_LIBRARY:WHOLE_ARCHIVE,stompbox>)
 
 target_compile_features(stompbox-capi PUBLIC cxx_std_17)
 

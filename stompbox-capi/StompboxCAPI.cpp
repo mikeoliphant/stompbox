@@ -56,7 +56,7 @@ bool IsPresetLoading(ProcessorState* state)
 	return state->processor->IsPresetLoading();
 }
 
-const wchar_t* GetDataPath(ProcessorState* state)
+const std::filesystem::path::value_type* GetDataPath(ProcessorState* state)
 {
     return state->processor->GetDataPath().c_str();
 }
