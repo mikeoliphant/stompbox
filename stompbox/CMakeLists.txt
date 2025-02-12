@@ -35,6 +35,8 @@ add_library(stompbox STATIC ${SOURCES} ${NA_SOURCES} ${OTHER_SOURCES})
 
 target_link_libraries(stompbox PRIVATE NeuralAudio)
 
+set_property(TARGET stompbox PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 source_group(NeuralAudio ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NA_SOURCES})
 

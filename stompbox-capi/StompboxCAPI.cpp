@@ -11,7 +11,7 @@ struct StringVector
     std::vector<std::string>* vec;
 };
 
-const int GetSize(StringVector strVec)
+const size_t GetSize(StringVector strVec)
 {
     return (*(strVec.vec)).size();
 }
