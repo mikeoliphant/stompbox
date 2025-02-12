@@ -37,7 +37,7 @@ else()
 	link_libraries(stdc++fs pthread)
 endif()
 
-add_subdirectory(stompbox-capi)
+#add_subdirectory(stompbox-capi)
 
 if(JACK_LIB)
 	message("Jack library found - stombox-jack will be built")
