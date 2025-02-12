@@ -4,7 +4,12 @@
 extern "C" {
 #endif
 
+
+#ifdef _MSC_VER
 #define STOMPBOX_EXTERN extern __declspec(dllexport)
+#else
+#define STOMPBOX_EXTERN extern
+#endif
 
 struct ProcessorState;
 struct StringVector;
