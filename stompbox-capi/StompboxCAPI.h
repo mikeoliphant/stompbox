@@ -28,7 +28,7 @@ STOMPBOX_EXTERN void SetBPM(ProcessorState* state, double bpm);
 
 STOMPBOX_EXTERN bool IsPresetLoading(ProcessorState* state);
 
-STOMPBOX_EXTERN const wchar_t* GetDataPath(ProcessorState* state);
+STOMPBOX_EXTERN const std::filesystem::path::value_type* GetDataPath(ProcessorState* state);
 
 STOMPBOX_EXTERN const StringVector GetAllPlugins(ProcessorState* state);
 
