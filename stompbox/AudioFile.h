@@ -4,7 +4,7 @@
 #include <string.h>
 #include <string>
 #include <fstream>
-
+#include <stdint.h>
 #include "dr_wav.h"
 
 typedef struct WAVE_HEADER
