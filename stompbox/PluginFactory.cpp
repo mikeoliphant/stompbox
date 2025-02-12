@@ -379,7 +379,7 @@ void PluginFactory::AddPlugin(std::string name, CreatePluginFunction function)
 	allPluginList.push_back(name);
 }
 
-std::list<std::string> PluginFactory::GetAllPlugins()
+std::vector<std::string>& PluginFactory::GetAllPlugins()
 {
 	return allPluginList;
 }
