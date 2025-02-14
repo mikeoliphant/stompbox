@@ -1549,8 +1549,6 @@ void PluginProcessor::Process(double* input, double* output, int count)
             {
                 if (presetLoadThread == nullptr)
                 {
-                    std::cout << "Begin preset loading" << std::endl;
-
                     std::list<StompBox*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
                     newPlugins.clear();
                     plugins = newPlugins;
@@ -1562,8 +1560,6 @@ void PluginProcessor::Process(double* input, double* output, int count)
             {
                 presetLoadThread->join();
                 presetLoadThread = nullptr;
-
-                std::cout << "Preset finished loading" << std::endl;
 
                 ramp = 0;
             }
