@@ -996,7 +996,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                std::list<StompBox*>* chain = nullptr;
+                std::vector<StompBox*>* chain = nullptr;
 
                 if (commandWords[1] == "Input")
                 {

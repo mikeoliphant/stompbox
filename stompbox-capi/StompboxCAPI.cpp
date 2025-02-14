@@ -1,72 +1,292 @@
 #include "PluginProcessor.h"
+#include "StompBox.h"
 #include "StompboxCAPI.h"
 
-struct ProcessorState
-{
-    PluginProcessor* processor;
-};
+// String vector helpers
 
-struct StringVector
+size_t GetStringVectorSize(void* strVec)
 {
-    std::vector<std::string>* vec;
-};
-
-const size_t GetSize(StringVector strVec)
-{
-    return (*(strVec.vec)).size();
+    return (*(std::vector<std::string> *)strVec).size();
 }
 
-const char* GetValue(StringVector strVec, int index)
+const char* GetStringVectorValue(void* strVec, int index)
 {
-    return (*(strVec.vec))[index].c_str();
+    return (*(std::vector<std::string> *)strVec)[index].c_str();
 }
 
-const ProcessorState* CreateProcessor(const wchar_t* dataPath, bool dawMode)
+
+// Processor methods
+
+void* CreateProcessor(const wchar_t* dataPath, bool dawMode)
 {
-    ProcessorState* state = new ProcessorState();
-
-    state->processor = new PluginProcessor(dataPath, dawMode);
-
-    return state;
+    return (void *)new PluginProcessor(dataPath, dawMode);
 }
 
-void DeleteProcessor(ProcessorState* state)
+void DeleteProcessor(void* processor)
 {
-    delete state->processor;
-    delete state;
+    delete (PluginProcessor*)processor;
 }
 
-void Init(ProcessorState* state, double sampleRate)
+void InitProcessor(void* processor, double sampleRate)
 {
-    state->processor->Init(sampleRate);
+    ((PluginProcessor*)processor)->Init(sampleRate);
 }
 
-void StartServer(ProcessorState* state)
+void StartServer(void* processor)
 {
-    state->processor->StartServer();
+    ((PluginProcessor*)processor)->StartServer();
 }
 
-void SetBPM(ProcessorState* state, double bpm)
+void Process(void* processor, double* input, double* output, unsigned int bufferSize)
 {
-    state->processor->SetBPM(bpm);
+    ((PluginProcessor*)processor)->Process(input, output, bufferSize);
 }
 
-bool IsPresetLoading(ProcessorState* state)
+bool IsPresetLoading(void* processor)
 {
-	return state->processor->IsPresetLoading();
+    return ((PluginProcessor*)processor)->IsPresetLoading();
 }
 
-const PATH_STR GetDataPath(ProcessorState* state)
+void SetBPM(void* processor, double bpm)
 {
-    return state->processor->GetDataPath().c_str();
+    ((PluginProcessor*)processor)->SetBPM(bpm);
 }
 
-const StringVector GetAllPlugins(ProcessorState* state)
+const PATH_STR GetDataPath(void* processor)
 {
-    StringVector allPlugins;
+    return ((PluginProcessor*)processor)->GetDataPath().c_str();
+}
 
-    allPlugins.vec = &(state->processor->GetPluginFactory()->GetAllPlugins());
+void* GetAllPlugins(void* processor)
+{
+    return (void *)&(((PluginProcessor*)processor)->GetPluginFactory()->GetAllPlugins());
+}
 
-    return allPlugins;
+void* CreatePlugin(void* processor, const char* id)
+{
+    StompBox* stomp = ((PluginProcessor*)processor)->CreatePlugin(id);
+
+    if (stomp == nullptr)
+        return nullptr;
+
+    return (void *)stomp;
+}
+
+const char* GetPluginSlot(void* processor, const char* slotName)
+{
+    StompBox* stomp = ((PluginProcessor*)processor)->GetPluginSlot(slotName);
+
+    if (stomp == nullptr)
+        return nullptr;
+
+    return stomp->ID.c_str();
+}
+
+void* GetChainPlugins(void* processor, const char* chainName)
+{
+    std::string chainStr = chainName;
+
+    void* chain = nullptr;
+
+    if (chainStr == "InputChain")
+    {
+        chain = (void*)&(((PluginProcessor*)processor)->GetInputChain());
+    }
+    else if (chainStr == "FxLoopChain")
+    {
+        chain = (void*)&(((PluginProcessor*)processor)->GetFxLoop());
+    }
+    else if (chainStr == "OutputChain")
+    {
+        chain = (void*)&(((PluginProcessor*)processor)->GetOutputChain());
+    }
+}
+
+
+// Plugin methods
+
+const char* GetPluginName(void* plugin)
+{
+    return ((StompBox *)plugin)->Name.c_str();
+}
+
+const char* GetPluginID(void* plugin)
+{
+    return ((StompBox*)plugin)->ID.c_str();
+}
+
+bool GetPluginEnabled(void* plugin)
+{
+    return ((StompBox*)plugin)->Enabled;
+}
+
+void SetPluginEnabled(void* plugin, bool enabled)
+{
+    ((StompBox*)plugin)->Enabled = enabled;
+}
+
+const char* GetPluginDescription(void* plugin)
+{
+    return ((StompBox*)plugin)->Description.c_str();
+}
+
+const char* GetPluginBackgroundColor(void* plugin)
+{
+    return ((StompBox*)plugin)->BackgroundColor.c_str();
+}
+
+const char* GetPluginForegroundColor(void* plugin)
+{
+    return ((StompBox*)plugin)->ForegroundColor.c_str();
+}
+
+bool GetPluginIsUserSelectable(void* plugin)
+{
+    return ((StompBox*)plugin)->IsUserSelectable;
+}
+
+double GetOutputValue(void* plugin)
+{
+    if (((StompBox*)plugin)->OutputValue != nullptr)
+    {
+        return *(((StompBox*)plugin)->OutputValue);
+    }
+
+    return 0;
+}
+
+
+size_t GetPluginNumParameters(void* plugin)
+{
+    StompBox* stomp = (StompBox*)plugin;
+
+    size_t numParams = 0;
+
+    if (stomp->InputGain != nullptr)
+    {
+        numParams++;
+    }
+
+    numParams += stomp->NumParameters;
+
+    if (stomp->OutputVolume != nullptr)
+    {
+        numParams++;
+    }
+
+    return numParams;
+}
+
+void* GetPluginParameter(void* plugin, size_t index)
+{
+    StompBox* stomp = (StompBox*)plugin;
+
+    if (stomp->InputGain != nullptr)
+    {
+        if (index == 0)
+            return (void*)(&stomp->InputGain->Parameters[0]);
+
+        index--;
+    }
+
+    if (index < stomp->NumParameters)
+        return (void*)(&stomp->Parameters[index]);
+
+    index -= stomp->NumParameters;
+
+    if (index < 0)
+        return nullptr;
+
+    return (void*)(&stomp->OutputVolume->Parameters[0]);
+}
+
+// Parameter methods
+
+double GetParameterValue(void *parameter)
+{
+    return ((StompBoxParameter*)(void*)parameter)->GetValue();
+}
+
+void SetParameterValue(void* parameter, double value)
+{
+    return ((StompBoxParameter*)(void*)parameter)->SetValue(value);
+}
+
+const char* GetParameterName(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->Name.c_str();
+}
+
+const char* GetParameterDescription(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->Description.c_str();
+}
+
+double GetParameterMinValue(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->MinValue;
+}
+
+double GetParameterMaxValue(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->MaxValue;
+}
+
+double GetParameterDefaultValue(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->DefaultValue;
+}
+
+double GetParameterRangePower(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->RangePower;
+}
+
+int GetParameterType(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->ParameterType;
+}
+
+bool GetParameterCanSyncToHostBPM(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->CanSyncToHostBPM;
+}
+
+int GetParameterBPMSyncNumerator(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->BPMSyncNumerator;
+}
+
+int GetParameterBPMSyncDenominator(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->BPMSyncDenominator;
+}
+
+void SetParameterBPMSyncNumerator(void* parameter, int numerator)
+{
+	((StompBoxParameter*)(void*)parameter)->BPMSyncNumerator = numerator;
+
+    ((StompBoxParameter*)(void*)parameter)->Stomp->UpdateBPM();
+}
+
+void SetParameterBPMSyncDenominator(void* parameter, int denom)
+{
+	((StompBoxParameter*)(void*)parameter)->BPMSyncDenominator = denom;
+    ((StompBoxParameter*)(void*)parameter)->Stomp->UpdateBPM();
+}
+
+bool GetParameterIsAdvanced(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->IsAdvanced;
+}
+
+const char* GetParameterFilePath(void* parameter)
+{
+	return ((StompBoxParameter*)(void*)parameter)->FilePath.c_str();
+}
+
+const char* GetParameterDisplayFormat(void* parameter)
+{
+    return ((StompBoxParameter*)(void*)parameter)->DisplayFormat;
 }
 

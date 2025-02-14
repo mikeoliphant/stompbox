@@ -56,9 +56,9 @@ protected:
 	StompBox* tuner = nullptr;
 	StompBox* audioFilePlayer = nullptr;
 	StompBox* audioFileRecorder = nullptr;
-	std::list<StompBox*> inputChain;
-	std::list<StompBox*> fxLoop;
-	std::list<StompBox*> outputChain;
+	std::vector<StompBox*> inputChain;
+	std::vector<StompBox*> fxLoop;
+	std::vector<StompBox*> outputChain;
 	StompBox* monitorPlugin = nullptr;
 	std::function<void(double*, int)> monitorCallback = nullptr;
 	std::function<void(int, int, int)> midiCallback = nullptr;
@@ -148,15 +148,15 @@ public:
 
 		return nullptr;
 	}
-	std::list<StompBox*> GetInputChain()
+	std::vector<StompBox*> GetInputChain()
 	{
 		return inputChain;
 	}
-	std::list<StompBox*> GetFxLoop()
+	std::vector<StompBox*> GetFxLoop()
 	{
 		return fxLoop;
 	}
-	std::list<StompBox*> GetOutputChain()
+	std::vector<StompBox*> GetOutputChain()
 	{
 		return outputChain;
 	}

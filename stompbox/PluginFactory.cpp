@@ -421,6 +421,8 @@ StompBox* PluginFactory::CreatePlugin(std::string const& name, std::string const
 		return component;
 	}
 
+	fprintf(stderr, "Plugin not found %s\n", id.c_str());
+
 	return nullptr;
 }
 
