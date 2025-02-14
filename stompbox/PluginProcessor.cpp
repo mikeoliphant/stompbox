@@ -1530,7 +1530,7 @@ void PluginProcessor::SaveSettings()
 
 bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
 {
-    fprintf(stderr, "Load commands from file: %s\n", filePath.c_str());
+    fprintf(stderr, "Load commands from file: %ws\n", filePath.c_str());
 
     if (!std::filesystem::exists(filePath))
         return false;

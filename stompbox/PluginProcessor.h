@@ -148,15 +148,15 @@ public:
 
 		return nullptr;
 	}
-	std::vector<StompBox*> GetInputChain()
+	std::vector<StompBox*>& GetInputChain()
 	{
 		return inputChain;
 	}
-	std::vector<StompBox*> GetFxLoop()
+	std::vector<StompBox*>& GetFxLoop()
 	{
 		return fxLoop;
 	}
-	std::vector<StompBox*> GetOutputChain()
+	std::vector<StompBox*>& GetOutputChain()
 	{
 		return outputChain;
 	}
