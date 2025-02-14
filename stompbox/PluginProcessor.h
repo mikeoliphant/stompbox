@@ -56,6 +56,7 @@ protected:
 	StompBox* tuner = nullptr;
 	StompBox* audioFilePlayer = nullptr;
 	StompBox* audioFileRecorder = nullptr;
+	std::vector<std::string> presets;
 	std::vector<StompBox*> inputChain;
 	std::vector<StompBox*> fxLoop;
 	std::vector<StompBox*> outputChain;
@@ -160,6 +161,8 @@ public:
 
 	void SetPluginSlot(const std::string& slotName, const std::string& pluginID)
 	{
+		std::cout << "Set Plugin Slot: " << slotName << " to " << pluginID << std::endl;
+		
 		if (slotName == "Amp")
 		{
 			amp = CreatePlugin(pluginID);
@@ -189,9 +192,12 @@ public:
 		return outputChain;
 	}
 
-	std::string GetPresets();
+	std::vector<std::string>& GetPresets()
+	{
+		return presets;
+	}
 
-	std::string GetCurrentPreset()
+	std::string& GetCurrentPreset()
 	{
 		return currentPreset;
 	}

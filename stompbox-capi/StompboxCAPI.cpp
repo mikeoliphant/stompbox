@@ -131,6 +131,21 @@ void* GetChainPlugins(void* processor, const char* chainName)
     return chain;
 }
 
+void* GetPresets(void* processor)
+{
+    return (void*)&(((PluginProcessor*)processor)->GetPresets());
+}
+
+const char* GetCurrentPreset(void* processor)
+{
+    return ((PluginProcessor*)processor)->GetCurrentPreset().c_str();
+}
+
+void LoadPreset(void* processor, const char* presetName)
+{
+    ((PluginProcessor*)processor)->LoadPreset(presetName);
+}
+
 
 // Plugin methods
 

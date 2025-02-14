@@ -64,6 +64,11 @@ PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
     if (!std::filesystem::exists(presetPath))
         std::filesystem::create_directory(presetPath);
 
+    for (const auto& entry : std::filesystem::directory_iterator(presetPath))
+    {
+        presets.push_back(entry.path().filename().string());
+    }
+
     pluginFactory.SetDataPath(dataPath);
 
     inputGain = CreatePlugin("Input");
@@ -738,19 +743,6 @@ std::string PluginProcessor::DumpProgram()
     return dump;
 }
 
-std::string PluginProcessor::GetPresets()
-{
-    std::string presetList;
-
-    for (const auto& entry : std::filesystem::directory_iterator(presetPath))
-    {
-        presetList.append(entry.path().filename().string());
-        presetList.append(" ");
-    }
-
-    return presetList;
-}
-
 // This is pretty gross - should probably read presets into a list and keep it around...
 std::string PluginProcessor::GetNextPreset(std::string afterPreset)
 {
@@ -1059,8 +1051,12 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                 if (commandWords[1] == "Presets")
                 {
                     std::string presetList = "Presets ";
-                    
-                    presetList.append(GetPresets());
+
+                    for (const auto& preset : GetPresets())
+                    {
+                        presetList.append(preset);
+                        presetList.append(" ");
+                    }
 
                     presetList.append("\r\n");
 
@@ -1441,7 +1437,7 @@ void PluginProcessor::LoadPreset(std::string preset)
 {
     if (ramp == 0)  // Don't allow loading a preset while another is already being loaded
     {
-        fprintf(stderr, "Loading preset %s\n", preset.c_str());
+        std::cout << "Loading preset: " << preset << std::endl;
 
         loadPreset.assign(preset);
 
@@ -1553,6 +1549,8 @@ void PluginProcessor::Process(double* input, double* output, int count)
             {
                 if (presetLoadThread == nullptr)
                 {
+                    std::cout << "Begin preset loading" << std::endl;
+
                     std::list<StompBox*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
                     newPlugins.clear();
                     plugins = newPlugins;
@@ -1564,6 +1562,8 @@ void PluginProcessor::Process(double* input, double* output, int count)
             {
                 presetLoadThread->join();
                 presetLoadThread = nullptr;
+
+                std::cout << "Preset finished loading" << std::endl;
 
                 ramp = 0;
             }

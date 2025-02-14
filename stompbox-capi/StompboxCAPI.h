@@ -51,6 +51,12 @@ STOMPBOX_EXTERN void* GetChainPlugins(void* processor, const char* chainName);
 
 STOMPBOX_EXTERN void* CreatePlugin(void* processor, const char* id);
 
+STOMPBOX_EXTERN void* GetPresets(void* processor);
+
+STOMPBOX_EXTERN const char* GetCurrentPreset(void* processor);
+
+STOMPBOX_EXTERN void LoadPreset(void* processor, const char* presetName);
+
 STOMPBOX_EXTERN const char* GetPluginName(void* plugin);
 
 STOMPBOX_EXTERN const char* GetPluginID(void* plugin);
