@@ -9,7 +9,7 @@ size_t GetStringVectorSize(void* strVec)
     return (*(std::vector<std::string> *)strVec).size();
 }
 
-const char* GetStringVectorValue(void* strVec, int index)
+const char* GetStringVectorValue(void* strVec, size_t index)
 {
     return (*(std::vector<std::string> *)strVec)[index].c_str();
 }
@@ -47,6 +47,17 @@ bool IsPresetLoading(void* processor)
     return ((PluginProcessor*)processor)->IsPresetLoading();
 }
 
+void HandleCommand(void* processor, const char* cmd)
+{
+    ((PluginProcessor*)processor)->HandleCommand(cmd);
+}
+
+bool HandleMidiCommand(void* processor, int midiCommand, int midiData1, int midiData2)
+{
+    return ((PluginProcessor*)processor)->HandleMidiCommand(midiCommand, midiData1, midiData2);
+}
+
+
 void SetBPM(void* processor, double bpm)
 {
     ((PluginProcessor*)processor)->SetBPM(bpm);
@@ -82,6 +93,22 @@ const char* GetPluginSlot(void* processor, const char* slotName)
     return stomp->ID.c_str();
 }
 
+void SetPluginSlot(void* processor, const char* slotName, const char* pluginID)
+{
+    ((PluginProcessor*)processor)->SetPluginSlot(slotName, pluginID);
+}
+
+size_t GetPluginVectorSize(void* plugVec)
+{
+    return (*(std::vector<StompBox*> *)plugVec).size();
+}
+
+void* GetPluginVectorValue(void* plugVec, size_t index)
+{
+    return (*(std::vector<StompBox*> *)plugVec)[index];
+}
+
+
 void* GetChainPlugins(void* processor, const char* chainName)
 {
     std::string chainStr = chainName;
@@ -100,6 +127,8 @@ void* GetChainPlugins(void* processor, const char* chainName)
     {
         chain = (void*)&(((PluginProcessor*)processor)->GetOutputChain());
     }
+
+    return chain;
 }
 
 
@@ -246,6 +275,12 @@ int GetParameterType(void* parameter)
 {
 	return ((StompBoxParameter*)(void*)parameter)->ParameterType;
 }
+
+void* GetParameterEnumValues(void* parameter)
+{
+    return (void *)(((StompBoxParameter*)(void*)parameter)->EnumValues);
+}
+
 
 bool GetParameterCanSyncToHostBPM(void* parameter)
 {

@@ -97,21 +97,26 @@ public:
 	StompBox* CreatePlugin(std::string const& id);
 	void UpdatePlugins();
 	void InitPlugin(StompBox* plugin);
+
 	bool IsPresetLoading()
 	{
 		return (ramp == -1);
 	}
+
 	double GetBPM()
 	{
 		return bpm;
 	}
+
 	std::filesystem::path& GetDataPath()
 	{
 		return dataPath;
 	}
+
 	bool GetServerIsRunning() {
 		return serverIsRunning;
 	}
+
 	bool HaveClient()
 	{
 		if (!serverIsRunning)
@@ -119,18 +124,22 @@ public:
 
 		return stompboxServer.HaveClient();
 	}
+
 	PluginFactory* GetPluginFactory()
 	{
 		return &pluginFactory;
 	}
+
 	StompBox* GetInputGain()
 	{
 		return inputGain;
 	}
+
 	StompBox* GetMasterVolume()
 	{
 		return masterVolume;
 	}
+
 	StompBox* GetPluginSlot(const std::string& slotName)
 	{
 		if (slotName == "Amp")
@@ -148,34 +157,59 @@ public:
 
 		return nullptr;
 	}
+
+	void SetPluginSlot(const std::string& slotName, const std::string& pluginID)
+	{
+		if (slotName == "Amp")
+		{
+			amp = CreatePlugin(pluginID);
+		}
+		else if (slotName == "Tonestack")
+		{
+			tonestack = CreatePlugin(pluginID);
+		}
+		else if (slotName == "Cabinet")
+		{
+			cabinet = CreatePlugin(pluginID);
+		}
+	}
+
 	std::vector<StompBox*>& GetInputChain()
 	{
 		return inputChain;
 	}
+
 	std::vector<StompBox*>& GetFxLoop()
 	{
 		return fxLoop;
 	}
+
 	std::vector<StompBox*>& GetOutputChain()
 	{
 		return outputChain;
 	}
+
 	std::string GetPresets();
+
 	std::string GetCurrentPreset()
 	{
 		return currentPreset;
 	}
+
 	std::string GetNextPreset(std::string afterPreset);
 	std::string GetPreviousPreset(std::string beforePreset);
+
 	void SetMonitorPlugin(std::string const& pluginID, std::function<void(double *, int)> callback)
 	{
 		monitorCallback = callback;
 		monitorPlugin = pluginFactory.FindPlugin(pluginID);
 	}
+
 	void SetMidiCallback(std::function<void(int, int, int)> callback)
 	{
 		midiCallback = callback;
 	}
+
 	void SetMessageCallback(std::function<void(const std::string)> callback);
 	void ReportDSPLoad(float currentLoad);
 	std::string HandleCommand(const std::string& line);

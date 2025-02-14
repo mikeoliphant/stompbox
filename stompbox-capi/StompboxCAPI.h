@@ -15,7 +15,7 @@ extern "C" {
 
 STOMPBOX_EXTERN size_t GetStringVectorSize(void* strVec);
 
-STOMPBOX_EXTERN const char* GetStringVectorValue(void* strVec, int index);
+STOMPBOX_EXTERN const char* GetStringVectorValue(void* strVec, size_t index);
 
 STOMPBOX_EXTERN void* CreateProcessor(const wchar_t* dataPath, bool dawMode);
 
@@ -29,6 +29,10 @@ STOMPBOX_EXTERN void Process(void* processor, double* input, double* output, uns
 
 STOMPBOX_EXTERN bool IsPresetLoading(void* processor);
 
+STOMPBOX_EXTERN void HandleCommand(void* processor, const char* cmd);
+
+STOMPBOX_EXTERN bool HandleMidiCommand(void* processor, int midiCommand, int midiData1, int midiData2);
+
 STOMPBOX_EXTERN void SetBPM(void* processor, double bpm);
 
 STOMPBOX_EXTERN const PATH_STR GetDataPath(void* processor);
@@ -36,6 +40,12 @@ STOMPBOX_EXTERN const PATH_STR GetDataPath(void* processor);
 STOMPBOX_EXTERN void *GetAllPlugins(void* processor);
 
 STOMPBOX_EXTERN const char* GetPluginSlot(void* processor, const char* slotName);
+
+STOMPBOX_EXTERN void SetPluginSlot(void* processor, const char* slotName, const char* pluginID);
+
+STOMPBOX_EXTERN size_t GetPluginVectorSize(void* plugVec);
+
+STOMPBOX_EXTERN void* GetPluginVectorValue(void* plugVec, size_t index);
 
 STOMPBOX_EXTERN void* GetChainPlugins(void* processor, const char* chainName);
 
@@ -80,6 +90,8 @@ STOMPBOX_EXTERN double GetParameterDefaultValue(void* parameter);
 STOMPBOX_EXTERN double GetParameterRangePower(void* parameter);
 
 STOMPBOX_EXTERN int GetParameterType(void* parameter);
+
+STOMPBOX_EXTERN void* GetParameterEnumValues(void* parameter);
 
 STOMPBOX_EXTERN bool GetParameterCanSyncToHostBPM(void* parameter);
 

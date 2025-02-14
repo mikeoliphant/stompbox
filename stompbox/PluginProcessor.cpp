@@ -838,18 +838,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 2)
             {
-                if (commandWords[1] == "Amp")
-                {
-                    amp = CreatePlugin(commandWords[2]);
-                }
-                else if (commandWords[1] == "Tonestack")
-                {
-                    tonestack = CreatePlugin(commandWords[2]);
-                }
-                else if (commandWords[1] == "Cabinet")
-                {
-                    cabinet = CreatePlugin(commandWords[2]);
-                }
+                SetPluginSlot(commandWords[1], commandWords[2]);
 
                 needPluginUpdate = true;
             }
