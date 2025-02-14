@@ -64,10 +64,7 @@ PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
     if (!std::filesystem::exists(presetPath))
         std::filesystem::create_directory(presetPath);
 
-    for (const auto& entry : std::filesystem::directory_iterator(presetPath))
-    {
-        presets.push_back(entry.path().filename().string());
-    }
+    ScanPresets();
 
     pluginFactory.SetDataPath(dataPath);
 
@@ -157,6 +154,16 @@ void PluginProcessor::Init(double sampleRate)
     fprintf(stderr, "Starting client update thread\n");
 
     clientUpdateThread = new std::thread(&PluginProcessor::UpdateClient, this);
+}
+
+void PluginProcessor::ScanPresets()
+{
+    presets.clear();
+
+    for (const auto& entry : std::filesystem::directory_iterator(presetPath))
+    {
+        presets.push_back(entry.path().filename().string());
+    }
 }
 
 void PluginProcessor::SetBPM(double bpm)
@@ -1082,6 +1089,8 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                 outFile << dump;
 
                 outFile.close();
+
+                ScanPresets();
             }
         }
         else if (commandWords[0] == "LoadPreset")
@@ -1102,6 +1111,8 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                 if (std::filesystem::exists(outPath))
                     std::filesystem::remove(outPath);
+
+                ScanPresets();
             }
         }
         else if (commandWords[0] == "SaveSettings")

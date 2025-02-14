@@ -92,6 +92,7 @@ public:
 	PluginProcessor(std::filesystem::path dataPath, bool dawMode);
 	~PluginProcessor();
 	static std::string GetVersion();
+	void ScanPresets();
 	void Init(double sampleRate);
 	void SetBPM(double bpm);
 	void StartServer();
