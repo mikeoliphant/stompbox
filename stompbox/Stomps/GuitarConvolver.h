@@ -41,9 +41,9 @@ class GuitarConvolver : public StompBox
 private:
 	WDL_ImpulseBuffer impulseBuffer;
 //#ifdef _WIN32
-	//WDL_ConvolutionEngine_Thread convolutionEngine;
+	WDL_ConvolutionEngine_Thread convolutionEngine;
 //#else
-	WDL_ConvolutionEngine_Div convolutionEngine;
+	//WDL_ConvolutionEngine_Div convolutionEngine;
 //#endif
 
 	double* impulseData = nullptr;
