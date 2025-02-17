@@ -44,6 +44,7 @@ void NAM::IndexModels(std::filesystem::path path)
         }
     }
 
+    Parameters[NAM_MODEL].MinValue = -1;
     Parameters[NAM_MODEL].MaxValue = (int)modelNames.size() - 1;
 }
 
@@ -57,13 +58,24 @@ void NAM::SetParameterValue(StompBoxParameter* parameter, double value)
     }
 }
 
+void NAM::ClearModel()
+{
+    stagedModel = nullptr;
+    haveStagedModel = true;
+}
+
 void NAM::SetModel(int index)
 {
-    if (loadedModelIndex != index)
+    if (index == -1)
+        ClearModel();
+    else
     {
-        SetModel(modelPaths[index]);
+        if (loadedModelIndex != index)
+        {
+            SetModel(modelPaths[index]);
 
-        loadedModelIndex = (int)index;
+            loadedModelIndex = (int)index;
+        }
     }
 }
 
@@ -78,6 +90,8 @@ void NAM::SetModel(const std::string filename)
         try
         {
             stagedModel = NeuralAudio::NeuralModel::CreateFromFile(filename);
+
+            haveStagedModel = true;
         }
         catch (std::exception& e)
         {
@@ -88,13 +102,14 @@ void NAM::SetModel(const std::string filename)
 
 void NAM::compute(int count, double* input, double* output)
 {
-    if (stagedModel != nullptr)
+    if (haveStagedModel)
     {
         if (activeModel != nullptr)
             delete activeModel;
 
         activeModel = stagedModel;
         stagedModel = nullptr;
+        haveStagedModel = false;
     }
 
     if (activeModel == nullptr)

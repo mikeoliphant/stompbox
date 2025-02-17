@@ -102,7 +102,7 @@ public:
 
 	bool IsPresetLoading()
 	{
-		return (ramp == -1);
+		return (ramp != 0);
 	}
 
 	double GetBPM()

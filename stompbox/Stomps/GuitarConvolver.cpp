@@ -55,6 +55,7 @@ void GuitarConvolver::IndexImpulses(std::filesystem::path path)
         }
     }
 
+    Parameters[CONVOLVER_IMPULSE].MinValue = -1;
     Parameters[CONVOLVER_IMPULSE].MaxValue = (int)impulseNames.size() - 1;
 }
 
@@ -65,8 +66,27 @@ void GuitarConvolver::SetParameterValue(StompBoxParameter *parameter, double val
     if (parameter == &Parameters[CONVOLVER_IMPULSE])
     {
         if (!NeedsInit)
-            SetImpulse(impulsePaths[(int)impulseIndex]);
+            SetImpulseIndex(impulseIndex);
     }
+}
+
+void GuitarConvolver::SetImpulseIndex(const int index)
+{
+    impulseIndex = index;
+
+    if (impulseIndex == -1)
+    {
+        ClearImpulse();
+    }
+    else
+    {
+        SetImpulse(impulsePaths[(int)impulseIndex]);
+    }
+}
+
+void GuitarConvolver::ClearImpulse()
+{
+    haveImpulseData = false;
 }
 
 void GuitarConvolver::SetImpulse(const std::string filename)
@@ -104,16 +124,23 @@ void GuitarConvolver::SetImpulse(const std::string filename)
 
 void GuitarConvolver::SetImpulse()
 {
-    double* newImpulseData[1];
+    if (impulseData == nullptr)
+    {
+        haveImpulseData = false;
+    }
+    else
+    {
+        double* newImpulseData[1];
 
-    newImpulseData[0] = impulseData;
+        newImpulseData[0] = impulseData;
 
-    impulseBuffer.Set((const double **)newImpulseData, impulseSamples, 1);
+        impulseBuffer.Set((const double**)newImpulseData, impulseSamples, 1);
 
-    //convolutionEngine.SetImpulse(&impulseBuffer, 0, 0, 0, 0, 1024);
-    convolutionEngine.SetImpulse(&impulseBuffer); // , 0, 32);
+        //convolutionEngine.SetImpulse(&impulseBuffer, 0, 0, 0, 0, 1024);
+        convolutionEngine.SetImpulse(&impulseBuffer); // , 0, 32);
 
-    haveImpulseData = true;
+        haveImpulseData = true;
+    }
 }
 
 void GuitarConvolver::compute(int count, double* input, double* output)

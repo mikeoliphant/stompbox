@@ -6,6 +6,7 @@
 #define FAUSTFLOAT double
 #endif
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <functional>

@@ -31,6 +31,7 @@ private:
 	int loadedModelIndex = -1;
 	std::vector<std::string> modelNames;
 	std::vector<std::string> modelPaths;
+	bool haveStagedModel = false;
 	NeuralAudio::NeuralModel* stagedModel = nullptr;
 	NeuralAudio::NeuralModel* activeModel = nullptr;
 	double prevDCInput = 0;
@@ -44,6 +45,7 @@ public:
 	virtual void init(int samplingFreq);
 	void IndexModels(std::filesystem::path path);
 	void SetParameterValue(StompBoxParameter* parameter, double value);
+	void ClearModel();
 	void SetModel(int index);
 	void SetModel(const std::string filename);
 	virtual void compute(int count, double* input, double* output);

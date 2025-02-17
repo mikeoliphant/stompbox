@@ -912,6 +912,8 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                         if (!gotEnum)
                                         {
                                             err.append("Bad Enum Value");
+
+                                            param->SetValue(-1);
                                         }
                                     }
                                     else if (param->ParameterType == PARAMETER_TYPE_FILE)
@@ -943,6 +945,8 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                         if (!gotEnum)
                                         {
                                             err.append("Bad Enum Value");
+
+                                            param->SetValue(-1);
                                         }
                                     }
 
@@ -968,6 +972,14 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                     }
 
                                     gotParam = true;
+                                }
+                                else
+                                {
+                                    // No parameter value, so set default value
+
+                                    std::cout << "Set default value" << std::endl;
+
+                                    param->SetValue(param->DefaultValue);
                                 }
                             }
                         }
@@ -1446,13 +1458,17 @@ void PluginProcessor::SyncPreset()
 
 void PluginProcessor::LoadPreset(std::string preset)
 {
-    if (ramp == 0)  // Don't allow loading a preset while another is already being loaded
-    {
-        std::cout << "Loading preset: " << preset << std::endl;
+    std::cout << "Loading preset: " << preset << std::endl;
 
+    if (ramp == 0)
+    {
         loadPreset.assign(preset);
 
         StartRamp(-1, rampMS);
+    }
+    else
+    {
+        std::cout << "Error: Can't load preset while another is still loading" << std::endl;
     }
 }
 
