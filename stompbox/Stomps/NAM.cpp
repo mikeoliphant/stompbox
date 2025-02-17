@@ -73,10 +73,10 @@ void NAM::SetModel(int index)
         if (loadedModelIndex != index)
         {
             SetModel(modelPaths[index]);
-
-            loadedModelIndex = (int)index;
         }
     }
+
+    loadedModelIndex = (int)index;
 }
 
 void NAM::SetModel(const std::string filename)
