@@ -1,7 +1,8 @@
 #include "NAMMultiBand.h"
 #include "Gain.h"
 
-NAMMultiBand::NAMMultiBand()
+NAMMultiBand::NAMMultiBand(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath) :
+	nam(folderName, fileExtensions, basePath)
 {
     Name = "NAMMulti";
 
@@ -22,6 +23,9 @@ NAMMultiBand::NAMMultiBand()
 
 	memcpy(&Parameters[NAMMULTIBAND_MODEL_GAIN], &nam.InputGain->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));
 	memcpy(&Parameters[NAMMULTIBAND_MODEL_VOLUME], &nam.OutputVolume->Parameters[GAIN_GAIN], sizeof(StompBoxParameter));
+
+	memcpy(&Parameters[NAMMULTIBAND_MODEL], &nam.Parameters[NAM_MODEL], sizeof(StompBoxParameter));
+	Parameters[NAMMULTIBAND_MODEL].Stomp = this;
 }
 
 void NAMMultiBand::init(int samplingFreq)
@@ -31,14 +35,6 @@ void NAMMultiBand::init(int samplingFreq)
 	nam.OutputVolume->init(samplingFreq);
 
 	crossover.init(samplingFreq);
-}
-
-void NAMMultiBand::IndexModels(std::filesystem::path path)
-{
-	nam.IndexModels(path);
-
-	memcpy(&Parameters[NAMMULTIBAND_MODEL], &nam.Parameters[NAM_MODEL], sizeof(StompBoxParameter));
-	Parameters[NAMMULTIBAND_MODEL].Stomp = this;
 }
 
 double NAMMultiBand::GetParameterValue(StompBoxParameter* parameter)

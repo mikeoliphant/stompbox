@@ -60,18 +60,104 @@ public:
 		}
 	}
 
-	std::string& GetFolderName()
+	const std::string& GetFolderName() const
 	{
 		return folderName;
 	}
 
-	std::vector<std::string>& GetFileNames()
+	const std::vector<std::string>& GetFileNames() const
 	{
 		return fileNames;
 	}
 
-	std::vector<std::filesystem::path>& GetFilePaths()
+	const std::vector<std::filesystem::path>& GetFilePaths() const
 	{
 		return filePaths;
+	}
+};
+
+template<typename T>
+class FileLoader
+{
+private:
+	const FileType& fileType;
+	int loadedIndex;
+	T* loadedData;
+	T* stagedData;
+	T* toDeleteData;
+	bool haveStagedData;
+
+protected:
+	virtual T* LoadFromFile(const std::filesystem::path& loadPath)
+	{
+		return nullptr;
+	}
+
+public:
+	FileLoader(const FileType& fileType) :
+		fileType(fileType),
+		loadedIndex(-1),
+		loadedData(nullptr),
+		stagedData(nullptr),
+		toDeleteData(nullptr),
+		haveStagedData(false)
+	{
+
+	}
+
+	~FileLoader()
+	{
+		if (loadedData != nullptr)
+			delete loadedData;
+
+		if (stagedData != nullptr)
+			delete stagedData;
+
+		if (toDeleteData != nullptr)
+			delete toDeleteData;
+	}
+
+	const FileType& GetFileType()
+	{
+		return fileType;
+	}
+
+	void LoadIndex(int index)
+	{
+		if (index != loadedIndex)
+		{
+			loadedIndex = index;
+
+			if (index == -1)
+			{
+				stagedData = nullptr;
+			}
+			else
+			{
+				if (toDeleteData != nullptr)
+				{
+					delete toDeleteData;
+					toDeleteData = nullptr;
+				}
+
+				stagedData = LoadFromFile(fileType.GetFilePaths()[index]);
+			}
+
+			haveStagedData = true;
+		}
+	}
+
+	T* GetCurrentData()
+	{
+		if (haveStagedData)
+		{
+			toDeleteData = loadedData;
+			loadedData = stagedData;
+			stagedData = nullptr;
+
+			haveStagedData = false;
+		}
+
+		return loadedData;
 	}
 };

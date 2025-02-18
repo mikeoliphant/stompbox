@@ -1,6 +1,8 @@
 #include "NAM.h"
 
-NAM::NAM()
+NAM::NAM(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath) :
+    fileType(folderName, fileExtensions, basePath),
+    namLoader(fileType)
 {
     Name = "NAM";
     Description = "Neural Amp Modeler capture playback";
@@ -12,40 +14,16 @@ NAM::NAM()
     Parameters[NAM_MODEL].SourceVariable = &modelIndex;
     Parameters[NAM_MODEL].ParameterType = PARAMETER_TYPE_FILE;
     Parameters[NAM_MODEL].FilePath = "NAM";
-    Parameters[NAM_MODEL].EnumValues = &modelNames;
+    Parameters[NAM_MODEL].EnumValues = &fileType.GetFileNames();
     Parameters[NAM_MODEL].DefaultValue = -1;
     Parameters[NAM_MODEL].Description = "Selected NAM model";
+    Parameters[NAM_MODEL].MinValue = -1;
+    Parameters[NAM_MODEL].MaxValue = (int)(fileType.GetFileNames().size()) - 1;
 }
 
 void NAM::init(int samplingFreq)
 {
     StompBox::init(samplingFreq);
-}
-
-void NAM::IndexModels(std::filesystem::path path)
-{
-    modelNames.clear();
-
-    struct stat fstat;
-
-    if (stat(path.string().c_str(), &fstat) == 0)
-    {
-        for (const auto& entry : std::filesystem::directory_iterator(path))
-        {
-            std::filesystem::path ext = entry.path().filename().extension();
-
-            if ((ext == ".nam") || (ext == ".json") || (ext == ".aidax"))
-            {
-                auto filename = entry.path().filename().replace_extension();
-
-                modelNames.push_back(filename.string());
-                modelPaths.push_back(entry.path().string());
-            }
-        }
-    }
-
-    Parameters[NAM_MODEL].MinValue = -1;
-    Parameters[NAM_MODEL].MaxValue = (int)modelNames.size() - 1;
 }
 
 void NAM::SetParameterValue(StompBoxParameter* parameter, double value)
@@ -54,63 +32,13 @@ void NAM::SetParameterValue(StompBoxParameter* parameter, double value)
 
     if (parameter == &Parameters[NAM_MODEL])
     {
-        SetModel((int)modelIndex);
-    }
-}
-
-void NAM::ClearModel()
-{
-    stagedModel = nullptr;
-    haveStagedModel = true;
-}
-
-void NAM::SetModel(int index)
-{
-    if (index == -1)
-        ClearModel();
-    else
-    {
-        if (loadedModelIndex != index)
-        {
-            SetModel(modelPaths[index]);
-        }
-    }
-
-    loadedModelIndex = (int)index;
-}
-
-void NAM::SetModel(const std::string filename)
-{
-    struct stat fstat;
-
-    fprintf(stderr, "Loading model from %s\n", filename.c_str());
-
-    if (stat(filename.c_str(), &fstat) == 0)
-    {
-        try
-        {
-            stagedModel = NeuralAudio::NeuralModel::CreateFromFile(filename);
-
-            haveStagedModel = true;
-        }
-        catch (std::exception& e)
-        {
-            stagedModel = nullptr;
-        }
+        namLoader.LoadIndex((int)modelIndex);
     }
 }
 
 void NAM::compute(int count, double* input, double* output)
 {
-    if (haveStagedModel)
-    {
-        if (activeModel != nullptr)
-            delete activeModel;
-
-        activeModel = stagedModel;
-        stagedModel = nullptr;
-        haveStagedModel = false;
-    }
+    auto activeModel = namLoader.GetCurrentData();
 
     if (activeModel == nullptr)
     {

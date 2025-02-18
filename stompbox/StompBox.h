@@ -91,7 +91,7 @@ struct StompBoxParameter
 	int BPMSyncDenominator = 0;
 	bool IsAdvanced = false;
 	std::string FilePath;
-	std::vector<std::string>* EnumValues = nullptr;
+	const std::vector<std::string>* EnumValues = nullptr;
 	bool IsDirty = false;
 	bool SuppressSave = false;
 	double GetValue()

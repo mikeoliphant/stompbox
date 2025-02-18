@@ -25,10 +25,9 @@ private:
 
 public:
 
-	NAMMultiBand();
+	NAMMultiBand(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath);
 	virtual ~NAMMultiBand() {}
 	virtual void init(int samplingFreq);
-	void IndexModels(std::filesystem::path path);
 	double GetParameterValue(StompBoxParameter* parameter) override;
 	void SetParameterValue(StompBoxParameter* parameter, double value) override;
 	virtual void compute(int count, double* input, double* output);

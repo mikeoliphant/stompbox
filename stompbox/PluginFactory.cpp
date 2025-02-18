@@ -89,9 +89,7 @@ std::filesystem::path namModelPath;
 
 StompBox* CreateNAMPlugin()
 {
-	NAM* nam = new NAM();
-
-	nam->IndexModels(namModelPath);
+	NAM* nam = new NAM("NAM", { ".nam", ".json", ".aidax" }, basePath);
 
 	nam->InputGain = CreateInputGainPlugin();
 	nam->InputGain->ID = "NAM";
@@ -103,9 +101,7 @@ StompBox* CreateNAMPlugin()
 
 StompBox* CreateNAMMultiBandPlugin()
 {
-	NAMMultiBand* nam = new NAMMultiBand();
-
-	nam->IndexModels(namModelPath);
+	NAMMultiBand* nam = new NAMMultiBand("NAM", { ".nam", ".json", ".aidax" }, basePath);
 
 	return nam;
 }

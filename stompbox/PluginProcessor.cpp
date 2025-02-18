@@ -893,7 +893,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                             paramValue += " " + commandWords[i];
                                         }
 
-                                        std::vector<std::string>* enumValues = param->EnumValues;
+                                        const std::vector<std::string>* enumValues = param->EnumValues;
 
                                         bool gotEnum = false;
 
@@ -926,7 +926,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                             paramValue += " " + commandWords[i];
                                         }
 
-                                        std::vector<std::string>* enumValues = param->EnumValues;
+                                        const std::vector<std::string>* enumValues = param->EnumValues;
 
                                         bool gotEnum = false;
 
