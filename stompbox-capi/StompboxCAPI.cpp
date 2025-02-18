@@ -154,7 +154,7 @@ const char* DumpSettings(void* processor)
 
     int len = settings.length() + 1;
     char* buff = (char*)CoTaskMemAlloc(len);
-    strcpy_s(buff, len, settings.c_str());
+    strcpy(buff, settings.c_str());
 
     return buff;
 }
@@ -165,7 +165,7 @@ const char* DumpProgram(void* processor)
 
     int len = program.length() + 1;
     char* buff = (char*)CoTaskMemAlloc(len);
-    strcpy_s(buff, len, program.c_str());
+    strcpy(buff, program.c_str());
 
     return buff;
 }
