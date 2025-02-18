@@ -8,9 +8,11 @@ extern "C" {
 #ifdef _MSC_VER
 #define STOMPBOX_EXTERN extern __declspec(dllexport)
 #define PATH_STR wchar_t*
+#include "Combaseapi.h"
 #else
 #define STOMPBOX_EXTERN extern
 #define PATH_STR char*
+#define CoTaskMemAlloc(p) malloc(p)
 #endif
 
 STOMPBOX_EXTERN size_t GetStringVectorSize(void* strVec);
@@ -56,6 +58,10 @@ STOMPBOX_EXTERN void* GetPresets(void* processor);
 STOMPBOX_EXTERN const char* GetCurrentPreset(void* processor);
 
 STOMPBOX_EXTERN void LoadPreset(void* processor, const char* presetName);
+
+STOMPBOX_EXTERN const char* DumpSettings(void* processor);
+
+STOMPBOX_EXTERN const char* DumpProgram(void* processor);
 
 STOMPBOX_EXTERN const char* GetPluginName(void* plugin);
 

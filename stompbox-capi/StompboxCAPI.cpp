@@ -146,6 +146,28 @@ void LoadPreset(void* processor, const char* presetName)
     ((PluginProcessor*)processor)->LoadPreset(presetName);
 }
 
+const char* DumpSettings(void* processor)
+{
+    auto settings = ((PluginProcessor*)processor)->DumpSettings();
+
+    int len = settings.length() + 1;
+    char* buff = (char*)CoTaskMemAlloc(len);
+    strcpy_s(buff, len, settings.c_str());
+
+    return buff;
+}
+
+const char* DumpProgram(void* processor)
+{
+    auto program = ((PluginProcessor*)processor)->DumpProgram();
+
+    int len = program.length() + 1;
+    char* buff = (char*)CoTaskMemAlloc(len);
+    strcpy_s(buff, len, program.c_str());
+
+    return buff;
+}
+
 
 // Plugin methods
 
