@@ -27,7 +27,7 @@ typedef struct WAVE_HEADER
 class WaveReader
 {
 public:
-	WaveReader(std::string filename, uint32_t desiredSampleRate);
+	WaveReader(const std::string filename, uint32_t desiredSampleRate);
 	~WaveReader();
 
 	float* GetWaveData()

@@ -1,6 +1,9 @@
 #include "GuitarConvolver.h"
 
-GuitarConvolver::GuitarConvolver()
+GuitarConvolver::GuitarConvolver(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath) :
+    fileType(folderName, fileExtensions, basePath),
+    irLoader(fileType)
+
 {
     Name = "Cabinet";
     Description = "Cabinet impulse response playback";
@@ -12,9 +15,11 @@ GuitarConvolver::GuitarConvolver()
     Parameters[CONVOLVER_IMPULSE].SourceVariable = &impulseIndex;
     Parameters[CONVOLVER_IMPULSE].ParameterType = PARAMETER_TYPE_FILE;
     Parameters[CONVOLVER_IMPULSE].FilePath = "Cabinets";
-    Parameters[CONVOLVER_IMPULSE].EnumValues = &impulseNames;
+    Parameters[CONVOLVER_IMPULSE].EnumValues = &fileType.GetFileNames();
     Parameters[CONVOLVER_IMPULSE].DefaultValue = -1;
     Parameters[CONVOLVER_IMPULSE].Description = "Selected impulse response";
+    Parameters[CONVOLVER_IMPULSE].MinValue = -1;
+    Parameters[CONVOLVER_IMPULSE].MaxValue = (int)(fileType.GetFileNames().size()) - 1;
 
     Parameters[CONVOLVER_DRY].Name = "Dry";
     Parameters[CONVOLVER_DRY].SourceVariable = &dry;
@@ -32,139 +37,36 @@ void GuitarConvolver::init(int samplingFreq)
     StompBox::init(samplingFreq);
 }
 
-void GuitarConvolver::IndexImpulses(std::filesystem::path path)
-{
-    impulseNames.clear();
-
-    struct stat fstat;
-
-    if (stat(path.string().c_str(), &fstat) == 0)
-    {
-        for (const auto& entry : std::filesystem::directory_iterator(path))
-        {
-            if (entry.path().filename().extension() == ".wav")
-            {
-                auto filename = entry.path().filename().replace_extension();
-
-                impulseNames.push_back(filename.string());
-                impulsePaths.push_back(entry.path().string());
-            }
-        }
-    }
-
-    Parameters[CONVOLVER_IMPULSE].MinValue = -1;
-    Parameters[CONVOLVER_IMPULSE].MaxValue = (int)impulseNames.size() - 1;
-}
-
 void GuitarConvolver::SetParameterValue(StompBoxParameter *parameter, double value)
 {
     StompBox::SetParameterValue(parameter, value);
 
     if (parameter == &Parameters[CONVOLVER_IMPULSE])
     {
-        if (!NeedsInit)
-            SetImpulseIndex(impulseIndex);
-    }
-}
-
-void GuitarConvolver::SetImpulseIndex(const int index)
-{
-    impulseIndex = index;
-
-    if (impulseIndex == -1)
-    {
-        ClearImpulse();
-    }
-    else
-    {
-        SetImpulse(impulsePaths[(int)impulseIndex]);
-    }
-}
-
-void GuitarConvolver::ClearImpulse()
-{
-    haveImpulseData = false;
-}
-
-void GuitarConvolver::SetImpulse(const std::string filename)
-{
-    struct stat fstat;
-
-    fprintf(stderr, "Loading IR from %s\n", filename.c_str());
-
-    WaveReader *waveReader = new WaveReader(filename, samplingFreq);
-
-    float* waveData = waveReader->GetWaveData();
-
-    if (waveData != nullptr)
-    {
-        if (impulseData != nullptr)
-            delete[] impulseData;
-
-        impulseSamples = waveReader->NumSamples;
-
-        impulseData = new double[impulseSamples];
-
-        float gain = pow(10, -18 * 0.05);  // IRs are usually too loud
-
-        for (int i = 0; i < impulseSamples; i++)
-        {
-            impulseData[i] = waveData[i] * gain;
-        }
-
-        haveNewImpulseData = true;
-    }
-
-    delete waveReader;
-    waveReader = nullptr;
-}
-
-void GuitarConvolver::SetImpulse()
-{
-    if (impulseData == nullptr)
-    {
-        haveImpulseData = false;
-    }
-    else
-    {
-        double* newImpulseData[1];
-
-        newImpulseData[0] = impulseData;
-
-        impulseBuffer.Set((const double**)newImpulseData, impulseSamples, 1);
-
-        //convolutionEngine.SetImpulse(&impulseBuffer, 0, 0, 0, 0, 1024);
-        convolutionEngine.SetImpulse(&impulseBuffer); // , 0, 32);
-
-        haveImpulseData = true;
+        irLoader.LoadIndex((int)impulseIndex);
     }
 }
 
 void GuitarConvolver::compute(int count, double* input, double* output)
 {
-    if (haveNewImpulseData)
-    {
-        SetImpulse();
+    auto conv = irLoader.GetCurrentData();
 
-        haveNewImpulseData = false;
-    }
-
-    if (!haveImpulseData)
+    if (conv == nullptr)
     {
         memcpy(output, input, count * sizeof(double));
 
         return;
     }
 
-    convolutionEngine.Add((WDL_FFT_REAL**)&input, count, 1);
+    conv->ConvolutionEngine.Add((WDL_FFT_REAL**)&input, count, 1);
 
     int copiedSoFar = 0;
 
     do
     {
-        int nAvail = convolutionEngine.Avail(count - copiedSoFar); //  MIN(mEngine.Avail(nFrames), nFrames);
+        int nAvail = conv->ConvolutionEngine.Avail(count - copiedSoFar); //  MIN(mEngine.Avail(nFrames), nFrames);
 
-        WDL_FFT_REAL* convo = convolutionEngine.Get()[0];
+        WDL_FFT_REAL* convo = conv->ConvolutionEngine.Get()[0];
 
         if ((wet < 1) || (dry > 1))
         {
@@ -181,7 +83,7 @@ void GuitarConvolver::compute(int count, double* input, double* output)
             memcpy(output + copiedSoFar, convo, nAvail * sizeof(double));
         }
 
-        convolutionEngine.Advance(nAvail);
+        conv->ConvolutionEngine.Advance(nAvail);
         
         copiedSoFar += nAvail;
     }

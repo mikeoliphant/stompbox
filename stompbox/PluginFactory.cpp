@@ -62,9 +62,7 @@ std::filesystem::path cabinetPath;
 
 StompBox* CreateGuitarConvolverPlugin()
 {
-	GuitarConvolver* convolver = new GuitarConvolver();
-
-	convolver->IndexImpulses(cabinetPath);
+	GuitarConvolver* convolver = new GuitarConvolver("Cabinets", { ".wav" }, basePath);
 
 	return convolver;
 }
@@ -73,14 +71,12 @@ std::filesystem::path reverbPath;
 
 StompBox* CreateConvolutionReverbPlugin()
 {
-	GuitarConvolver* reverb = new GuitarConvolver();
+	GuitarConvolver* reverb = new GuitarConvolver("Reverb", { ".wav" }, basePath);
 	reverb->Description = "Convolution reverb (impulse response)";
 
 	reverb->GetParameter(CONVOLVER_DRY)->SetValue(1);
 	reverb->GetParameter(CONVOLVER_WET)->SetValue(0.3);
 	reverb->GetParameter(CONVOLVER_WET)->DefaultValue = 0.3f;
-
-	reverb->IndexImpulses(reverbPath);
 
 	return reverb;
 }
