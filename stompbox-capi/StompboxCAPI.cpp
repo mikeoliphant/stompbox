@@ -1,3 +1,5 @@
+#include "string.h"
+
 #include "PluginProcessor.h"
 #include "StompBox.h"
 #include "StompboxCAPI.h"
