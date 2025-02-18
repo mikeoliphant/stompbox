@@ -1,6 +1,7 @@
 #include "AudioFilePlayer.h"
 
-AudioFilePlayer::AudioFilePlayer()
+AudioFilePlayer::AudioFilePlayer(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath) :
+	fileType(folderName, fileExtensions, basePath)
 {
 	Name = "AudioFilePlayer";
 
@@ -10,8 +11,11 @@ AudioFilePlayer::AudioFilePlayer()
 	Parameters[AUDIOFILEPLAYER_FILE].Name = "File";
 	Parameters[AUDIOFILEPLAYER_FILE].SourceVariable = &fileIndex;
 	Parameters[AUDIOFILEPLAYER_FILE].ParameterType = PARAMETER_TYPE_FILE;
-	Parameters[AUDIOFILEPLAYER_FILE].FilePath = "Music";
-	Parameters[AUDIOFILEPLAYER_FILE].EnumValues = &fileNames;
+	Parameters[AUDIOFILEPLAYER_FILE].DefaultValue = -1;
+	Parameters[AUDIOFILEPLAYER_FILE].FilePath = fileType.GetFolderName();
+	Parameters[AUDIOFILEPLAYER_FILE].EnumValues = &fileType.GetFileNames();
+	Parameters[AUDIOFILEPLAYER_FILE].MinValue = -1;
+	Parameters[AUDIOFILEPLAYER_FILE].MaxValue = (int)(fileType.GetFileNames().size()) - 1;
 
 	Parameters[AUDIOFILEPLAYER_LEVEL].Name = "Level";
 	Parameters[AUDIOFILEPLAYER_LEVEL].SourceVariable = &level;
@@ -28,36 +32,6 @@ AudioFilePlayer::AudioFilePlayer()
 	Parameters[AUDIOFILEPLAYER_POSITION].SourceVariable = &position;
 	Parameters[AUDIOFILEPLAYER_POSITION].DefaultValue = position;
 	Parameters[AUDIOFILEPLAYER_POSITION].SuppressSave = true;
-}
-
-void AudioFilePlayer::IndexFiles(std::filesystem::path path)
-{
-	fileNames.clear();
-	filePaths.clear();
-
-	struct stat fstat;
-
-	if (stat(path.string().c_str(), &fstat) == 0)
-	{
-		for (const auto& entry : std::filesystem::directory_iterator(path))
-		{
-			if (entry.path().filename().extension() == ".wav")
-			{
-				filePaths.push_back(entry.path());
-			}
-		}
-	}
-
-	std::sort(filePaths.begin(), filePaths.end());
-
-	for (const auto& entry : filePaths)
-	{
-		auto filename = entry.filename().replace_extension();
-
-		fileNames.push_back(filename.string());
-	}
-
-	Parameters[AUDIOFILEPLAYER_FILE].MaxValue = (int)fileNames.size() - 1;
 }
 
 void AudioFilePlayer::SetParameterValue(StompBoxParameter* param, double value)
@@ -95,13 +69,14 @@ void AudioFilePlayer::HandleCommand(std::vector<std::string> commandWords)
 	}
 }
 
-void AudioFilePlayer::SetFile(const std::string filename)
+void AudioFilePlayer::SetFile()
 {
 	recordArmed = false;
 	recording = false;
 	haveRecording = false;
+	readPosition = 0;
 
-	if (waveReader)
+	if (waveReader != nullptr)
 	{
 		delete waveReader;
 		waveReader = nullptr;
@@ -110,19 +85,22 @@ void AudioFilePlayer::SetFile(const std::string filename)
 		recordBuffer = nullptr;
 	}
 
-	waveReader = new WaveReader(filename, samplingFreq);
-
-	if (waveReader->NumSamples == 0)
+	if ((fileIndex >= 0) && (fileType.GetFileNames().size() >= (int)fileIndex))
 	{
-		delete waveReader;
-		waveReader = nullptr;
-	}
-	else
-	{
-		waveBuffer = waveReader->GetWaveData();
-		readPosition = 0;
+		waveReader = new WaveReader(fileType.GetFilePaths()[(int)fileIndex].string(), samplingFreq);
 
-		recordBuffer = new double[waveReader->NumSamples];
+		if (waveReader->NumSamples == 0)
+		{
+			delete waveReader;
+			waveReader = nullptr;
+		}
+		else
+		{
+			waveBuffer = waveReader->GetWaveData();
+			readPosition = 0;
+
+			recordBuffer = new double[waveReader->NumSamples];
+		}
 	}
 }
 
@@ -135,15 +113,12 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 {
 	if (needWaveLoad)
 	{
-		needWaveLoad = false;
+		SetFile();
 
-		if (filePaths.size() >= (int)fileIndex)
-		{
-			SetFile(filePaths[(int)fileIndex].string());
-		}
+		needWaveLoad = false;
 	}
 
-	if ((playing == 1) && (waveReader))
+	if ((playing == 1) && (waveReader != nullptr))
 	{
 		double linearLevel = (pow(10, level) - 1) / 9;
 

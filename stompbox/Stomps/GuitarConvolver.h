@@ -2,7 +2,9 @@
 
 #include <filesystem>
 
+#ifndef NOMINMAX
 #define NOMINMAX  // prevents windows.h from defining min/max macros and messing with juce
+#endif
 
 #if _WIN32
 #include "windows.h"
@@ -15,8 +17,6 @@
 #include <fstream>
 #include <limits.h>
 
-#define WDL_FFT_REALSIZE 8
-#define WDL_CONVO_THREAD
 #include "convoengine.h"
 
 #include "StompBox.h"

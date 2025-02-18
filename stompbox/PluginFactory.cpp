@@ -28,6 +28,8 @@
 #include "MultiGate.h"
 #include "Screamer.h"
 
+std::filesystem::path basePath;
+
 StompBox* CreateInputGainPlugin()
 {
 	Gain *input = new Gain(0, -40, 40);
@@ -317,13 +319,9 @@ StompBox* CreateTunerPlugin()
 	return tuner;
 }
 
-std::filesystem::path musicPath;
-
 StompBox* CreateAudioFilePlayerPlugin()
 {
-	AudioFilePlayer* player = new AudioFilePlayer();
-
-	player->IndexFiles(musicPath);
+	AudioFilePlayer* player = new AudioFilePlayer("Music", { ".wav" }, basePath);
 
 	player->IsUserSelectable = false;
 
@@ -332,7 +330,7 @@ StompBox* CreateAudioFilePlayerPlugin()
 
 StompBox* CreateAudioFileRecorderPlugin()
 {
-	AudioFileRecorder* recorder = new AudioFileRecorder(musicPath);
+	AudioFileRecorder* recorder = new AudioFileRecorder(basePath / "Music");
 
 	recorder->IsUserSelectable = false;
 

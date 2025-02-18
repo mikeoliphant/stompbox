@@ -9,6 +9,7 @@
 
 #include "StompBox.h"
 #include "AudioFile.h"
+#include "FileType.h"
 
 enum
 {
@@ -22,9 +23,7 @@ enum
 class AudioFilePlayer : public StompBox
 {
 private:
-	std::vector<std::string> fileNames;
-	std::vector<std::filesystem::path> filePaths;
-	double fileIndex = 0;
+	double fileIndex = -1;
 	double level = 0.5;
 	double playing = 0;
 	double position = 0;
@@ -38,11 +37,11 @@ private:
 	bool haveRecording = false;
 	int readPosition;
 	bool needWaveLoad = false;
+	FileType fileType;
 public:
-	AudioFilePlayer();
+	AudioFilePlayer(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath);
 	~AudioFilePlayer() {}
-	void IndexFiles(std::filesystem::path path);
-	void SetFile(const std::string filename);
+	void SetFile();
 	void SetParameterValue(StompBoxParameter* parameter, double value);
 	virtual void HandleCommand(std::vector<std::string> commandWords);
 
