@@ -39,8 +39,8 @@ enum
 struct Convolution
 {
 	WDL_ImpulseBuffer ImpulseBuffer;
-	WDL_ConvolutionEngine_Div ConvolutionEngine;
-	//WDL_ConvolutionEngine_Thread ConvolutionEngine;
+	//WDL_ConvolutionEngine_Div ConvolutionEngine;
+	WDL_ConvolutionEngine_Thread ConvolutionEngine;
 };
 
 class IRLoader : public FileLoader<Convolution>
