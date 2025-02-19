@@ -888,7 +888,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                         std::string paramValue = commandWords[3];
 
                                         // Concatenate any additional words - should probably enclose in quotes or something instead
-                                        for (int i = 4; i < commandWords.size(); i++)
+                                        for (size_t i = 4; i < commandWords.size(); i++)
                                         {
                                             paramValue += " " + commandWords[i];
                                         }
@@ -897,7 +897,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                                         bool gotEnum = false;
 
-                                        for (size_t e = 0; e < (int)enumValues->size(); e++)
+                                        for (size_t e = 0; e < enumValues->size(); e++)
                                         {
                                             if ((*enumValues)[e] == paramValue)
                                             {
@@ -921,7 +921,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                         std::string paramValue = commandWords[3];
 
                                         // Concatenate any additional words - should probably enclose in quotes or something instead
-                                        for (int i = 4; i < commandWords.size(); i++)
+                                        for (size_t i = 4; i < commandWords.size(); i++)
                                         {
                                             paramValue += " " + commandWords[i];
                                         }
@@ -930,7 +930,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                                         bool gotEnum = false;
 
-                                        for (size_t e = 0; e < (int)enumValues->size(); e++)
+                                        for (size_t e = 0; e < enumValues->size(); e++)
                                         {
                                             if ((*enumValues)[e] == paramValue)
                                             {
@@ -1542,7 +1542,7 @@ void PluginProcessor::SaveSettings()
 
 bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
 {
-    fprintf(stderr, "Load commands from file: %ws\n", filePath.c_str());
+    std::cout << "Load commands from file :" << filePath << std::endl;
 
     if (!std::filesystem::exists(filePath))
         return false;
@@ -1566,7 +1566,7 @@ bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
     return true;
 }
 
-void PluginProcessor::Process(float* input, float* output, int count)
+void PluginProcessor::Process(float* input, float* output, size_t count)
 {
     if (ramp != 0)
     {
@@ -1610,23 +1610,23 @@ void PluginProcessor::Process(float* input, float* output, int count)
         if (plugin->Enabled)
         {
             if (plugin->InputGain != nullptr)
-                plugin->InputGain->compute(count, output, output);
+                plugin->InputGain->compute((int)count, output, output);
 
-            plugin->compute(count, output, output);
+            plugin->compute((int)count, output, output);
 
             if (plugin->OutputVolume != nullptr)
-                plugin->OutputVolume->compute(count, output, output);
+                plugin->OutputVolume->compute((int)count, output, output);
         }
 
         if (plugin == monitorPlugin)
         {
-            monitorCallback(output, count);
+            monitorCallback(output, (int)count);
         }
     }
 
     if (ramp != 0)
     {
-        for (int i = 0; i < count; i++)
+        for (size_t i = 0; i < count; i++)
         {
             float rampPercent = (float)rampSamplesSoFar / (float)rampSamples;
 

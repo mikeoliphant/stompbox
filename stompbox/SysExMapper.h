@@ -32,5 +32,5 @@ public:
 	SysExMapper();
 	~SysExMapper() { };
 	void AddCC(SysExCC cc);
-	bool HandleMidiMessage(const unsigned char* data, int length, std::list<MidiEvent>& midiEvents);
+	bool HandleMidiMessage(const unsigned char* data, size_t length, std::list<MidiEvent>& midiEvents);
 };

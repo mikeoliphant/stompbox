@@ -38,7 +38,7 @@ public:
 	StompBox* InputGain = nullptr;
 	StompBox* OutputVolume = nullptr;
 	float* OutputValue = nullptr;
-	int NumParameters;
+	size_t NumParameters;
 	std::string Name;
 	std::string ID;
 	std::string Description;
@@ -59,7 +59,10 @@ public:
 	virtual void SetParameterValue(StompBoxParameter *param, float value);
 	virtual float GetParameterValue(int id);
 	virtual float GetParameterValue(StompBoxParameter* param);
-	virtual void HandleCommand(std::vector<std::string> commandWords) { };
+	virtual void HandleCommand(const std::vector<std::string>& commandWords)
+	{
+		(void)commandWords;
+	}
 	virtual void SetBPM(float bpm);
 	virtual void UpdateBPM();
 	virtual void init(int samplingFreq);

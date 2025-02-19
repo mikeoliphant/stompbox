@@ -230,6 +230,6 @@ public:
 	std::string DumpSettings();
 	std::string DumpProgram();
 	std::string DumpConfig();
-	void Process(float* input, float* output, int count);
+	void Process(float* input, float* output, size_t count);
 	void StartRamp(int rampDirection, float rampMS);
 };

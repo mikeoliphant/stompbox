@@ -43,7 +43,7 @@ public:
 	~AudioFilePlayer() {}
 	void SetFile();
 	void SetParameterValue(StompBoxParameter* parameter, float value);
-	virtual void HandleCommand(std::vector<std::string> commandWords);
+	void HandleCommand(const std::vector<std::string>& commandWords);
 
 	virtual void init(int samplingFreq);
 	virtual void compute(int count, float* input, float* output);

@@ -51,7 +51,7 @@ void AudioFilePlayer::SetParameterValue(StompBoxParameter* param, float value)
 	}
 }
 
-void AudioFilePlayer::HandleCommand(std::vector<std::string> commandWords)
+void AudioFilePlayer::HandleCommand(const std::vector<std::string>& commandWords)
 {
 	if (commandWords.size() > 2)
 	{
@@ -85,7 +85,7 @@ void AudioFilePlayer::SetFile()
 		recordBuffer = nullptr;
 	}
 
-	if ((fileIndex >= 0) && (fileType.GetFileNames().size() >= (int)fileIndex))
+	if ((fileIndex >= 0) && (fileType.GetFileNames().size() >= (size_t)fileIndex))
 	{
 		waveReader = new WaveReader(fileType.GetFilePaths()[(int)fileIndex].string(), (uint32_t)samplingFreq);
 

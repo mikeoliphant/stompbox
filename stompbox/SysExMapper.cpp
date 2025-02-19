@@ -9,7 +9,7 @@ void SysExMapper::AddCC(SysExCC cc)
 	ccMap.push_back(cc);
 }
 
-bool SysExMapper::HandleMidiMessage(const unsigned char* data, int length, std::list<MidiEvent>& midiEvents)
+bool SysExMapper::HandleMidiMessage(const unsigned char* data, size_t length, std::list<MidiEvent>& midiEvents)
 {
 	bool matched = false;
 
@@ -19,7 +19,7 @@ bool SysExMapper::HandleMidiMessage(const unsigned char* data, int length, std::
 	}
 	else
 	{
-		for (int i = 0; i < sizeof(sysExHeader); i++)
+		for (size_t i = 0; i < sizeof(sysExHeader); i++)
 		{
 			if (data[i] != sysExHeader[i])
 				return false;

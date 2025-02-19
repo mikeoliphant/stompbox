@@ -39,7 +39,7 @@ void StartServer(void* processor)
     ((PluginProcessor*)processor)->StartServer();
 }
 
-void Process(void* processor, float* input, float* output, unsigned int bufferSize)
+void Process(void* processor, float* input, float* output, size_t bufferSize)
 {
     ((PluginProcessor*)processor)->Process(input, output, bufferSize);
 }
@@ -262,7 +262,7 @@ void* GetPluginParameter(void* plugin, size_t index)
 
     index -= stomp->NumParameters;
 
-    if (index < 0)
+    if (index > 0)
         return nullptr;
 
     return (void*)(&stomp->OutputVolume->Parameters[0]);
