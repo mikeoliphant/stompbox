@@ -33,16 +33,16 @@ float PitchDetector::GetCurrentPitch()
 	return (float)currentPitch;
 }
 
-void PitchDetector::init(int samplingFreq)
+void PitchDetector::init(int newSamplingFreq)
 {
-	StompBox::init(samplingFreq);
+	StompBox::init(newSamplingFreq);
 
-	pitchMPM->setSampleRate(samplingFreq);
+	pitchMPM->setSampleRate(newSamplingFreq);
 }
 
 long sampsSoFar = 0;
 
-void PitchDetector::compute(int count, double* input0, double* output0)
+void PitchDetector::compute(int count, float* input0, float* output0)
 {
 	for (int i = 0; i < count; i++)
 	{
@@ -72,7 +72,6 @@ void PitchDetector::compute(int count, double* input0, double* output0)
 
 		sampsSoFar = 0;
 	}
-
 
 	//if (bufIndex == bufferSize)
 	//{

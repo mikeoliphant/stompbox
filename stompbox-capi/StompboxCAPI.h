@@ -27,7 +27,7 @@ STOMPBOX_EXTERN void InitProcessor(void* processor, float sampleRate);
 
 STOMPBOX_EXTERN void StartServer(void* processor);
 
-STOMPBOX_EXTERN void Process(void* processor, float* input, float* output, unsigned int bufferSize);
+STOMPBOX_EXTERN void Process(void* processor, float* input, float* output, size_t bufferSize);
 
 STOMPBOX_EXTERN bool IsPresetLoading(void* processor);
 

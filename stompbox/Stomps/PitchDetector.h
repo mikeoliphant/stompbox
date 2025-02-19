@@ -32,7 +32,7 @@ public:
 	}
 
 	virtual void init(int samplingFreq);
-	virtual void compute(int count, double* input, double* output);
+	virtual void compute(int count, float* input, float* output);
 
 	float GetCurrentPitch();
 };

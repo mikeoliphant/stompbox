@@ -60,7 +60,7 @@ void Wah::instanceClear() {
 	}
 }
 
-void Wah::compute(int count, double* input0, double* output0) {
+void Wah::compute(int count, float* input0, float* output0) {
 	double fSlow0 = double(fVslider0);
 	double fSlow1 = (0.0001000000000000001 * pow(4.0, fSlow0));
 	double fSlow2 = pow(2.0, (2.2999999999999998 * fSlow0));
