@@ -16,10 +16,10 @@ class NoiseGate : public StompBox
 private:
 	int fSamplingFreq;
 
-	double threshold;
-	double attackMS;
-	double holdMS;
-	double releaseMS;
+	float threshold;
+	float attackMS;
+	float holdMS;
+	float releaseMS;
 
 	double fConst0;
 	double fConst1;

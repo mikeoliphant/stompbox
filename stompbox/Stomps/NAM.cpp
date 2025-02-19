@@ -26,7 +26,7 @@ void NAM::init(int samplingFreq)
     StompBox::init(samplingFreq);
 }
 
-void NAM::SetParameterValue(StompBoxParameter* parameter, double value)
+void NAM::SetParameterValue(StompBoxParameter* parameter, float value)
 {
     StompBox::SetParameterValue(parameter, value);
 
@@ -36,13 +36,13 @@ void NAM::SetParameterValue(StompBoxParameter* parameter, double value)
     }
 }
 
-void NAM::compute(int count, double* input, double* output)
+void NAM::compute(int count, float* input, float* output)
 {
     auto activeModel = namLoader.GetCurrentData();
 
     if (activeModel == nullptr)
     {
-        memcpy(output, input, count * sizeof(double));
+        memcpy(output, input, count * sizeof(float));
 
         return;
     }
@@ -61,10 +61,10 @@ void NAM::compute(int count, double* input, double* output)
 
     float adjustDB = activeModel->GetRecommendedOutputDBAdjustment();
 
-    double modelLoudnessAdjustmentGain = pow(10.0, adjustDB / 20.0);
+    float modelLoudnessAdjustmentGain = pow(10.0, adjustDB / 20.0);
 
     for (int i = 0; i < count; i++)
     {
-        output[i] = (double)namBuffer[i] * modelLoudnessAdjustmentGain;
+        output[i] = (float)namBuffer[i] * modelLoudnessAdjustmentGain;
     }
 }

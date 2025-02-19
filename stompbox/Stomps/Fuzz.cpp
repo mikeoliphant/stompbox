@@ -43,7 +43,7 @@ void Fuzz::init(int samplingFreq)
 	StompBox::init(samplingFreq);
 }
 
-void Fuzz::compute(int count, double* input0, double* output0)
+void Fuzz::compute(int count, float* input0, float* output0)
 {
 
 	//double shape = 1 - (fuzz * 0.99);

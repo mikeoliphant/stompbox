@@ -31,5 +31,5 @@ public:
 	virtual void init(int samplingFreq);
 	virtual void instanceConstants(int samplingFreq);
 	virtual void instanceClear();
-	virtual void compute(int count, double* input, double* output);
+	virtual void compute(int count, float* input, float* output);
 };

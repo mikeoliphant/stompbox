@@ -29,7 +29,7 @@ void DeleteProcessor(void* processor)
     delete (PluginProcessor*)processor;
 }
 
-void InitProcessor(void* processor, double sampleRate)
+void InitProcessor(void* processor, float sampleRate)
 {
     ((PluginProcessor*)processor)->Init(sampleRate);
 }
@@ -39,7 +39,7 @@ void StartServer(void* processor)
     ((PluginProcessor*)processor)->StartServer();
 }
 
-void Process(void* processor, double* input, double* output, unsigned int bufferSize)
+void Process(void* processor, float* input, float* output, unsigned int bufferSize)
 {
     ((PluginProcessor*)processor)->Process(input, output, bufferSize);
 }
@@ -60,7 +60,7 @@ bool HandleMidiCommand(void* processor, int midiCommand, int midiData1, int midi
 }
 
 
-void SetBPM(void* processor, double bpm)
+void SetBPM(void* processor, float bpm)
 {
     ((PluginProcessor*)processor)->SetBPM(bpm);
 }
@@ -152,7 +152,7 @@ const char* DumpSettings(void* processor)
 {
     auto settings = ((PluginProcessor*)processor)->DumpSettings();
 
-    int len = settings.length() + 1;
+    size_t len = settings.length() + 1;
     char* buff = (char*)CoTaskMemAlloc(len);
     strcpy(buff, settings.c_str());
 
@@ -163,7 +163,7 @@ const char* DumpProgram(void* processor)
 {
     auto program = ((PluginProcessor*)processor)->DumpProgram();
 
-    int len = program.length() + 1;
+    size_t len = program.length() + 1;
     char* buff = (char*)CoTaskMemAlloc(len);
     strcpy(buff, program.c_str());
 
@@ -213,7 +213,7 @@ bool GetPluginIsUserSelectable(void* plugin)
     return ((StompBox*)plugin)->IsUserSelectable;
 }
 
-double GetOutputValue(void* plugin)
+float GetOutputValue(void* plugin)
 {
     if (((StompBox*)plugin)->OutputValue != nullptr)
     {
@@ -270,12 +270,12 @@ void* GetPluginParameter(void* plugin, size_t index)
 
 // Parameter methods
 
-double GetParameterValue(void *parameter)
+float GetParameterValue(void *parameter)
 {
     return ((StompBoxParameter*)(void*)parameter)->GetValue();
 }
 
-void SetParameterValue(void* parameter, double value)
+void SetParameterValue(void* parameter, float value)
 {
     return ((StompBoxParameter*)(void*)parameter)->SetValue(value);
 }
@@ -290,22 +290,22 @@ const char* GetParameterDescription(void* parameter)
 	return ((StompBoxParameter*)(void*)parameter)->Description.c_str();
 }
 
-double GetParameterMinValue(void* parameter)
+float GetParameterMinValue(void* parameter)
 {
 	return ((StompBoxParameter*)(void*)parameter)->MinValue;
 }
 
-double GetParameterMaxValue(void* parameter)
+float GetParameterMaxValue(void* parameter)
 {
 	return ((StompBoxParameter*)(void*)parameter)->MaxValue;
 }
 
-double GetParameterDefaultValue(void* parameter)
+float GetParameterDefaultValue(void* parameter)
 {
 	return ((StompBoxParameter*)(void*)parameter)->DefaultValue;
 }
 
-double GetParameterRangePower(void* parameter)
+float GetParameterRangePower(void* parameter)
 {
 	return ((StompBoxParameter*)(void*)parameter)->RangePower;
 }

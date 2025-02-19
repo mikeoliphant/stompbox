@@ -85,7 +85,7 @@ void WaveWriter::ResetRecording()
 	needReset = true;
 }
 
-void WaveWriter::AddSamples(double* samples, size_t numSamples)
+void WaveWriter::AddSamples(float* samples, size_t numSamples)
 {
 	if (needReset)
 	{

@@ -66,7 +66,7 @@ void AutoWah::instanceClear() {
 	}
 }
 
-void AutoWah::compute(int count, double* input0, double* output0) {
+void AutoWah::compute(int count, float* input0, float* output0) {
 	double fSlow0 = double(fVslider0);
 	double fSlow1 = (1.0 - fSlow0);
 	for (int i = 0; (i < count); i = (i + 1)) {

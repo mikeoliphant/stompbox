@@ -1,9 +1,7 @@
 #pragma once
 
-//#include "WDLConvolver/Oversampler.h"
-
 #ifndef FAUSTFLOAT
-#define FAUSTFLOAT double
+#define FAUSTFLOAT float
 #endif
 
 #include <iostream>
@@ -30,19 +28,16 @@ struct StompBoxParameter;
 class StompBox
 {
 protected:
-	double samplingFreq = 0;
-	double bpm;
-	double* doubleBuffer[1];
+	float samplingFreq = 0;
+	float bpm;
 	int bufferSize;
-	//void doComputeDouble(int count, FAUSTFLOAT* input, FAUSTFLOAT* output, EFactor oversample);
-	//OverSampler<double>* overSampler = nullptr;
 
 public:
 	bool Enabled = true;
 	StompBoxParameter* Parameters = nullptr;
 	StompBox* InputGain = nullptr;
 	StompBox* OutputVolume = nullptr;
-	double* OutputValue = nullptr;
+	float* OutputValue = nullptr;
 	int NumParameters;
 	std::string Name;
 	std::string ID;
@@ -60,12 +55,12 @@ public:
 	virtual void CreateParameters(int numParameters);
 	virtual StompBoxParameter* GetParameter(int id);
 	virtual StompBoxParameter* GetParameter(std::string name);
-	virtual void SetParameterValue(int id, double value) final;
-	virtual void SetParameterValue(StompBoxParameter *param, double value);
-	virtual double GetParameterValue(int id);
-	virtual double GetParameterValue(StompBoxParameter* param);
+	virtual void SetParameterValue(int id, float value) final;
+	virtual void SetParameterValue(StompBoxParameter *param, float value);
+	virtual float GetParameterValue(int id);
+	virtual float GetParameterValue(StompBoxParameter* param);
 	virtual void HandleCommand(std::vector<std::string> commandWords) { };
-	virtual void SetBPM(double bpm);
+	virtual void SetBPM(float bpm);
 	virtual void UpdateBPM();
 	virtual void init(int samplingFreq);
 	virtual void instanceConstants(int newSamplingFreq)
@@ -73,7 +68,7 @@ public:
 		(void)newSamplingFreq;
 	}
 	virtual void instanceClear() {};
-	virtual void compute(int count, double* input, double* output)
+	virtual void compute(int count, float* input, float* output)
 	{
 		(void)count;
 		(void)input;
@@ -86,13 +81,13 @@ struct StompBoxParameter
 	std::string Name = "Unnamed";
 	std::string Description;
 	StompBox* Stomp = nullptr;
-	double* SourceVariable = nullptr;
-	double MinValue = 0;
-	double MaxValue = 1;
-	double DefaultValue = 0.5;
-	double RangePower = 1;
+	float* SourceVariable = nullptr;
+	float MinValue = 0;
+	float MaxValue = 1;
+	float DefaultValue = 0.5;
+	float RangePower = 1;
 	const char* DisplayFormat = "{0:0.00}";
-	double Step = 0.01;
+	float Step = 0.01f;
 	int ParameterType = PARAMETER_TYPE_KNOB;
 	bool CanSyncToHostBPM = false;
 	int BPMSyncNumerator = 0;
@@ -102,11 +97,11 @@ struct StompBoxParameter
 	const std::vector<std::string>* EnumValues = nullptr;
 	bool IsDirty = false;
 	bool SuppressSave = false;
-	double GetValue()
+	float GetValue()
 	{
 		return Stomp->GetParameterValue(this);
 	}
-	void SetValue(double value)
+	void SetValue(float value)
 	{
 		return Stomp->SetParameterValue(this, value);
 	}

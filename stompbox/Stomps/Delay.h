@@ -17,14 +17,14 @@ class Delay : public StompBox
 private:
 	int fSamplingFreq;
 
-	double delay;
-	double level;
-	double feedback;
-	double hipass;
-	double lowpass;
-	double warmth;
-	double hilo;
-	double wet;
+	float delay;
+	float level;
+	float feedback;
+	float hipass;
+	float lowpass;
+	float warmth;
+	float hilo;
+	float wet;
 
 	double fConst0;
 	double fConst1;

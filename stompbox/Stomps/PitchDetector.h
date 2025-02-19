@@ -17,12 +17,12 @@ private:
 	int bufferSizeTimesTwo;
 	float* buffer;
 	int bufIndex;
-	double currentPitch;
+	float currentPitch;
 	int numDetects = 0;
 	int numFailures = 0;
 	bool noteOn = false;
 	int lastNote = 0;
-	double muteOutput = 1;
+	float muteOutput = 1;
 public:
 	PitchDetector(int bufferSize);
 	~PitchDetector()

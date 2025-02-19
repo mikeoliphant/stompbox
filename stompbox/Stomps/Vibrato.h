@@ -16,13 +16,13 @@ class Vibrato : public StompBox
 private:
 	int fSamplingFreq;
 
-	double freq;
-	double depth;
-	double fb;
-	double width;
-	double frqmin;
-	double frqmax;
-	double fratio;
+	float freq;
+	float depth;
+	float fb;
+	float width;
+	float frqmin;
+	float frqmax;
+	float fratio;
 
 	double fConst0;
 	double fConst1;

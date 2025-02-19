@@ -15,7 +15,7 @@ AudioFilePlayer::AudioFilePlayer(const std::string folderName, const std::vector
 	Parameters[AUDIOFILEPLAYER_FILE].FilePath = fileType.GetFolderName();
 	Parameters[AUDIOFILEPLAYER_FILE].EnumValues = &fileType.GetFileNames();
 	Parameters[AUDIOFILEPLAYER_FILE].MinValue = -1;
-	Parameters[AUDIOFILEPLAYER_FILE].MaxValue = (int)(fileType.GetFileNames().size()) - 1;
+	Parameters[AUDIOFILEPLAYER_FILE].MaxValue = (float)(fileType.GetFileNames().size()) - 1;
 
 	Parameters[AUDIOFILEPLAYER_LEVEL].Name = "Level";
 	Parameters[AUDIOFILEPLAYER_LEVEL].SourceVariable = &level;
@@ -34,7 +34,7 @@ AudioFilePlayer::AudioFilePlayer(const std::string folderName, const std::vector
 	Parameters[AUDIOFILEPLAYER_POSITION].SuppressSave = true;
 }
 
-void AudioFilePlayer::SetParameterValue(StompBoxParameter* param, double value)
+void AudioFilePlayer::SetParameterValue(StompBoxParameter* param, float value)
 {
 	StompBox::SetParameterValue(param, value);
 
@@ -99,7 +99,7 @@ void AudioFilePlayer::SetFile()
 			waveBuffer = waveReader->GetWaveData();
 			readPosition = 0;
 
-			recordBuffer = new double[waveReader->NumSamples];
+			recordBuffer = new float[waveReader->NumSamples];
 		}
 	}
 }
@@ -109,7 +109,7 @@ void AudioFilePlayer::init(int newSamplingFreq)
 	StompBox::init(newSamplingFreq);
 }
 
-void AudioFilePlayer::compute(int count, double* input, double* output)
+void AudioFilePlayer::compute(int count, float* input, float* output)
 {
 	if (needWaveLoad)
 	{
@@ -120,12 +120,12 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 
 	if ((playing == 1) && (waveReader != nullptr))
 	{
-		double linearLevel = (pow(10, level) - 1) / 9;
+		float linearLevel = (float)(pow(10, level) - 1) / 9;
 
 		size_t leftToRead = count;
 		size_t outputPos = 0;
 
-		double* recordInput = input;
+		float* recordInput = input;
 
 		while (leftToRead > 0)
 		{			
@@ -133,7 +133,7 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 
 			if (recording)
 			{
-				memcpy(recordBuffer + readPosition, recordInput, toRead * sizeof(double));
+				memcpy(recordBuffer + readPosition, recordInput, toRead * sizeof(float));
 
 				recordInput += toRead;
 			}
@@ -142,7 +142,7 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 
 			for (size_t i = 0; i < toRead; i++)
 			{
-				double outputVal = 0;
+				float outputVal = 0;
 
 				for (size_t channel = 0; channel < waveReader->NumChannels; channel++)
 				{

@@ -14,17 +14,17 @@ enum
 class Fuzz : public StompBox
 {
 private:
-	double level;
-	double fuzz;
-	double octave;
-	double asymmetry;
+	float level;
+	float fuzz;
+	float octave;
+	float asymmetry;
 
-	double fb;
-	double env;
+	float fb;
+	float env;
 public:
 	Fuzz();
 	~Fuzz() {}
 
 	virtual void init(int samplingFreq);
-	virtual void compute(int count, double* input, double* output);
+	virtual void compute(int count, float* input, float* output);
 };

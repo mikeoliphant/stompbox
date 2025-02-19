@@ -40,7 +40,7 @@ set_property(TARGET stompbox PROPERTY POSITION_INDEPENDENT_CODE ON)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 source_group(NeuralAudio ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NA_SOURCES})
 
-add_definitions(-DWDL_FFT_REALSIZE=8)
+add_definitions(-DWDL_FFT_REALSIZE=4)
 add_definitions(-DWDL_CONVO_THREAD)
 add_definitions(-DWDL_ALLOW_UNSIGNED_DEFAULT_CHAR)
 

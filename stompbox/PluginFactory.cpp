@@ -75,7 +75,7 @@ StompBox* CreateConvolutionReverbPlugin()
 	reverb->Description = "Convolution reverb (impulse response)";
 
 	reverb->GetParameter(CONVOLVER_DRY)->SetValue(1);
-	reverb->GetParameter(CONVOLVER_WET)->SetValue(0.3);
+	reverb->GetParameter(CONVOLVER_WET)->SetValue(0.3f);
 	reverb->GetParameter(CONVOLVER_WET)->DefaultValue = 0.3f;
 
 	return reverb;
@@ -238,12 +238,12 @@ StompBox* CreateReverbPlugin()
 
 StompBox* CreateEQ7Plugin()
 {
-	double* frequencies = new double[7];
+	float* frequencies = new float[7];
 	float startFrequency = 100;
 
 	for (int band = 0; band < 7; band++)
 	{
-		frequencies[band] = startFrequency * pow(2, band);
+		frequencies[band] = startFrequency * (float)pow(2, band);
 	}
 
 	GraphicEqualizer *eq7 = new GraphicEqualizer(7, frequencies, 1);
@@ -256,7 +256,7 @@ StompBox* CreateEQ7Plugin()
 
 StompBox* CreateBassEQ7Plugin()
 {
-	double* frequencies = new double[7];
+	float* frequencies = new float[7];
 
 	frequencies[0] = 50;
 	frequencies[1] = 120;

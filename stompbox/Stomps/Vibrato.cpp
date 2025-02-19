@@ -31,7 +31,7 @@ Vibrato::Vibrato()
 	NumParameters = VIBRATO_NUMPARAMETERS;
 	CreateParameters(NumParameters);
 	Parameters[VIBRATO_SPEED].Name = "Speed";
-	Parameters[VIBRATO_SPEED].MinValue = 0.1;
+	Parameters[VIBRATO_SPEED].MinValue = 0.1f;
 	Parameters[VIBRATO_SPEED].MaxValue = 10;
 	Parameters[VIBRATO_SPEED].SourceVariable = &freq;
 	Parameters[VIBRATO_SPEED].DefaultValue = freq;
@@ -51,7 +51,7 @@ Vibrato::Vibrato()
 	Parameters[VIBRATO_FEEDBACK].Description = "Amount of feedback applied";
 
 	Parameters[VIBRATO_RATIO].Name = "Ratio";
-	Parameters[VIBRATO_RATIO].MinValue = 1.1;
+	Parameters[VIBRATO_RATIO].MinValue = 1.1f;
 	Parameters[VIBRATO_RATIO].MaxValue = 4;
 	Parameters[VIBRATO_RATIO].SourceVariable = &fratio;
 	Parameters[VIBRATO_RATIO].DefaultValue = fratio;
@@ -105,8 +105,8 @@ void Vibrato::instanceClear() {
 }
 
 void Vibrato::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output0) {
-	double centerFreq = 200;
-	double ratio = depth * 10;
+	float centerFreq = 200;
+	float ratio = depth * 10;
 
 	frqmin = centerFreq / ratio;
 	frqmax = centerFreq * ratio;

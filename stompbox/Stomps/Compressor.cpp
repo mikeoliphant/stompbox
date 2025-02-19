@@ -75,7 +75,7 @@ void Compressor::instanceClear() {
 	}
 }
 
-void Compressor::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output0) {
+void Compressor::compute(int count, float* input0, float* output0) {
 	double fSlow0 = double(fVslider0);
 	double fSlow1 = (1.0 - fSlow0);
 	double fSlow2 = double(fEntry0);

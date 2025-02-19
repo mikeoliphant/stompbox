@@ -54,7 +54,7 @@ private:
 	double C1;
 	double C2;
 	double C3;
-	double preset;
+	float preset;
 	bool needUpdate = false;
 
 	double fConst0;

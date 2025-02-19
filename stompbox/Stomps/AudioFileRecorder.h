@@ -21,7 +21,7 @@ class AudioFileRecorder : public StompBox
 private:
 	WaveWriter* waveWriter = nullptr;
 	std::filesystem::path savePath;
-	double recordSeconds;
+	float recordSeconds;
 public:
 	AudioFileRecorder(std::filesystem::path savePath);
 	~AudioFileRecorder();
@@ -31,5 +31,5 @@ public:
 	void SaveRecording();
 
 	virtual void init(int samplingFreq);
-	virtual void compute(int count, double* input, double* output);
+	virtual void compute(int count, float* input, float* output);
 };

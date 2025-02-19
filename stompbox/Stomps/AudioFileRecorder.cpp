@@ -73,7 +73,7 @@ void AudioFileRecorder::init(int newSamplingFreq)
 	}
 }
 
-void AudioFileRecorder::compute(int count, double* input, double* output)
+void AudioFileRecorder::compute(int count, float* input, float* output)
 {
 	if (waveWriter != nullptr)
 	{

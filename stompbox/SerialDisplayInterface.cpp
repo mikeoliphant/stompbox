@@ -156,7 +156,7 @@ void SerialDisplayInterface::ResetTuner()
 	histSize = 0;
 }
 
-void SerialDisplayInterface::UpdateTuner(double frequency)
+void SerialDisplayInterface::UpdateTuner(float frequency)
 {
 	if (frequency < 1)
 	{
@@ -178,11 +178,11 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 
 		int midiNote = (int)round(log(runningFrequency / 440.0) / log(2) * 12) + 69;
 
-		float targetFreq = (float)(440.0 * pow(2.0, ((double)midiNote - 69) / 12));
+		float targetFreq = (float)(440.0 * pow(2.0, ((float)midiNote - 69) / 12));
 
 		//fprintf(stderr, "Tuner frequency: %f Target frequency: %f Running Frequency: %f\n", frequency, targetFreq, runningFrequency);
 
-		double centDelta = 1200 * (log(runningFrequency / targetFreq) / log(2));
+		float centDelta = 1200 * (log(runningFrequency / targetFreq) / log(2));
 
 		bool isNegative = centDelta < 0;
 
@@ -247,7 +247,7 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 
 int lastRecordSeconds = -1;
 
-void SerialDisplayInterface::UpdateRecordSeconds(double recordSeconds)
+void SerialDisplayInterface::UpdateRecordSeconds(float recordSeconds)
 {
 	if ((int)recordSeconds == lastRecordSeconds)
 		return;

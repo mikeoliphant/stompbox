@@ -14,8 +14,8 @@ class HighLowFilter : public StompBox
 private:
 	int fSampleRate;
 
-	double lowFreq = 1;
-	double highFreq = 20000;
+	float lowFreq = 1;
+	float highFreq = 20000;
 
 	double fConst0;
 	double fConst1;

@@ -98,7 +98,7 @@ namespace chorus
 		}
 	}
 
-	void Chorus::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output0) {
+	void Chorus::compute(int count, float* input0, float* output0) {
 		double fSlow0 = (0.0070000000000000062 * double(fHslider0));
 		double fSlow1 = double(fHslider1);
 		double fSlow2 = (fConst2 * double(fHslider2));

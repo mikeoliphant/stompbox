@@ -8,13 +8,13 @@ class GraphicEqualizer : public StompBox
 private:
 	int fSamplingFreq;
 
-	double volume;
+	float volume;
 	int numBands;
 	PeakingFilter** peakingFilters = nullptr;
 	float linearGain;
 
 public:
-	GraphicEqualizer(int numBands, double* frequencies, double q);
+	GraphicEqualizer(int numBands, float* frequencies, float q);
 	virtual ~GraphicEqualizer();
 	virtual void init(int samplingFreq);
 	virtual void instanceConstants(int samplingFreq);

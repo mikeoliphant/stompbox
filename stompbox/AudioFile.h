@@ -51,7 +51,7 @@ public:
 	~WaveWriter();
 	float GetRecordSeconds();
 	void ResetRecording();
-	void AddSamples(double* samples, size_t numSamples);
+	void AddSamples(float* samples, size_t numSamples);
 	void WriteToFile(std::string filename);
 
 private:

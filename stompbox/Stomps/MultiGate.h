@@ -17,11 +17,11 @@ class MultiGate : public StompBox
 private:
 	int fSampleRate;
 
-	double threshold;
-	double attackMS;
-	double releaseMS;
-	double softness;
-	double strength;
+	float threshold;
+	float attackMS;
+	float releaseMS;
+	float softness;
+	float strength;
 
 	double fConst0;
 	double fConst1;

@@ -44,7 +44,7 @@ void Tremolo::init(int samplingFreq)
 	tfrac = 1.0 / (double)samplingFreq;
 }
 
-void Tremolo::compute(int count, double* input0, double* output0)
+void Tremolo::compute(int count, float* input0, float* output0)
 {
 	double linearGain = pow(10.0, (0.05 * double(shape)));
 	//double linearDepth = pow(10.0, (0.05 * double(depth)));

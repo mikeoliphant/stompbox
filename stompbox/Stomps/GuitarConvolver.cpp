@@ -39,7 +39,7 @@ void GuitarConvolver::init(int samplingFreq)
     irLoader.SetSampleRate(samplingFreq);
 }
 
-void GuitarConvolver::SetParameterValue(StompBoxParameter *parameter, double value)
+void GuitarConvolver::SetParameterValue(StompBoxParameter *parameter, float value)
 {
     StompBox::SetParameterValue(parameter, value);
 
@@ -49,13 +49,13 @@ void GuitarConvolver::SetParameterValue(StompBoxParameter *parameter, double val
     }
 }
 
-void GuitarConvolver::compute(int count, double* input, double* output)
+void GuitarConvolver::compute(int count, float* input, float* output)
 {
     auto conv = irLoader.GetCurrentData();
 
     if (conv == nullptr)
     {
-        memcpy(output, input, count * sizeof(double));
+        memcpy(output, input, count * sizeof(float));
 
         return;
     }
@@ -72,8 +72,8 @@ void GuitarConvolver::compute(int count, double* input, double* output)
 
         if ((wet < 1) || (dry > 1))
         {
-            double* dest = output + copiedSoFar;
-            double* src = input + copiedSoFar;
+            float* dest = output + copiedSoFar;
+            float* src = input + copiedSoFar;
                 
             for (int sample = 0; sample < nAvail; sample++)
             {
@@ -82,7 +82,7 @@ void GuitarConvolver::compute(int count, double* input, double* output)
         }
         else
         {
-            memcpy(output + copiedSoFar, convo, nAvail * sizeof(double));
+            memcpy(output + copiedSoFar, convo, nAvail * sizeof(float));
         }
 
         conv->ConvolutionEngine.Advance(nAvail);

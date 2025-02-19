@@ -37,7 +37,7 @@ void NAMMultiBand::init(int samplingFreq)
 	crossover.init(samplingFreq);
 }
 
-double NAMMultiBand::GetParameterValue(StompBoxParameter* parameter)
+float NAMMultiBand::GetParameterValue(StompBoxParameter* parameter)
 {
 	if (parameter == &Parameters[NAMMULTIBAND_MODEL])
 	{
@@ -48,7 +48,7 @@ double NAMMultiBand::GetParameterValue(StompBoxParameter* parameter)
 }
 
 
-void NAMMultiBand::SetParameterValue(StompBoxParameter *parameter, double value)
+void NAMMultiBand::SetParameterValue(StompBoxParameter *parameter, float value)
 {
 	StompBox::SetParameterValue(parameter, value);
 
@@ -58,7 +58,7 @@ void NAMMultiBand::SetParameterValue(StompBoxParameter *parameter, double value)
 	}
 }
 
-void NAMMultiBand::compute(int count, double* input, double* output)
+void NAMMultiBand::compute(int count, float* input, float* output)
 {
 	crossover.SetCrossoverFrequency(crossoverFreq);
 	crossover.compute(count, input, splitBuf[0], splitBuf[1]);

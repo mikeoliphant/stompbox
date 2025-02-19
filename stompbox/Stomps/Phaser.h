@@ -17,14 +17,14 @@ class Phaser : public StompBox
 private:
 	int fSamplingFreq;
 
-	double freq;
-	double depth;
-	double fb;
-	double width;
-	double frqwidth;
-	double frqmin;
-	double frqmax;
-	double fratio;
+	float freq;
+	float depth;
+	float fb;
+	float width;
+	float frqwidth;
+	float frqmin;
+	float frqmax;
+	float fratio;
 
 	int iVec0[2];
 	double fConst0;

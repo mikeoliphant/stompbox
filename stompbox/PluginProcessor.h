@@ -36,14 +36,14 @@ protected:
 	void AppendParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 	void ThreadLoadPreset();
 
-	double sampleRate;
-	double bpm = 120;
+	float sampleRate;
+	float bpm = 120;
 	std::list<StompBox *> pluginList1;
 	std::list<StompBox*> pluginList2;
 	std::list<StompBox*>& plugins = pluginList1;
 	int tmpBufSize = 64;
-	double* tmpBuf1 = nullptr;
-	double* tmpBuf2 = nullptr;
+	float* tmpBuf1 = nullptr;
+	float* tmpBuf2 = nullptr;
 	bool initialized = false;
 	PluginFactory pluginFactory;
 	StompboxServer stompboxServer;
@@ -61,7 +61,7 @@ protected:
 	std::vector<StompBox*> fxLoop;
 	std::vector<StompBox*> outputChain;
 	StompBox* monitorPlugin = nullptr;
-	std::function<void(double*, int)> monitorCallback = nullptr;
+	std::function<void(float*, int)> monitorCallback = nullptr;
 	std::function<void(int, int, int)> midiCallback = nullptr;
 	std::function<void(const std::string)> messageCallback = nullptr;
 	bool serverIsRunning = false;
@@ -93,8 +93,8 @@ public:
 	~PluginProcessor();
 	static std::string GetVersion();
 	void ScanPresets();
-	void Init(double sampleRate);
-	void SetBPM(double bpm);
+	void Init(float sampleRate);
+	void SetBPM(float bpm);
 	void StartServer();
 	StompBox* CreatePlugin(std::string const& id);
 	void UpdatePlugins();
@@ -105,7 +105,7 @@ public:
 		return (ramp != 0);
 	}
 
-	double GetBPM()
+	float GetBPM()
 	{
 		return bpm;
 	}
@@ -206,7 +206,7 @@ public:
 	std::string GetNextPreset(std::string afterPreset);
 	std::string GetPreviousPreset(std::string beforePreset);
 
-	void SetMonitorPlugin(std::string const& pluginID, std::function<void(double *, int)> callback)
+	void SetMonitorPlugin(std::string const& pluginID, std::function<void(float *, int)> callback)
 	{
 		monitorCallback = callback;
 		monitorPlugin = pluginFactory.FindPlugin(pluginID);
@@ -230,6 +230,6 @@ public:
 	std::string DumpSettings();
 	std::string DumpProgram();
 	std::string DumpConfig();
-	void Process(double* input, double* output, int count);
+	void Process(float* input, float* output, int count);
 	void StartRamp(int rampDirection, float rampMS);
 };

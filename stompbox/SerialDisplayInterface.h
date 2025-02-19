@@ -27,9 +27,9 @@ public:
 	void ResetDisplay();
 	void SetPresetText(const char* presetName, const char* textColor);
 	void HandleStomp(int16_t stomp, bool enabled, const char* pluginName, const char* parameterName, const char *pluginBGColor, const char* pluginFGColor);
-	void UpdateTuner(double frequency);
+	void UpdateTuner(float frequency);
 	void ResetTuner();
-	void UpdateRecordSeconds(double recordSeconds);
+	void UpdateRecordSeconds(float recordSeconds);
 
 protected:
 	Serial* serial;
@@ -41,7 +41,7 @@ protected:
 		"C","C#","D","Eb","E","F","F#","G","Ab","A", "Bb","B"
 	};
 
-	double runningFrequency;
+	float runningFrequency;
 	int histSize;
 	int16_t screenWidth = 320;
 	int16_t screenHeight = 240;

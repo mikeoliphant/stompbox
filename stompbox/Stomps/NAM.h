@@ -42,8 +42,8 @@ public:
 class NAM : public StompBox
 {
 private:
-	double modelIndex = -1;
-	double prevDCInput = 0;
+	float modelIndex = -1;
+	float prevDCInput = 0;
 	double prevDCOutput = 0;
 	std::vector<float> namBuffer;
 	FileType fileType;
@@ -54,6 +54,6 @@ public:
 	NAM(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath);
 	virtual ~NAM() {}
 	virtual void init(int samplingFreq);
-	void SetParameterValue(StompBoxParameter* parameter, double value);
-	virtual void compute(int count, double* input, double* output);
+	void SetParameterValue(StompBoxParameter* parameter, float value);
+	virtual void compute(int count, float* input, float* output);
 };

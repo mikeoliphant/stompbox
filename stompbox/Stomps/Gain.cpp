@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "Gain.h"
 
-Gain::Gain(double initialGain, double minGain, double maxGain)
+Gain::Gain(float initialGain, float minGain, float maxGain)
 {
 	Name = "Gain";
 	Description = "Simple volume/gain effect";
@@ -40,11 +40,11 @@ void Gain::init(int samplingFreq)
 	instanceClear();
 }
 
-void Gain::compute(int count, double* input0, double* output0)
+void Gain::compute(int count, float* input0, float* output0)
 {
-	double desiredGain = pow(10.0, (0.05 * gain));
+	float desiredGain = (float)pow(10.0, (0.05 * gain));
 
-	double level = 0;
+	float level = 0;
 
 	for (int i = 0; i < count; i++)
 	{

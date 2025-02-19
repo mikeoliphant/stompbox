@@ -23,11 +23,11 @@ STOMPBOX_EXTERN void* CreateProcessor(const wchar_t* dataPath, bool dawMode);
 
 STOMPBOX_EXTERN void DeleteProcessor(void* processor);
 
-STOMPBOX_EXTERN void InitProcessor(void* processor, double sampleRate);
+STOMPBOX_EXTERN void InitProcessor(void* processor, float sampleRate);
 
 STOMPBOX_EXTERN void StartServer(void* processor);
 
-STOMPBOX_EXTERN void Process(void* processor, double* input, double* output, unsigned int bufferSize);
+STOMPBOX_EXTERN void Process(void* processor, float* input, float* output, unsigned int bufferSize);
 
 STOMPBOX_EXTERN bool IsPresetLoading(void* processor);
 
@@ -35,7 +35,7 @@ STOMPBOX_EXTERN void HandleCommand(void* processor, const char* cmd);
 
 STOMPBOX_EXTERN bool HandleMidiCommand(void* processor, int midiCommand, int midiData1, int midiData2);
 
-STOMPBOX_EXTERN void SetBPM(void* processor, double bpm);
+STOMPBOX_EXTERN void SetBPM(void* processor, float bpm);
 
 STOMPBOX_EXTERN const PATH_STR GetDataPath(void* processor);
 
@@ -79,27 +79,27 @@ STOMPBOX_EXTERN const char* GetPluginForegroundColor(void* plugin);
 
 STOMPBOX_EXTERN bool GetPluginIsUserSelectable(void* plugin);
 
-STOMPBOX_EXTERN double GetOutputValue(void* plugin);
+STOMPBOX_EXTERN float GetOutputValue(void* plugin);
 
 STOMPBOX_EXTERN size_t GetPluginNumParameters(void* plugin);
 
 STOMPBOX_EXTERN void* GetPluginParameter(void* plugin, size_t index);
 
-STOMPBOX_EXTERN double GetParameterValue(void* parameter);
+STOMPBOX_EXTERN float GetParameterValue(void* parameter);
 
-STOMPBOX_EXTERN void SetParameterValue(void* parameter, double value);
+STOMPBOX_EXTERN void SetParameterValue(void* parameter, float value);
 
 STOMPBOX_EXTERN const char* GetParameterName(void* parameter);
 
 STOMPBOX_EXTERN const char* GetParameterDescription(void* parameter);
 
-STOMPBOX_EXTERN double GetParameterMinValue(void* parameter);
+STOMPBOX_EXTERN float GetParameterMinValue(void* parameter);
 
-STOMPBOX_EXTERN double GetParameterMaxValue(void* parameter);
+STOMPBOX_EXTERN float GetParameterMaxValue(void* parameter);
 
-STOMPBOX_EXTERN double GetParameterDefaultValue(void* parameter);
+STOMPBOX_EXTERN float GetParameterDefaultValue(void* parameter);
 
-STOMPBOX_EXTERN double GetParameterRangePower(void* parameter);
+STOMPBOX_EXTERN float GetParameterRangePower(void* parameter);
 
 STOMPBOX_EXTERN int GetParameterType(void* parameter);
 

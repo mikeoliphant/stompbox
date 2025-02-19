@@ -23,15 +23,15 @@ enum
 class AudioFilePlayer : public StompBox
 {
 private:
-	double fileIndex = -1;
-	double level = 0.5;
-	double playing = 0;
-	double position = 0;
+	float fileIndex = -1;
+	float level = 0.5;
+	float playing = 0;
+	float position = 0;
 	size_t audioBufferSize = 0;
 	bool needUpdate = false;
 	WaveReader* waveReader = nullptr;
 	float* waveBuffer = nullptr;
-	double* recordBuffer = nullptr;
+	float* recordBuffer = nullptr;
 	bool recordArmed = false;
 	bool recording = false;
 	bool haveRecording = false;
@@ -42,9 +42,9 @@ public:
 	AudioFilePlayer(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath);
 	~AudioFilePlayer() {}
 	void SetFile();
-	void SetParameterValue(StompBoxParameter* parameter, double value);
+	void SetParameterValue(StompBoxParameter* parameter, float value);
 	virtual void HandleCommand(std::vector<std::string> commandWords);
 
 	virtual void init(int samplingFreq);
-	virtual void compute(int count, double* input, double* output);
+	virtual void compute(int count, float* input, float* output);
 };

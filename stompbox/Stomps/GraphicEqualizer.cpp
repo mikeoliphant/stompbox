@@ -3,7 +3,7 @@
 
 #include "GraphicEqualizer.h"
 
-GraphicEqualizer::GraphicEqualizer(int numBands, double* frequencies, double q)
+GraphicEqualizer::GraphicEqualizer(int numBands, float* frequencies, float q)
 {
 	Name = "EQ";
 
@@ -18,7 +18,7 @@ GraphicEqualizer::GraphicEqualizer(int numBands, double* frequencies, double q)
 
 	for (int band = 0; band < numBands; band++)
 	{
-		double freq = frequencies[band];
+		float freq = frequencies[band];
 
 		peakingFilters[band] = new PeakingFilter(freq, q);
 

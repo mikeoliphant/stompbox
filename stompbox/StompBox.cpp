@@ -3,7 +3,6 @@
 
 StompBox::StompBox()
 {
-	doubleBuffer[0] = nullptr;
 }
 
 StompBox::~StompBox()
@@ -50,31 +49,31 @@ StompBoxParameter* StompBox::GetParameter(std::string name)
 
 void StompBox::init(int newSamplingFreq)
 {
-	samplingFreq = newSamplingFreq;
+	samplingFreq = (float)newSamplingFreq;
 }
 
 
-void StompBox::SetParameterValue(int id, double value)
+void StompBox::SetParameterValue(int id, float value)
 {
 	SetParameterValue(&(Parameters[id]), value);
 }
 
-void StompBox::SetParameterValue(StompBoxParameter *param, double value)
+void StompBox::SetParameterValue(StompBoxParameter *param, float value)
 {
 	*(param->SourceVariable) = std::clamp(value, param->MinValue, param->MaxValue);
 }
 
-double StompBox::GetParameterValue(int id)
+float StompBox::GetParameterValue(int id)
 {
 	return GetParameterValue(&(Parameters[id]));
 }
 
-double StompBox::GetParameterValue(StompBoxParameter* param)
+float StompBox::GetParameterValue(StompBoxParameter* param)
 {
 	return *(param->SourceVariable);
 }
 
-void StompBox::SetBPM(double newBpm)
+void StompBox::SetBPM(float newBpm)
 {
 	bpm = newBpm;
 
@@ -87,57 +86,7 @@ void StompBox::UpdateBPM()
 	{
 		if ((Parameters[i].BPMSyncNumerator != 0) && (Parameters[i].BPMSyncDenominator != 0))
 		{
-			(*Parameters[i].SourceVariable) = ((60.0 / bpm) * ((double)Parameters[i].BPMSyncNumerator / (double)Parameters[i].BPMSyncDenominator)) * 1000;
+			(*Parameters[i].SourceVariable) = ((60.0f / bpm) * ((float)Parameters[i].BPMSyncNumerator / (float)Parameters[i].BPMSyncDenominator)) * 1000;
 		}
 	}
 }
-
-//void StompBox::doComputeDouble(int count, FAUSTFLOAT* input, FAUSTFLOAT* output, EFactor oversample)
-//{
-//	if (count != bufferSize)
-//	{
-//		bufferSize = count;
-//
-//		if (doubleBuffer[0] != nullptr)
-//			delete doubleBuffer[0];
-//
-//		doubleBuffer[0] = new double[bufferSize];
-//
-//		if (oversample != kNone)
-//		{
-//			if (overSampler == nullptr)
-//			{
-//				overSampler = new OverSampler<double>(oversample, true, 1);
-//				overSampler->Reset(bufferSize);
-//			}
-//		}
-//	}
-//
-//	for (int i = 0; i < count; i++)
-//	{
-//		doubleBuffer[0][i] = input[i];
-//	}
-//
-//	double* resultBuffer;
-//
-//	if (oversample != kNone)
-//	{
-//		overSampler->ProcessBlock(doubleBuffer, doubleBuffer, bufferSize, 1, [this](double** inputs, double** outputs, int count2)
-//		{
-//			computeDouble(count2, inputs[0], outputs[0]);
-//		});
-//
-//		resultBuffer = doubleBuffer[0];
-//	}
-//	else
-//	{
-//		computeDouble(count, doubleBuffer[0], doubleBuffer[0]);
-//
-//		resultBuffer = doubleBuffer[0];
-//	}
-//
-//	for (int i = 0; i < count; i++)
-//	{
-//		output[i] = (float)resultBuffer[i];
-//	}
-//}

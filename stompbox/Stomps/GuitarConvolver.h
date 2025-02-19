@@ -57,7 +57,7 @@ protected:
 
 		if (waveData != nullptr)
 		{
-			double* data = new double[waveReader->NumSamples];
+			float* data = new float[waveReader->NumSamples];
 
 			float gain = (float)pow(10, -18 * 0.05);  // IRs are usually too loud
 
@@ -68,11 +68,11 @@ protected:
 
 			Convolution* conv = new Convolution();
 
-			double* newImpulseData[1];
+			float* newImpulseData[1];
 
 			newImpulseData[0] = data;
 
-			conv->ImpulseBuffer.Set((const double**)newImpulseData, (int)waveReader->NumSamples, 1);
+			conv->ImpulseBuffer.Set((const float**)newImpulseData, (int)waveReader->NumSamples, 1);
 			conv->ConvolutionEngine.SetImpulse(&conv->ImpulseBuffer);
 
 			delete waveReader;
@@ -99,9 +99,9 @@ public:
 class GuitarConvolver : public StompBox
 {
 private:
-	double impulseIndex = -1;
-	double wet = 1;
-	double dry = 0;
+	float impulseIndex = -1;
+	float wet = 1;
+	float dry = 0;
 	FileType fileType;
 	IRLoader irLoader;
 
@@ -110,6 +110,6 @@ public:
 	GuitarConvolver(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath);
 	virtual ~GuitarConvolver() {}
 	virtual void init(int samplingFreq);
-	void SetParameterValue(StompBoxParameter* parameter, double value);
-	virtual void compute(int count, double* input, double* output);
+	void SetParameterValue(StompBoxParameter* parameter, float value);
+	virtual void compute(int count, float* input, float* output);
 };

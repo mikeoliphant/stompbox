@@ -94,8 +94,8 @@ PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
         audioFileRecorder->Enabled = true;
     }
 
-    tmpBuf1 = new double[tmpBufSize];
-    tmpBuf2 = new double[tmpBufSize];
+    tmpBuf1 = new float[tmpBufSize];
+    tmpBuf2 = new float[tmpBufSize];
 
     for (int i = 0; i < tmpBufSize; i++)
     {
@@ -131,7 +131,7 @@ PluginProcessor::~PluginProcessor()
         serialDisplayInterface.Close();
 }
 
-void PluginProcessor::Init(double newSampleRate)
+void PluginProcessor::Init(float newSampleRate)
 {
     fprintf(stderr, "Init with sample rate: %d\n", (int)newSampleRate);
 
@@ -166,7 +166,7 @@ void PluginProcessor::ScanPresets()
     }
 }
 
-void PluginProcessor::SetBPM(double newBpm)
+void PluginProcessor::SetBPM(float newBpm)
 {
     bpm = newBpm;
 
@@ -232,7 +232,7 @@ void PluginProcessor::UpdateClient()
                 case MIDI_MODE_RECORDER:
                     if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
                     {
-                        double secondsRecorded = audioFileRecorder->GetParameterValue(AUDIOFILERECORDER_SECONDSRECORDED);
+                        float secondsRecorded = audioFileRecorder->GetParameterValue(AUDIOFILERECORDER_SECONDSRECORDED);
 
                         serialDisplayInterface.UpdateRecordSeconds(secondsRecorded);
                     }
@@ -897,11 +897,11 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                                         bool gotEnum = false;
 
-                                        for (int e = 0; e < (int)enumValues->size(); e++)
+                                        for (size_t e = 0; e < (int)enumValues->size(); e++)
                                         {
                                             if ((*enumValues)[e] == paramValue)
                                             {
-                                                param->SetValue(e);
+                                                param->SetValue((float)e);
 
                                                 gotEnum = true;
 
@@ -930,11 +930,11 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                                         bool gotEnum = false;
 
-                                        for (int e = 0; e < (int)enumValues->size(); e++)
+                                        for (size_t e = 0; e < (int)enumValues->size(); e++)
                                         {
                                             if ((*enumValues)[e] == paramValue)
                                             {
-                                                param->SetValue(e);
+                                                param->SetValue((float)e);
 
                                                 gotEnum = true;
 
@@ -966,7 +966,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                                             param->BPMSyncNumerator = param->BPMSyncDenominator = 0;
                                         }
 
-                                        param->SetValue(atof(commandWords[3].c_str()));
+                                        param->SetValue((float)atof(commandWords[3].c_str()));
 
                                         CheckMidiCommand(component, param);
                                     }
@@ -1337,7 +1337,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
 
                             if (parameter != nullptr)
                             {
-                                double value = parameter->MinValue + ((parameter->MaxValue - parameter->MinValue) * ((double)midiData2 / 127.0));
+                                float value = parameter->MinValue + ((parameter->MaxValue - parameter->MinValue) * ((float)midiData2 / 127.0f));
 
                                 parameter->SetValue(value);
 
@@ -1411,9 +1411,9 @@ bool PluginProcessor::CheckMidiCommand(StompBox* plugin, StompBoxParameter* para
     {
         if ((ccMap.Plugin == plugin) && ((ccMap.Parameter.empty() && (parameter == nullptr)) || (ccMap.Parameter == parameter->Name)))
         {
-            int stomp = -1;
+            int16_t stomp = -1;
 
-            for (int i = 0; i < 16; i++)
+            for (int16_t i = 0; i < 16; i++)
             {
                 if (stompCC[i] == ccMap.CCNumber)
                 {
@@ -1566,7 +1566,7 @@ bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
     return true;
 }
 
-void PluginProcessor::Process(double* input, double* output, int count)
+void PluginProcessor::Process(float* input, float* output, int count)
 {
     if (ramp != 0)
     {
@@ -1603,7 +1603,7 @@ void PluginProcessor::Process(double* input, double* output, int count)
     std::feholdexcept(&fe_state);
     disable_denormals();
 
-    memcpy(output, input, count * sizeof(double));
+    memcpy(output, input, count * sizeof(float));
 
     for (const auto& plugin : plugins)
     {
