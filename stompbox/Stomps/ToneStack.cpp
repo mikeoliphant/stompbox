@@ -169,7 +169,7 @@ void Tonestack::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output0)
 {
 	if (needUpdate)
 	{
-		SetPreset((float)preset);
+		SetPreset((int)preset);
 
 		needUpdate = false;
 	}

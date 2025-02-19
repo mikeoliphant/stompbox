@@ -444,7 +444,7 @@ std::string PluginProcessor::DumpConfig()
 
 void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
 {
-    for (int i = 0; i < plugin->NumParameters; i++)
+    for (size_t i = 0; i < plugin->NumParameters; i++)
     {
         StompBoxParameter* param = plugin->GetParameter(i);
 
@@ -574,7 +574,7 @@ void PluginProcessor::AppendPluginParams(std::string& dump, StompBox* plugin, bo
 
 void PluginProcessor::AppendParams(std::string& dump, StompBox* plugin, bool dirtyOnly)
 {
-    for (int i = 0; i < plugin->NumParameters; i++)
+    for (size_t i = 0; i < plugin->NumParameters; i++)
     {
         StompBoxParameter* param = plugin->GetParameter(i);
 

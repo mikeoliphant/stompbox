@@ -52,12 +52,12 @@ public:
 
 	StompBox();
 	virtual ~StompBox();
-	virtual void CreateParameters(int numParameters);
-	virtual StompBoxParameter* GetParameter(int id);
-	virtual StompBoxParameter* GetParameter(std::string name);
-	virtual void SetParameterValue(int id, float value) final;
+	virtual void CreateParameters(size_t numParameters);
+	virtual StompBoxParameter* GetParameter(size_t id);
+	virtual StompBoxParameter* GetParameter(const std::string& name);
+	virtual void SetParameterValue(size_t id, float value) final;
 	virtual void SetParameterValue(StompBoxParameter *param, float value);
-	virtual float GetParameterValue(int id);
+	virtual float GetParameterValue(size_t id);
 	virtual float GetParameterValue(StompBoxParameter* param);
 	virtual void HandleCommand(const std::vector<std::string>& commandWords)
 	{

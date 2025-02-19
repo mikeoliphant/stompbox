@@ -13,24 +13,24 @@ StompBox::~StompBox()
 	}
 }
 
-void StompBox::CreateParameters(int numParameters)
+void StompBox::CreateParameters(size_t numParameters)
 {
 	Parameters = new StompBoxParameter[numParameters];
 
-	for (int i = 0; i < NumParameters; i++)
+	for (size_t i = 0; i < NumParameters; i++)
 	{
 		Parameters[i].Stomp = this;
 	}
 }
 
-StompBoxParameter* StompBox::GetParameter(int id)
+StompBoxParameter* StompBox::GetParameter(size_t id)
 {
 	return &Parameters[id];
 }
 
-StompBoxParameter* StompBox::GetParameter(std::string name)
+StompBoxParameter* StompBox::GetParameter(const std::string& name)
 {
-	for (int i = 0; i < NumParameters; i++)
+	for (size_t i = 0; i < NumParameters; i++)
 	{
 		if (Parameters[i].Name == name)
 			return &Parameters[i];
@@ -53,7 +53,7 @@ void StompBox::init(int newSamplingFreq)
 }
 
 
-void StompBox::SetParameterValue(int id, float value)
+void StompBox::SetParameterValue(size_t id, float value)
 {
 	SetParameterValue(&(Parameters[id]), value);
 }
@@ -63,7 +63,7 @@ void StompBox::SetParameterValue(StompBoxParameter *param, float value)
 	*(param->SourceVariable) = std::clamp(value, param->MinValue, param->MaxValue);
 }
 
-float StompBox::GetParameterValue(int id)
+float StompBox::GetParameterValue(size_t id)
 {
 	return GetParameterValue(&(Parameters[id]));
 }
@@ -82,7 +82,7 @@ void StompBox::SetBPM(float newBpm)
 
 void StompBox::UpdateBPM()
 {
-	for (int i = 0; i < NumParameters; i++)
+	for (size_t i = 0; i < NumParameters; i++)
 	{
 		if ((Parameters[i].BPMSyncNumerator != 0) && (Parameters[i].BPMSyncDenominator != 0))
 		{

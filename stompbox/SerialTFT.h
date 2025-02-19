@@ -30,9 +30,9 @@
 class SerialTFT
 {
 public:
-	SerialTFT(Serial *serialDevice)
+	SerialTFT(Serial *serialDevice) :
+		serial(serialDevice)
 	{
-		serial = serialDevice;
 	}
 
 	void updateScreen()
