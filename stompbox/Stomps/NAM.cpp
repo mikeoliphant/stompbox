@@ -18,7 +18,7 @@ NAM::NAM(const std::string folderName, const std::vector<std::string> fileExtens
     Parameters[NAM_MODEL].DefaultValue = -1;
     Parameters[NAM_MODEL].Description = "Selected NAM model";
     Parameters[NAM_MODEL].MinValue = -1;
-    Parameters[NAM_MODEL].MaxValue = (int)(fileType.GetFileNames().size()) - 1;
+    Parameters[NAM_MODEL].MaxValue = (float)(fileType.GetFileNames().size()) - 1;
 }
 
 void NAM::init(int samplingFreq)
@@ -51,7 +51,7 @@ void NAM::compute(int count, float* input, float* output)
 
     float adjustDB = activeModel->GetRecommendedOutputDBAdjustment();
 
-    float modelLoudnessAdjustmentGain = pow(10.0, adjustDB / 20.0);
+    float modelLoudnessAdjustmentGain = (float)pow(10.0, adjustDB / 20.0);
 
     for (int i = 0; i < count; i++)
     {

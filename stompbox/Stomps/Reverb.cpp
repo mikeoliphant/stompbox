@@ -48,7 +48,7 @@ void FreeVerb::init(int samplingFreq)
 void FreeVerb::instanceConstants(int sample_rate)
 {
 	fSampleRate = sample_rate;
-	double fConst0 = std::min<double>(192000.0, std::max<double>(1.0, double(fSampleRate)));
+	fConst0 = std::min<double>(192000.0, std::max<double>(1.0, double(fSampleRate)));
 	iConst1 = int(((0.036666666666666667 * fConst0) + 23.0));
 	iConst2 = int(((0.035306122448979592 * fConst0) + 23.0));
 	iConst3 = int(((0.03380952380952381 * fConst0) + 23.0));

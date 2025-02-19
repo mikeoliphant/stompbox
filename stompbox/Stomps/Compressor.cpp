@@ -3,11 +3,6 @@
 
 #include "Compressor.h"
 
-static double mydsp_faustpower2_f(double value) {
-	return (value * value);
-
-}
-
 Compressor::Compressor()
 {
 	Name = "Compressor";
@@ -31,9 +26,9 @@ Compressor::Compressor()
 	Parameters[COMPRESSOR_SUSTAIN].Description = "Compression threshold (dB below 0)";
 
 	Parameters[COMPRESSOR_ATTACK].Name = "Attack";
-	Parameters[COMPRESSOR_ATTACK].MinValue = 0.002;
-	Parameters[COMPRESSOR_ATTACK].MaxValue = 0.05;
-	Parameters[COMPRESSOR_ATTACK].Step = 0.001;
+	Parameters[COMPRESSOR_ATTACK].MinValue = 0.002f;
+	Parameters[COMPRESSOR_ATTACK].MaxValue = 0.05f;
+	Parameters[COMPRESSOR_ATTACK].Step = 0.001f;
 	Parameters[COMPRESSOR_ATTACK].DefaultValue = fHslider0;
 	Parameters[COMPRESSOR_ATTACK].SourceVariable = &fHslider0;
 	Parameters[COMPRESSOR_ATTACK].DisplayFormat = "{0:.000}s";

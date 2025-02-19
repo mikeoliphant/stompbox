@@ -13,12 +13,12 @@ Phaser::Phaser()
 	Name = "Phaser";
 	Description = "Phaser effect";
 
-	freq = 0.5;
-	depth = 0.5;
-	width = 1000.0;
-	fb = 0.5;
-	fratio = 1.5;
-	frqwidth = 0.3;
+	freq = 0.5f;
+	depth = 0.5f;
+	width = 1000;
+	fb = 0.5f;
+	fratio = 1.5f;
+	frqwidth = 0.3f;
 	
 	NumParameters = PHASER_NUMPARAMETERS;
 	CreateParameters(NumParameters);
@@ -41,7 +41,7 @@ Phaser::Phaser()
 	Parameters[PHASER_FREQWIDTH].Description = "Frequency width of phaser sweep";
 
 	Parameters[PHASER_RATIO].Name = "Ratio";
-	Parameters[PHASER_RATIO].MinValue = 1.1;
+	Parameters[PHASER_RATIO].MinValue = 1.1f;
 	Parameters[PHASER_RATIO].MaxValue = 4;
 	Parameters[PHASER_RATIO].SourceVariable = &fratio;
 	Parameters[PHASER_RATIO].DefaultValue = fratio;

@@ -58,7 +58,7 @@ void Fuzz::compute(int count, float* input0, float* output0)
 	{
 		env = std::max(env, abs(input0[i]));
 
-		output0[i] = atan((input0[i] + (env * offset))  * mult) * scale;
+		output0[i] = (float)(atan((input0[i] + (env * offset))  * mult) * scale);
 
 		//output0[i] = (scale * atan((input0[i] / clip) / shape)) * clip;
 
@@ -72,6 +72,6 @@ void Fuzz::compute(int count, float* input0, float* output0)
 				output0[i] = -output0[i];
 		}
 
-		env *= .99;
+		env *= .99f;
 	}
 }

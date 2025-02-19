@@ -22,8 +22,8 @@ private:
 	float fb;
 	float width;
 	float frqwidth;
-	float frqmin;
-	float frqmax;
+	double frqmin;
+	double frqmax;
 	float fratio;
 
 	int iVec0[2];

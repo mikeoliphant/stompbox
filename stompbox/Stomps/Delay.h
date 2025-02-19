@@ -20,8 +20,8 @@ private:
 	float delay;
 	float level;
 	float feedback;
-	float hipass;
-	float lowpass;
+	double hipass;
+	double lowpass;
 	float warmth;
 	float hilo;
 	float wet;

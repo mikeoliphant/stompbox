@@ -73,7 +73,7 @@ Tonestack::Tonestack()
 	}
 }
 
-void Tonestack::SetParameterValue(StompBoxParameter *parameter, double value)
+void Tonestack::SetParameterValue(StompBoxParameter *parameter, float value)
 {
 	StompBox::SetParameterValue(parameter, value);
 
@@ -169,7 +169,7 @@ void Tonestack::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output0)
 {
 	if (needUpdate)
 	{
-		SetPreset(preset);
+		SetPreset((float)preset);
 
 		needUpdate = false;
 	}

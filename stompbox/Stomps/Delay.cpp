@@ -34,7 +34,7 @@ Delay::Delay()
 
 	Parameters[DELAY_LEVEL].Name = "Mix";
 	Parameters[DELAY_LEVEL].MinValue = 0;
-	Parameters[DELAY_LEVEL].MaxValue = 1.2;
+	Parameters[DELAY_LEVEL].MaxValue = 1.2f;
 	Parameters[DELAY_LEVEL].SourceVariable = &wet;
 	Parameters[DELAY_LEVEL].DefaultValue = wet;
 	Parameters[DELAY_LEVEL].Description = "Delay volume";

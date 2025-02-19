@@ -19,7 +19,7 @@ GuitarConvolver::GuitarConvolver(const std::string folderName, const std::vector
     Parameters[CONVOLVER_IMPULSE].DefaultValue = -1;
     Parameters[CONVOLVER_IMPULSE].Description = "Selected impulse response";
     Parameters[CONVOLVER_IMPULSE].MinValue = -1;
-    Parameters[CONVOLVER_IMPULSE].MaxValue = (int)(fileType.GetFileNames().size()) - 1;
+    Parameters[CONVOLVER_IMPULSE].MaxValue = (float)(fileType.GetFileNames().size()) - 1;
 
     Parameters[CONVOLVER_DRY].Name = "Dry";
     Parameters[CONVOLVER_DRY].SourceVariable = &dry;

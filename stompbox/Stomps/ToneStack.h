@@ -107,7 +107,7 @@ private:
 public:
 	Tonestack();
 	virtual ~Tonestack() {}
-	void SetParameterValue(StompBoxParameter* parameter, double value);
+	void SetParameterValue(StompBoxParameter* parameter, float value);
 	virtual void SetPreset(int preset);
 	virtual void SetParameters(double r1, double r2, double r3, double r4, double c1, double c2, double c3);
 	virtual void init(int samplingFreq);

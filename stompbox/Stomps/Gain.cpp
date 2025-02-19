@@ -34,7 +34,7 @@ void Gain::init(int samplingFreq)
 {
 	StompBox::init(samplingFreq);
 
-	linearGain = pow(10.0, (0.05 * gain));
+	linearGain = (float)pow(10.0, (0.05 * gain));
 
 	instanceConstants(samplingFreq);
 	instanceClear();

@@ -69,7 +69,7 @@ void GraphicEqualizer::init(int samplingFreq)
 {
 	StompBox::init(samplingFreq);
 
-	linearGain = pow(10.0, (0.05 * volume));
+	linearGain = (float)pow(10.0, (0.05 * volume));
 
 	instanceConstants(samplingFreq);
 	instanceClear();

@@ -121,7 +121,7 @@ void SerialDisplayInterface::HandleStomp(int16_t stompNumber, bool enabled, cons
 	serialTFT->setTextColor(fg565);
 	serialTFT->setTextAlignment("mc");
 
-	int16_t xCenter = stompWidth * (stompNumber + 0.5);
+	int16_t xCenter = (int16_t)(stompWidth * (stompNumber + 0.5));
 
 	serialTFT->setTextFont("FSSB9");
 
@@ -148,7 +148,7 @@ int lastTunerDelta = -1000;
 
 void SerialDisplayInterface::ResetTuner()
 {
-	int yCenter = screenHeight / 2;
+	int16_t yCenter = screenHeight / 2;
 
 	serialTFT->fillRect(0, yCenter - tunerHeight, screenWidth, tunerHeight * 2, BACKGROUND_COLOR);
 	serialTFT->updateScreen();
@@ -182,11 +182,11 @@ void SerialDisplayInterface::UpdateTuner(float frequency)
 
 		//fprintf(stderr, "Tuner frequency: %f Target frequency: %f Running Frequency: %f\n", frequency, targetFreq, runningFrequency);
 
-		float centDelta = 1200 * (log(runningFrequency / targetFreq) / log(2));
+		float centDelta = (float)(1200 * (log(runningFrequency / targetFreq) / log(2)));
 
 		bool isNegative = centDelta < 0;
 
-		centDelta = abs(centDelta) / 2.5;
+		centDelta = abs(centDelta) / 2.5f;
 
 		int intDelta = (int)centDelta;
 
@@ -229,7 +229,7 @@ void SerialDisplayInterface::UpdateTuner(float frequency)
 					{
 						uint16_t color = (i == intDelta) ? ColorRGBto565(tint, tint, 0) : TFT_YELLOW;
 
-						serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * (i - 1) * 2),
+						serialTFT->fillRect(xCenter + tunerCenterWidth + (tunerDeltaWidth * (int16_t)(i - 1) * 2),
 							yCenter - tunerHeight, (tunerDeltaWidth - 2) * 2, tunerHeight * 2, color);
 					}
 				}
