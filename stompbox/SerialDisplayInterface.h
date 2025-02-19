@@ -26,7 +26,7 @@ public:
 	}
 	void ResetDisplay();
 	void SetPresetText(const char* presetName, const char* textColor);
-	void HandleStomp(int stomp, bool enabled, const char* pluginName, const char* parameterName, const char *pluginBGColor, const char* pluginFGColor);
+	void HandleStomp(int16_t stomp, bool enabled, const char* pluginName, const char* parameterName, const char *pluginBGColor, const char* pluginFGColor);
 	void UpdateTuner(double frequency);
 	void ResetTuner();
 	void UpdateRecordSeconds(double recordSeconds);
@@ -43,7 +43,7 @@ protected:
 
 	double runningFrequency;
 	int histSize;
-	int screenWidth = 320;
-	int screenHeight = 240;
+	int16_t screenWidth = 320;
+	int16_t screenHeight = 240;
 	const int maxHistSize = 10;
 };

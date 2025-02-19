@@ -3,11 +3,6 @@
 
 #include "Reverb.h"
 
-static double mydsp_faustpower2_f(double value) {
-	return (value * value);
-
-}
-
 FreeVerb::FreeVerb()
 {
 	Name = "Reverb";

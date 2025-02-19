@@ -98,7 +98,7 @@ void GraphicEqualizer::compute(int count, FAUSTFLOAT* input0, FAUSTFLOAT* output
 		peakingFilters[band]->compute(count, input0, input0);
 	}
 
-	float desiredGain = pow(10.0, (0.05 * volume));
+	float desiredGain = (float)pow(10.0, (0.05 * volume));
 
 	for (int i = 0; i < count; i++)
 	{

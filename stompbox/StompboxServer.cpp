@@ -72,7 +72,7 @@ void StompboxServer::SendData(std::string const& data)
     {
         int iSendResult;
 
-        iSendResult = send(ClientSocket, data.c_str(), data.size(), 0);
+        iSendResult = send(ClientSocket, data.c_str(), (int)data.size(), 0);
         if (iSendResult == SOCKET_ERROR) {
             LogError("send failed with error: %d\n");
             closesocket(ClientSocket);

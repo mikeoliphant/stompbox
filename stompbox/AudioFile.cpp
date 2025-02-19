@@ -1,5 +1,6 @@
 #define DR_WAV_IMPLEMENTATION
 
+#include <iostream>
 #include "AudioFile.h"
 #include "CDSPResampler.h"
 
@@ -128,7 +129,7 @@ void WaveWriter::WriteToFile(std::string filename)
 		recordDataSize = recordPos;
 	}
 
-	fprintf(stderr, "AudioFileRecorder saving %d bytes\n", recordDataSize);
+	std::cout << "AudioFileRecorder saving " << recordDataSize << " bytes" << std::endl;
 
 	memcpy((char*)waveHeader.fmt, "fmt ", 4);
 	waveHeader.Subchunk1Size = 16;
@@ -143,7 +144,7 @@ void WaveWriter::WriteToFile(std::string filename)
 	memcpy((char*)waveHeader.RIFF, "RIFF", 4);
 	memcpy((char*)waveHeader.WAVE, "WAVE", 4);
 
-	waveHeader.ChunkSize = 36 + recordDataSize;
+	waveHeader.ChunkSize = (uint32_t)(36 + recordDataSize);
 
 	std::ofstream waveFile;
 
@@ -163,5 +164,5 @@ void WaveWriter::WriteToFile(std::string filename)
 
 	waveFile.close();
 
-	fprintf(stderr, "AudioFileRecorder save finished\n");
+	std::cout << "AudioFileRecorder save finished" << std::endl;
 }

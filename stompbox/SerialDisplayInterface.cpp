@@ -60,8 +60,8 @@ uint16_t ColorRGBto565(uint8_t r, uint8_t g, uint8_t b)
 		((31 * (b + 4)) / 255);
 }
 
-int patchBoxStartY = 0;
-int patchBoxHeight = 50;
+int16_t patchBoxStartY = 0;
+int16_t patchBoxHeight = 50;
 
 void SerialDisplayInterface::SetPresetText(const char* presetName, const char* textColor)
 {
@@ -83,10 +83,10 @@ void SerialDisplayInterface::SetPresetText(const char* presetName, const char* t
 	serialTFT->updateScreen();
 }
 
-int stompBoxHeight = 70;
-int stompBoxStartY = 240 - stompBoxHeight;
+int16_t stompBoxHeight = 70;
+int16_t stompBoxStartY = 240 - stompBoxHeight;
 
-void SerialDisplayInterface::HandleStomp(int stompNumber, bool enabled, const char* pluginName, const char* parameterName, const char* pluginBGColor, const char* pluginFGColor)
+void SerialDisplayInterface::HandleStomp(int16_t stompNumber, bool enabled, const char* pluginName, const char* parameterName, const char* pluginBGColor, const char* pluginFGColor)
 {
 	uint8_t r, g, b;
 	uint16_t bg565, fg565;
@@ -113,7 +113,7 @@ void SerialDisplayInterface::HandleStomp(int stompNumber, bool enabled, const ch
 
 	fg565 = ColorRGBto565(r, g, b);
 
-	int stompWidth = screenWidth / 3;
+	int16_t stompWidth = screenWidth / 3;
 
 	serialTFT->fillRect(stompWidth * stompNumber, stompBoxStartY, stompWidth, stompBoxHeight, bg565);
 	serialTFT->drawRect(stompWidth * stompNumber, stompBoxStartY, stompWidth, stompBoxHeight, fg565);
@@ -121,7 +121,7 @@ void SerialDisplayInterface::HandleStomp(int stompNumber, bool enabled, const ch
 	serialTFT->setTextColor(fg565);
 	serialTFT->setTextAlignment("mc");
 
-	int xCenter = stompWidth * (stompNumber + 0.5);
+	int16_t xCenter = stompWidth * (stompNumber + 0.5);
 
 	serialTFT->setTextFont("FSSB9");
 
@@ -132,16 +132,16 @@ void SerialDisplayInterface::HandleStomp(int stompNumber, bool enabled, const ch
 	//	screen.setFreeFont(FSSB9);
 	//}
 
-	serialTFT->drawText(xCenter, stompBoxStartY + (stompBoxHeight / 4), pluginName);
-	serialTFT->drawText(xCenter, stompBoxStartY + (stompBoxHeight * .75), parameterName);
+	serialTFT->drawText(xCenter, stompBoxStartY + (int16_t)(stompBoxHeight / 4), pluginName);
+	serialTFT->drawText(xCenter, stompBoxStartY + (int16_t)(stompBoxHeight * .75), parameterName);
 
 	serialTFT->updateScreen();
 }
 
 
-int tunerHeight = 30;
-int tunerCenterWidth = 35;
-int tunerDeltaWidth = 10;
+int16_t tunerHeight = 30;
+int16_t tunerCenterWidth = 35;
+int16_t tunerDeltaWidth = 10;
 
 int lastTunerNote = 0;
 int lastTunerDelta = -1000;
@@ -176,9 +176,9 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 		if (histSize > (maxHistSize - 1))
 			histSize = (maxHistSize - 1);
 
-		int midiNote = round(log(runningFrequency / 440.0) / log(2) * 12) + 69;
+		int midiNote = (int)round(log(runningFrequency / 440.0) / log(2) * 12) + 69;
 
-		float targetFreq = 440.0 * pow(2.0, ((double)midiNote - 69) / 12);
+		float targetFreq = (float)(440.0 * pow(2.0, ((double)midiNote - 69) / 12));
 
 		//fprintf(stderr, "Tuner frequency: %f Target frequency: %f Running Frequency: %f\n", frequency, targetFreq, runningFrequency);
 
@@ -202,8 +202,8 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 			lastTunerDelta = intDelta;
 			lastTunerNote = midiNote;
 
-			int xCenter = screenWidth / 2;
-			int yCenter = screenHeight / 2;
+			int16_t xCenter = screenWidth / 2;
+			int16_t yCenter = screenHeight / 2;
 
 			serialTFT->fillRect(0, yCenter - tunerHeight, screenWidth, tunerHeight * 2, BACKGROUND_COLOR);
 
@@ -215,7 +215,7 @@ void SerialDisplayInterface::UpdateTuner(double frequency)
 			{
 				if (isNegative)
 				{
-					for (int i = 1; i <= intDelta; i++)
+					for (int16_t i = 1; i <= intDelta; i++)
 					{
 						uint16_t color = (i == intDelta) ? ColorRGBto565(tint, 0, 0) : TFT_RED;
 
@@ -254,8 +254,8 @@ void SerialDisplayInterface::UpdateRecordSeconds(double recordSeconds)
 
 	lastRecordSeconds = (int)recordSeconds;
 
-	int xCenter = screenWidth / 2;
-	int yCenter = screenHeight / 2;
+	int16_t xCenter = screenWidth / 2;
+	int16_t yCenter = screenHeight / 2;
 
 	serialTFT->fillRect(0, yCenter - 20, screenWidth, 40, BACKGROUND_COLOR);
 

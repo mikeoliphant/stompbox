@@ -52,11 +52,11 @@ void AudioFileRecorder::SaveRecording()
 	recordSeconds = 0;
 }
 
-void AudioFileRecorder::init(int samplingFreq)
+void AudioFileRecorder::init(int newSamplingFreq)
 {
-	if (samplingFreq != this->samplingFreq)
+	if (newSamplingFreq != samplingFreq)
 	{
-		StompBox::init(samplingFreq);
+		StompBox::init(newSamplingFreq);
 
 		if (waveWriter != nullptr)
 		{
@@ -69,7 +69,7 @@ void AudioFileRecorder::init(int samplingFreq)
 	if (waveWriter == nullptr)
 	{
 		recordSeconds = 0;
-		waveWriter = new WaveWriter(samplingFreq, 60 * 30);
+		waveWriter = new WaveWriter(newSamplingFreq, 60 * 30);
 	}
 }
 

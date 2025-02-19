@@ -23,18 +23,18 @@ AutoWah::AutoWah()
 	Parameters[AUTOWAH_LEVEL].Description = "Wah effect strength";
 }
 
-void AutoWah::init(int samplingFreq)
+void AutoWah::init(int newSamplingFreq)
 {
-	StompBox::init(samplingFreq);
+	StompBox::init(newSamplingFreq);
 
-	instanceConstants(samplingFreq);
+	instanceConstants(newSamplingFreq);
 
 	instanceClear();
 }
 
-void AutoWah::instanceConstants(int samplingFreq)
+void AutoWah::instanceConstants(int newSamplingFreq)
 {
-	fSamplingFreq = samplingFreq;
+	fSamplingFreq = newSamplingFreq;
 
 	fConst0 = std::min<double>(192000.0, std::max<double>(1.0, double(fSamplingFreq)));
 	fConst1 = exp((0.0 - (10.0 / fConst0)));

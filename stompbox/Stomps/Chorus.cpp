@@ -5,12 +5,6 @@
 
 namespace chorus
 {
-
-	static double mydsp_faustpower2_f(double value) {
-		return (value * value);
-
-	}
-
 	Chorus::Chorus()
 	{
 		Name = "Chorus";
@@ -41,12 +35,12 @@ namespace chorus
 		Parameters[CHORUS_DEPTH].Description = "How pronounced the effect is";
 	}
 
-	void Chorus::init(int samplingFreq)
+	void Chorus::init(int newSamplingFreq)
 	{
-		StompBox::init(samplingFreq);
+		StompBox::init(newSamplingFreq);
 
 		mydspSIG0* sig0 = newmydspSIG0();
-		sig0->instanceInitmydspSIG0(samplingFreq);
+		sig0->instanceInitmydspSIG0(newSamplingFreq);
 		sig0->fillmydspSIG0(65536, ftbl0mydspSIG0);
 		deletemydspSIG0(sig0);
 
@@ -56,14 +50,14 @@ namespace chorus
 		fConst3 = (1000.0 / fConst0);
 		fConst4 = (0.0 - fConst3);
 
-		instanceConstants(samplingFreq);
+		instanceConstants(newSamplingFreq);
 
 		instanceClear();
 	}
 
-	void Chorus::instanceConstants(int samplingFreq)
+	void Chorus::instanceConstants(int newSamplingFreq)
 	{
-		fSamplingFreq = samplingFreq;
+		fSamplingFreq = newSamplingFreq;
 
 		fConst0 = std::min<double>(192000.0, std::max<double>(1.0, double(fSamplingFreq)));
 		fConst1 = (0.01 * fConst0);

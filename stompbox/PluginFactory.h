@@ -9,7 +9,7 @@
 
 typedef StompBox * (*CreatePluginFunction)(void);
 
-extern std::filesystem::path basePath;
+extern std::filesystem::path dataBasePath;
 extern std::filesystem::path cabinetPath;
 extern std::filesystem::path reverbPath;
 extern std::filesystem::path namModelPath;
@@ -28,7 +28,7 @@ public:
 	~PluginFactory() {}
 	void SetDataPath(std::filesystem::path path)
 	{
-		basePath.assign(path);
+		dataBasePath.assign(path);
 
 		cabinetPath.assign(path);
 		cabinetPath.append("Cabinets");

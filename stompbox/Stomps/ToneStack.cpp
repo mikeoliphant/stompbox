@@ -83,9 +83,9 @@ void Tonestack::SetParameterValue(StompBoxParameter *parameter, double value)
 	}
 }
 
-void Tonestack::SetPreset(int preset)
+void Tonestack::SetPreset(int newPreset)
 {
-	SetParameters(tonestacks[preset].R1, tonestacks[preset].R2, tonestacks[preset].R3, tonestacks[preset].R4, tonestacks[preset].C1, tonestacks[preset].C2, tonestacks[preset].C3);
+	SetParameters(tonestacks[newPreset].R1, tonestacks[newPreset].R2, tonestacks[newPreset].R3, tonestacks[newPreset].R4, tonestacks[newPreset].C1, tonestacks[newPreset].C2, tonestacks[newPreset].C3);
 }
 
 void Tonestack::SetParameters(double r1, double r2, double r3, double r4, double c1, double c2, double c3)

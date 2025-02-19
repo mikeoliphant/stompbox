@@ -87,7 +87,7 @@ void AudioFilePlayer::SetFile()
 
 	if ((fileIndex >= 0) && (fileType.GetFileNames().size() >= (int)fileIndex))
 	{
-		waveReader = new WaveReader(fileType.GetFilePaths()[(int)fileIndex].string(), samplingFreq);
+		waveReader = new WaveReader(fileType.GetFilePaths()[(int)fileIndex].string(), (uint32_t)samplingFreq);
 
 		if (waveReader->NumSamples == 0)
 		{
@@ -104,9 +104,9 @@ void AudioFilePlayer::SetFile()
 	}
 }
 
-void AudioFilePlayer::init(int samplingFreq)
+void AudioFilePlayer::init(int newSamplingFreq)
 {
-	StompBox::init(samplingFreq);
+	StompBox::init(newSamplingFreq);
 }
 
 void AudioFilePlayer::compute(int count, double* input, double* output)
@@ -129,7 +129,7 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 
 		while (leftToRead > 0)
 		{			
-			int toRead = std::min(leftToRead, waveReader->NumSamples - readPosition);
+			size_t toRead = std::min(leftToRead, waveReader->NumSamples - readPosition);
 
 			if (recording)
 			{

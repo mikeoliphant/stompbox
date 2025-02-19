@@ -118,7 +118,7 @@ void StompboxClient::SendData(std::string const& data)
     {
         int iSendResult;
 
-        iSendResult = send(ConnectSocket, data.c_str(), data.size(), 0);
+        iSendResult = send(ConnectSocket, data.c_str(), (int)data.size(), 0);
         if (iSendResult == SOCKET_ERROR) {
 #if _WIN32
             fprintf(stderr, "send failed with error: %d\n", WSAGetLastError());

@@ -27,7 +27,7 @@ private:
 	double level = 0.5;
 	double playing = 0;
 	double position = 0;
-	int audioBufferSize = 0;
+	size_t audioBufferSize = 0;
 	bool needUpdate = false;
 	WaveReader* waveReader = nullptr;
 	float* waveBuffer = nullptr;
@@ -35,7 +35,7 @@ private:
 	bool recordArmed = false;
 	bool recording = false;
 	bool haveRecording = false;
-	int readPosition;
+	size_t readPosition;
 	bool needWaveLoad = false;
 	FileType fileType;
 public:

@@ -16,7 +16,7 @@ StompBox::~StompBox()
 
 void StompBox::CreateParameters(int numParameters)
 {
-	Parameters = new StompBoxParameter[NumParameters];
+	Parameters = new StompBoxParameter[numParameters];
 
 	for (int i = 0; i < NumParameters; i++)
 	{
@@ -48,9 +48,9 @@ StompBoxParameter* StompBox::GetParameter(std::string name)
 	return parameter;
 }
 
-void StompBox::init(int samplingFreq)
+void StompBox::init(int newSamplingFreq)
 {
-	this->samplingFreq = samplingFreq;
+	samplingFreq = newSamplingFreq;
 }
 
 
@@ -74,9 +74,9 @@ double StompBox::GetParameterValue(StompBoxParameter* param)
 	return *(param->SourceVariable);
 }
 
-void StompBox::SetBPM(double bpm)
+void StompBox::SetBPM(double newBpm)
 {
-	this->bpm = bpm;
+	bpm = newBpm;
 
 	UpdateBPM();
 }

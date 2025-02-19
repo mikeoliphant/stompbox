@@ -28,7 +28,7 @@
 #include "MultiGate.h"
 #include "Screamer.h"
 
-std::filesystem::path basePath;
+std::filesystem::path dataBasePath;
 
 StompBox* CreateInputGainPlugin()
 {
@@ -62,7 +62,7 @@ std::filesystem::path cabinetPath;
 
 StompBox* CreateGuitarConvolverPlugin()
 {
-	GuitarConvolver* convolver = new GuitarConvolver("Cabinets", { ".wav" }, basePath);
+	GuitarConvolver* convolver = new GuitarConvolver("Cabinets", { ".wav" }, dataBasePath);
 
 	return convolver;
 }
@@ -71,7 +71,7 @@ std::filesystem::path reverbPath;
 
 StompBox* CreateConvolutionReverbPlugin()
 {
-	GuitarConvolver* reverb = new GuitarConvolver("Reverb", { ".wav" }, basePath);
+	GuitarConvolver* reverb = new GuitarConvolver("Reverb", { ".wav" }, dataBasePath);
 	reverb->Description = "Convolution reverb (impulse response)";
 
 	reverb->GetParameter(CONVOLVER_DRY)->SetValue(1);
@@ -85,7 +85,7 @@ std::filesystem::path namModelPath;
 
 StompBox* CreateNAMPlugin()
 {
-	NAM* nam = new NAM("NAM", { ".nam", ".json", ".aidax" }, basePath);
+	NAM* nam = new NAM("NAM", { ".nam", ".json", ".aidax" }, dataBasePath);
 
 	nam->InputGain = CreateInputGainPlugin();
 	nam->InputGain->ID = "NAM";
@@ -97,7 +97,7 @@ StompBox* CreateNAMPlugin()
 
 StompBox* CreateNAMMultiBandPlugin()
 {
-	NAMMultiBand* nam = new NAMMultiBand("NAM", { ".nam", ".json", ".aidax" }, basePath);
+	NAMMultiBand* nam = new NAMMultiBand("NAM", { ".nam", ".json", ".aidax" }, dataBasePath);
 
 	return nam;
 }
@@ -313,7 +313,7 @@ StompBox* CreateTunerPlugin()
 
 StompBox* CreateAudioFilePlayerPlugin()
 {
-	AudioFilePlayer* player = new AudioFilePlayer("Music", { ".wav" }, basePath);
+	AudioFilePlayer* player = new AudioFilePlayer("Music", { ".wav" }, dataBasePath);
 
 	player->IsUserSelectable = false;
 
@@ -322,7 +322,7 @@ StompBox* CreateAudioFilePlayerPlugin()
 
 StompBox* CreateAudioFileRecorderPlugin()
 {
-	AudioFileRecorder* recorder = new AudioFileRecorder(basePath / "Music");
+	AudioFileRecorder* recorder = new AudioFileRecorder(dataBasePath / "Music");
 
 	recorder->IsUserSelectable = false;
 

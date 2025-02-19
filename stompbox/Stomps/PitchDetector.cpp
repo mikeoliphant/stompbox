@@ -30,7 +30,7 @@ PitchDetector::PitchDetector(int bufferSize)
 
 float PitchDetector::GetCurrentPitch()
 {
-	return currentPitch;
+	return (float)currentPitch;
 }
 
 void PitchDetector::init(int samplingFreq)
