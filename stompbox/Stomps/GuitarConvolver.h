@@ -59,9 +59,9 @@ protected:
 		{
 			double* data = new double[waveReader->NumSamples];
 
-			float gain = pow(10, -18 * 0.05);  // IRs are usually too loud
+			float gain = (float)pow(10, -18 * 0.05);  // IRs are usually too loud
 
-			for (int i = 0; i < waveReader->NumSamples; i++)
+			for (size_t i = 0; i < waveReader->NumSamples; i++)
 			{
 				data[i] = waveData[i] * gain;
 			}
@@ -72,7 +72,7 @@ protected:
 
 			newImpulseData[0] = data;
 
-			conv->ImpulseBuffer.Set((const double**)newImpulseData, waveReader->NumSamples, 1);
+			conv->ImpulseBuffer.Set((const double**)newImpulseData, (int)waveReader->NumSamples, 1);
 			conv->ConvolutionEngine.SetImpulse(&conv->ImpulseBuffer);
 
 			delete waveReader;
@@ -89,9 +89,9 @@ public:
 	{
 	}
 
-	void SetSampleRate(int sampleRate)
+	void SetSampleRate(int newSampleRate)
 	{
-		this->sampleRate = sampleRate;
+		sampleRate = newSampleRate;
 	}
 };
 

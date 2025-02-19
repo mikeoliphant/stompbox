@@ -399,7 +399,7 @@ StompBox* PluginFactory::CreatePlugin(std::string const& name, std::string const
 	{
 		CreatePluginFunction func = iter->second;
 
-		StompBox* component = func();
+		component = func();
 
 		component->Name.assign(name);
 		component->ID.assign(id);

@@ -25,7 +25,7 @@ public:
     PitchMPM(size_t bufferSize) : PitchMPM(44100, bufferSize) {}
 
     PitchMPM(int sampleRate, size_t bufferSize) : bufferSize (bufferSize),
-                                                  sampleRate (sampleRate),
+                                                  sampleRate ((float)sampleRate),
                                                   fftSize (2 * bufferSize), // Needs to be a power of 2!
                                                   real (audiofft::AudioFFT::ComplexSize(fftSize)),
                                                   imag (audiofft::AudioFFT::ComplexSize(fftSize)),
@@ -78,7 +78,7 @@ public:
             
             if (_nsdf[tau] > SMALL_CUTOFF)
             {
-                auto x = parabolic_interpolation(_nsdf, tau);
+                auto x = parabolic_interpolation(_nsdf, (float)tau);
                 estimates.push_back(x);
                 highestAmplitude = std::max(highestAmplitude, std::get<1>(x));
             }
@@ -86,7 +86,7 @@ public:
 
         if (estimates.empty()) return -1;
 
-        float actualCutoff = CUTOFF * highestAmplitude;
+        float actualCutoff = (float)(CUTOFF * highestAmplitude);
         float period = 0;
 
         for (auto estimate : estimates)
@@ -104,7 +104,7 @@ public:
     
     void setSampleRate (int newSampleRate)
     {
-        sampleRate = newSampleRate;
+        sampleRate = (float)newSampleRate;
     }
 
     void setBufferSize (int newBufferSize)

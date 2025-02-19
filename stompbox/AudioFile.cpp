@@ -15,17 +15,17 @@ WaveReader::WaveReader(const std::string filename, const uint32_t desiredSampleR
 
 	if (waveData != nullptr)
 	{
-		NumSamples = numFrames;
-		NumChannels = channels;
-		SampleRate = sampleRate;
+		NumSamples = (size_t)numFrames;
+		NumChannels = (size_t)channels;
+		SampleRate = (uint32_t)sampleRate;
 
 		if (SampleRate != desiredSampleRate)
 		{
-			r8b::CDSPResampler16IR resampler(sampleRate, desiredSampleRate, numFrames);
+			r8b::CDSPResampler16IR resampler(sampleRate, desiredSampleRate, (int)numFrames);
 			int resampledFrames = resampler.getMaxOutLen(0);
 
 			float *resampled = new float[resampledFrames];
-			resampler.oneshot(waveData, numFrames, resampled, resampledFrames);
+			resampler.oneshot(waveData, (int)numFrames, resampled, resampledFrames);
 
 			delete[] waveData;
 
@@ -54,12 +54,12 @@ WaveReader::~WaveReader()
 };
 
 
-WaveWriter::WaveWriter(int sampleRate, int recordSeconds)
+WaveWriter::WaveWriter(int sampleRate, size_t recordSeconds)
 {
 	this->sampleRate = sampleRate;
 	this->recordSeconds = recordSeconds;
 
-	waveDataSize = (uint32_t)recordSeconds * (uint32_t)sampleRate * 3;
+	waveDataSize = (size_t)(recordSeconds * sampleRate * 3);
 
 	waveData = new char[waveDataSize];
 
@@ -74,7 +74,7 @@ WaveWriter::~WaveWriter()
 float WaveWriter::GetRecordSeconds()
 {
 	if (recordIsFull)
-		return recordSeconds;
+		return (float)recordSeconds;
 
 	return ((float)recordPos / (float)waveDataSize) * recordSeconds;
 }
@@ -84,7 +84,7 @@ void WaveWriter::ResetRecording()
 	needReset = true;
 }
 
-void WaveWriter::AddSamples(double* samples, int numSamples)
+void WaveWriter::AddSamples(double* samples, size_t numSamples)
 {
 	if (needReset)
 	{
@@ -94,11 +94,11 @@ void WaveWriter::AddSamples(double* samples, int numSamples)
 		needReset = false;
 	}
 
-	long pos = recordPos;	// Make a copy in case recordPos gets changed while we're writing
+	size_t pos = recordPos;	// Make a copy in case recordPos gets changed while we're writing
 
-	for (int i = 0; i < numSamples; i++)
+	for (size_t i = 0; i < numSamples; i++)
 	{
-		int32_t intSample = samples[i] * INT32_MAX;
+		int32_t intSample = (int32_t)(samples[i] * INT32_MAX);
 
 		waveData[pos++] = ((intSample >> 8) & 0xff);
 		waveData[pos++] = ((intSample >> 16) & 0xff);
@@ -119,7 +119,7 @@ void WaveWriter::WriteToFile(std::string filename)
 {
 	WaveHeader waveHeader;
 
-	uint32_t recordDataSize;
+	size_t recordDataSize;
 
 	if (recordIsFull)
 		recordDataSize = waveDataSize;

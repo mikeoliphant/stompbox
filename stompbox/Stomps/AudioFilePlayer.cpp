@@ -122,8 +122,8 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 	{
 		double linearLevel = (pow(10, level) - 1) / 9;
 
-		unsigned int leftToRead = count;
-		unsigned int outputPos = 0;
+		size_t leftToRead = count;
+		size_t outputPos = 0;
 
 		double* recordInput = input;
 
@@ -140,11 +140,11 @@ void AudioFilePlayer::compute(int count, double* input, double* output)
 
 			float* readPtr = waveBuffer + (readPosition * waveReader->NumChannels);
 
-			for (int i = 0; i < toRead; i++)
+			for (size_t i = 0; i < toRead; i++)
 			{
 				double outputVal = 0;
 
-				for (int channel = 0; channel < waveReader->NumChannels; channel++)
+				for (size_t channel = 0; channel < waveReader->NumChannels; channel++)
 				{
 					outputVal += *readPtr;
 

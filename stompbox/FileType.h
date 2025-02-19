@@ -90,6 +90,8 @@ private:
 protected:
 	virtual T* LoadFromFile(const std::filesystem::path& loadPath)
 	{
+		(void)loadPath;
+
 		return nullptr;
 	}
 

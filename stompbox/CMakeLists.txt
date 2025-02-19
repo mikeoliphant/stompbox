@@ -15,13 +15,6 @@ endif()
 
 add_subdirectory(${STOMPBOX_DEPS_PATH}/NeuralAudio NeuralAudio)
 
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/NeuralAudio)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/denormal)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/WDL/WDL)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/dr_libs)
-include_directories(stompbox ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
-include_directories(stompbox ${CMAKE_CURRENT_SOURCE_DIR} Stomps)
-
 file(GLOB_RECURSE SOURCES *.cpp *.c *.h)
 
 set(NA_SOURCES ${STOMPBOX_DEPS_PATH}/NeuralAudio/NeuralAudio/NeuralModel.h)
@@ -32,6 +25,13 @@ set(OTHER_SOURCES "${STOMPBOX_DEPS_PATH}/r8brain-free-src/r8bbase.cpp"
 	"${STOMPBOX_DEPS_PATH}/WDL/WDL/fft.c")
 
 add_library(stompbox STATIC ${SOURCES} ${NA_SOURCES} ${OTHER_SOURCES})
+
+target_include_directories(stompbox SYSTEM PUBLIC ${STOMPBOX_DEPS_PATH}/NeuralAudio)
+target_include_directories(stompbox SYSTEM PUBLIC ${STOMPBOX_DEPS_PATH}/denormal)
+target_include_directories(stompbox SYSTEM PUBLIC ${STOMPBOX_DEPS_PATH}/WDL/WDL)
+target_include_directories(stompbox SYSTEM PUBLIC ${STOMPBOX_DEPS_PATH}/dr_libs)
+target_include_directories(stompbox SYSTEM PUBLIC ${STOMPBOX_DEPS_PATH}/r8brain-free-src)
+target_include_directories(stompbox PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} Stomps)
 
 target_link_libraries(stompbox PRIVATE NeuralAudio)
 

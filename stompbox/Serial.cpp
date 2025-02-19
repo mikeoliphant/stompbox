@@ -232,7 +232,7 @@ bool Serial::WriteString(const char* string)
 {
     //fprintf(stderr, "** Serial write: %s\n", string);
 
-    return WriteData(string, strlen(string));
+    return WriteData(string, (unsigned int)strlen(string));
 }
 
 bool Serial::WriteFormat(const char* format, ...)

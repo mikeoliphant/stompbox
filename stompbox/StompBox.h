@@ -68,9 +68,17 @@ public:
 	virtual void SetBPM(double bpm);
 	virtual void UpdateBPM();
 	virtual void init(int samplingFreq);
-	virtual void instanceConstants(int samplingFreq) {};
+	virtual void instanceConstants(int newSamplingFreq)
+	{
+		(void)newSamplingFreq;
+	}
 	virtual void instanceClear() {};
-	virtual void compute(int count, double* input, double* output) {};
+	virtual void compute(int count, double* input, double* output)
+	{
+		(void)count;
+		(void)input;
+		(void)output;
+	}
 };
 
 struct StompBoxParameter

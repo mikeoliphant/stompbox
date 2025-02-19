@@ -35,9 +35,9 @@ public:
 		return waveData;
 	}
 
-	uint16_t NumChannels = 0;
+	size_t NumChannels = 0;
 	uint32_t SampleRate = 0;
-	uint32_t NumSamples = 0;
+	size_t NumSamples = 0;
 
 private:
 	WaveHeader waveHeader;
@@ -47,19 +47,19 @@ private:
 class WaveWriter
 {
 public:
-	WaveWriter(int sampleRate, int recordSeconds);
+	WaveWriter(int sampleRate, size_t recordSeconds);
 	~WaveWriter();
 	float GetRecordSeconds();
 	void ResetRecording();
-	void AddSamples(double* samples, int numSamples);
+	void AddSamples(double* samples, size_t numSamples);
 	void WriteToFile(std::string filename);
 
 private:
 	int sampleRate;
-	int recordSeconds;
+	size_t recordSeconds;
 	char* waveData = nullptr;
-	uint32_t waveDataSize;
-	long recordPos;
+	size_t waveDataSize;
+	size_t recordPos;
 	bool recordIsFull = false;
 	bool needReset = false;
 };

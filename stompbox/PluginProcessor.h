@@ -85,7 +85,7 @@ protected:
 	int ramp = 0;
 	int rampSamplesSoFar;
 	int rampSamples;
-	float rampMS = 50;
+	float defaultRampMS = 50;
 	bool needPluginUpdate = false;
 
 public:

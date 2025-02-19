@@ -33,9 +33,9 @@ void GetDataPathFromModule(std::filesystem::path& dataPath)
         // Return or however you want to handle an error.
     }
 
-    int len = strlen(path);
+    size_t len = strlen(path);
 
-    for (int i = len - 1; i > 0; i--)
+    for (size_t i = len - 1; i > 0; i--)
     {
         if ((path[i] == '/') || (path[i] == '\\'))
         {
@@ -131,11 +131,11 @@ PluginProcessor::~PluginProcessor()
         serialDisplayInterface.Close();
 }
 
-void PluginProcessor::Init(double sampleRate)
+void PluginProcessor::Init(double newSampleRate)
 {
-    fprintf(stderr, "Init with sample rate: %d\n", (int)sampleRate);
+    fprintf(stderr, "Init with sample rate: %d\n", (int)newSampleRate);
 
-    this->sampleRate = sampleRate;
+    sampleRate = newSampleRate;
 
     bool wasInitialized = initialized;
     initialized = true;
@@ -166,9 +166,9 @@ void PluginProcessor::ScanPresets()
     }
 }
 
-void PluginProcessor::SetBPM(double bpm)
+void PluginProcessor::SetBPM(double newBpm)
 {
-    this->bpm = bpm;
+    bpm = newBpm;
 
     for (const auto& plugin : plugins)
     {
@@ -378,7 +378,7 @@ void PluginProcessor::InitPlugin(StompBox* plugin)
     {
         fprintf(stderr, "Init plugin: %s\n", plugin->Name.c_str());
 
-        plugin->init(sampleRate);
+        plugin->init((int)sampleRate);
         plugin->SetBPM(bpm);
 
         if (plugin->InputGain != nullptr)
@@ -1017,13 +1017,13 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                 if (chain != nullptr)
                 {
-                    int numPlugins = commandWords.size() - 2;
+                    size_t numPlugins = commandWords.size() - 2;
 
                     std::cerr << "SetChain " << commandWords[1] << "\n";
 
                     chain->clear();
 
-                    for (int i = 0; i < numPlugins; i++)
+                    for (size_t i = 0; i < numPlugins; i++)
                     {
                         std::cerr << commandWords[i + 2] << "\n";
 
@@ -1464,7 +1464,7 @@ void PluginProcessor::LoadPreset(std::string preset)
     {
         loadPreset.assign(preset);
 
-        StartRamp(-1, rampMS);
+        StartRamp(-1, defaultRampMS);
     }
     else
     {
@@ -1504,7 +1504,7 @@ void PluginProcessor::ThreadLoadPreset()
         }
     }
 
-    StartRamp(1, rampMS);
+    StartRamp(1, defaultRampMS);
 
     if (stompboxServer.HaveClient())
     {
@@ -1644,5 +1644,5 @@ void PluginProcessor::StartRamp(int rampDirection, float rampMS)
 {
     rampSamplesSoFar = 0;
     ramp = rampDirection;
-    rampSamples = sampleRate * (rampMS / 1000.0f);
+    rampSamples = (int)(sampleRate * (rampMS / 1000.0f));
 }

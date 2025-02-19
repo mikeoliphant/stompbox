@@ -33,11 +33,10 @@ namespace chorus
 		int getInputRatemydspSIG0(int channel) {
 			int rate;
 			switch (channel) {
-			default: {
-				rate = -1;
-				break;
-			}
-
+				default: {
+					rate = -1;
+					break;
+				}
 			}
 			return rate;
 
