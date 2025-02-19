@@ -35,6 +35,8 @@ GuitarConvolver::GuitarConvolver(const std::string folderName, const std::vector
 void GuitarConvolver::init(int samplingFreq)
 {
     StompBox::init(samplingFreq);
+
+    irLoader.SetSampleRate(samplingFreq);
 }
 
 void GuitarConvolver::SetParameterValue(StompBoxParameter *parameter, double value)

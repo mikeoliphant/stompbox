@@ -46,7 +46,7 @@ struct Convolution
 class IRLoader : public FileLoader<Convolution>
 {
 private:
-	double sampleRate = 48000;
+	int sampleRate = 48000;
 
 protected:
 	Convolution* LoadFromFile(const std::filesystem::path& loadPath)
@@ -89,7 +89,7 @@ public:
 	{
 	}
 
-	void SetSampleRate(double sampleRate)
+	void SetSampleRate(int sampleRate)
 	{
 		this->sampleRate = sampleRate;
 	}

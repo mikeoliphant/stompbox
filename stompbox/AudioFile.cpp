@@ -3,7 +3,7 @@
 #include "AudioFile.h"
 #include "CDSPResampler.h"
 
-WaveReader::WaveReader(std::string filename, uint32_t desiredSampleRate)
+WaveReader::WaveReader(const std::string filename, const uint32_t desiredSampleRate)
 {
 	memset(&waveHeader, 0, sizeof(waveHeader));
 
