@@ -121,12 +121,18 @@ int process(jack_nframes_t nframes, void* arg)
         }
     }
 
-    jack_default_audio_sample_t* in, * out;
+    auto in = (jack_default_audio_sample_t*)jack_port_get_buffer(input_ports[0], nframes);
 
-    in = (jack_default_audio_sample_t*)jack_port_get_buffer(input_ports[0], nframes);
-    out = (jack_default_audio_sample_t*)jack_port_get_buffer(output_ports[0], nframes);
+    auto out = (jack_default_audio_sample_t*)jack_port_get_buffer(output_ports[0], nframes);
 
     guitarProcessor->Process(in, out, nframes);
+
+    auto out2 = (jack_default_audio_sample_t*)jack_port_get_buffer(output_ports[1], nframes);
+
+    for (unsigned int samp = 0; samp < nframes; samp++)
+    {
+        out2[samp] = out[samp];
+    }
 
     return 0;
 }
