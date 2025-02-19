@@ -57,6 +57,7 @@ protected:
 
 		if (waveData != nullptr)
 		{
+			// FIXME: this never gets released!!!
 			float* data = new float[waveReader->NumSamples];
 
 			float gain = (float)pow(10, -18 * 0.05);  // IRs are usually too loud

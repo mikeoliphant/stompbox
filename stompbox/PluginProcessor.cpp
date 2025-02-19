@@ -539,8 +539,9 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
 
             for (const auto& enumValue : *(param->EnumValues))
             {
-                dump.append(" ");
+                dump.append(" \"");
                 dump.append(enumValue);
+                dump.append("\"");
             }
 
             dump.append("\r\n");
