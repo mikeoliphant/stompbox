@@ -45,7 +45,6 @@ private:
 	float modelIndex = -1;
 	float prevDCInput = 0;
 	double prevDCOutput = 0;
-	std::vector<float> namBuffer;
 	FileType fileType;
 	NAMLoader namLoader;
 

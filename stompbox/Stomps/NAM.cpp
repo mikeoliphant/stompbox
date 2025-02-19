@@ -47,17 +47,7 @@ void NAM::compute(int count, float* input, float* output)
         return;
     }
 
-    if (namBuffer.size() != count)
-    {
-        namBuffer.resize(count);
-    }
-
-    for (int i = 0; i < count; i++)
-    {
-        namBuffer[i] = (float)input[i];
-    }
-
-    activeModel->Process(namBuffer.data(), namBuffer.data(), count);
+    activeModel->Process(input, output, count);
 
     float adjustDB = activeModel->GetRecommendedOutputDBAdjustment();
 
@@ -65,6 +55,6 @@ void NAM::compute(int count, float* input, float* output)
 
     for (int i = 0; i < count; i++)
     {
-        output[i] = (float)namBuffer[i] * modelLoudnessAdjustmentGain;
+        output[i] *= modelLoudnessAdjustmentGain;
     }
 }

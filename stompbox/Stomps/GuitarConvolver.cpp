@@ -66,7 +66,7 @@ void GuitarConvolver::compute(int count, float* input, float* output)
 
     do
     {
-        int nAvail = conv->ConvolutionEngine.Avail(count - copiedSoFar); //  MIN(mEngine.Avail(nFrames), nFrames);
+        int nAvail = conv->ConvolutionEngine.Avail(count - copiedSoFar);
 
         WDL_FFT_REAL* convo = conv->ConvolutionEngine.Get()[0];
 
