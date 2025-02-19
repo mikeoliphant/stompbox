@@ -32,11 +32,13 @@ unsigned char midiStartMessage[15] = { 0xF0, 0x41, 0x00, 0x00, 0x00, 0x00, 0x30,
  0x7F, 0x00, 0x00, 0x01, 0x01, 0x7F, 0xF7 };
 std::list<MidiEvent> midiEvents;
 
-static void signal_handler ( int sig )
+static void signal_handler(int sig)
 {
-    jack_client_close ( client );
-    fprintf ( stderr, "signal received, exiting ...\n" );
-    exit ( 0 );
+    (void)sig;
+
+    jack_client_close(client);
+    fprintf(stderr, "signal received, exiting ...\n");
+    exit(0);
 }
 
 /**
@@ -47,11 +49,12 @@ static void signal_handler ( int sig )
  * running, copy the input port to the output.  When it stops, exit.
  */
 
-double* doubleBuf;
-unsigned int bufferSize = 0;
+size_t bufferSize = 0;
 
 int process(jack_nframes_t nframes, void* arg)
 {
+    (void)arg;
+
     guitarProcessor->ReportDSPLoad(jack_cpu_load(client) / 100);
 
     //if (!haveSentMidiStartMessage)
@@ -65,29 +68,24 @@ int process(jack_nframes_t nframes, void* arg)
     //    haveSentMidiStartMessage = true;
     //}
 
-    int i;
-
     if (jack_port_connected(midi_input_port) > 0)
     {
         void* port_buf = jack_port_get_buffer(midi_input_port, nframes);
+
         jack_midi_event_t in_event;
-        jack_nframes_t event_index = 0;
         jack_nframes_t event_count = jack_midi_get_event_count(port_buf);
 
         if (event_count > 0)
         {
-            for (i = 0; i < event_count; i++)
+            for (jack_nframes_t i = 0; i < event_count; i++)
             {
                 jack_midi_event_get(&in_event, port_buf, i);
 
-                int controller;
-                double value;
-
                 fprintf(stderr, "Midi Msg:");
 
-                for (int i = 0; i < in_event.size; i++)
+                for (size_t b = 0; b < in_event.size; b++)
                 {
-                    fprintf(stderr, " %x", in_event.buffer[i]);
+                    fprintf(stderr, " %x", in_event.buffer[b]);
                 }
 
                 fprintf(stderr, "\n");
@@ -125,34 +123,10 @@ int process(jack_nframes_t nframes, void* arg)
 
     jack_default_audio_sample_t* in, * out;
 
-    if (nframes > bufferSize)
-    {
-        if (bufferSize != 0)
-            delete[] doubleBuf;
-
-        bufferSize = nframes;
-
-        doubleBuf = new double[bufferSize];
-    }
-
     in = (jack_default_audio_sample_t*)jack_port_get_buffer(input_ports[0], nframes);
+    out = (jack_default_audio_sample_t*)jack_port_get_buffer(output_ports[0], nframes);
 
-    for (unsigned int samp = 0; samp < nframes; samp++)
-    {
-        doubleBuf[samp] = in[samp];
-    }
-
-    guitarProcessor->Process(doubleBuf, doubleBuf, nframes);
-
-    for (i = 0; i < 2; i++)
-    {
-        out = (jack_default_audio_sample_t*)jack_port_get_buffer(output_ports[i], nframes);
-
-        for (unsigned int samp = 0; samp < nframes; samp++)
-        {
-            out[samp] = doubleBuf[samp];
-        }
-    }
+    guitarProcessor->Process(in, out, nframes);
 
     return 0;
 }
@@ -161,17 +135,18 @@ int process(jack_nframes_t nframes, void* arg)
  * JACK calls this shutdown_callback if the server ever shuts down or
  * decides to disconnect the client.
  */
-void jack_shutdown ( void *arg )
+void jack_shutdown(void *arg )
 {
-    jack_free( input_ports);
-    jack_free( output_ports);
+    (void)arg;
 
-    exit( 1);
+    jack_free(input_ports);
+    jack_free(output_ports);
+
+    exit(1);
 }
 
 int main(int argc, char* argv[])
 {
-    int i;
     const char** ports;
     const char* client_name;
     const char* preset_name = NULL;
@@ -268,7 +243,7 @@ int main(int argc, char* argv[])
 
     char port_name[16];
 
-    for (i = 0; i < 2; i++)
+    for (int i = 0; i < 2; i++)
     {
         sprintf(port_name, "input_%d", i + 1);
         input_ports[i] = jack_port_register(client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
@@ -286,7 +261,7 @@ int main(int argc, char* argv[])
     //midi_output_port = jack_port_register(client, "midi_out", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
 
     guitarProcessor = new PluginProcessor(std::filesystem::current_path(), false);
-    guitarProcessor->Init(jack_get_sample_rate(client));
+    guitarProcessor->Init((float)jack_get_sample_rate(client));
 
     if (preset_name != NULL)
     {
@@ -335,7 +310,7 @@ int main(int argc, char* argv[])
         exit(1);
     }
 
-    for (i = 0; i < 1; i++)
+    for (int i = 0; i < 1; i++)
     {
         fprintf(stderr, "connecting to input port [%s]\n", ports[i]);
 
@@ -368,7 +343,7 @@ int main(int argc, char* argv[])
         exit(1);
     }
 
-    for (i = 0; i < 2; i++)
+    for (int i = 0; i < 2; i++)
     {
         fprintf(stderr, "connecting to output port [%s]\n", ports[i]);
 
