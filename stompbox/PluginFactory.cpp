@@ -78,6 +78,9 @@ StompBox* CreateConvolutionReverbPlugin()
 	reverb->GetParameter(CONVOLVER_WET)->SetValue(0.3f);
 	reverb->GetParameter(CONVOLVER_WET)->DefaultValue = 0.3f;
 
+	reverb->SetMaxIRSamples(-1);
+	reverb->SetIREpsilon(0);
+
 	return reverb;
 }
 

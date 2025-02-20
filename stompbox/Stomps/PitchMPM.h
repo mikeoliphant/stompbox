@@ -110,7 +110,6 @@ public:
     void setBufferSize (int newBufferSize)
     {
         bufferSize = newBufferSize;
-        input.resize (bufferSize);
         fftSize = 2 * bufferSize;
         real.resize (audiofft::AudioFFT::ComplexSize(fftSize));
         imag.resize (audiofft::AudioFFT::ComplexSize(fftSize));
@@ -122,7 +121,6 @@ private:
 
     audiofft::AudioFFT fft;
     size_t fftSize;
-    std::vector<float> input;
     std::vector<float> real;
     std::vector<float> imag;
     std::vector<float> output;
@@ -204,17 +202,24 @@ private:
 
     inline std::pair<float, float> parabolic_interpolation(std::vector<float> array, float x)
     {
-        int x_adjusted;
+        int x_adjusted = (int)x;
 
-        if (x < 1) {
-            x_adjusted = (array[x] <= array[x+1]) ? x : x+1;
-        } else if (x > signed(array.size())-1) {
-            x_adjusted = (array[x] <= array[x-1]) ? x : x-1;
-        } else {
-            float den = array[x+1] + array[x-1] - 2 * array[x];
-            float delta = array[x-1] - array[x+1];
-            return (!den) ? std::make_pair(x, array[x]) : std::make_pair(x + delta / (2 * den), array[x] - delta*delta/(8*den));
+        if (x < 1)
+        {
+            x_adjusted = (array[x_adjusted] <= array[x_adjusted + 1]) ? x_adjusted : x_adjusted + 1;
         }
+        else if (x > signed(array.size()) - 1)
+        {
+            x_adjusted = (array[x_adjusted] <= array[x_adjusted - 1]) ? x_adjusted : x_adjusted - 1;
+        }
+        else
+        {
+            float den = array[x_adjusted + 1] + array[x_adjusted - 1] - 2 * array[x_adjusted];
+            float delta = array[x_adjusted - 1] - array[x_adjusted + 1];
+
+            return (!den) ? std::make_pair(x, array[x_adjusted]) : std::make_pair(x + delta / (2 * den), array[x_adjusted] - delta*delta/(8 * den));
+        }
+
         return std::make_pair(x_adjusted, array[x_adjusted]);
     }
     

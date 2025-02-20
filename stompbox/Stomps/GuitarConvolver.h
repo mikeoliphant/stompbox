@@ -46,22 +46,60 @@ struct Convolution
 class IRLoader : public FileLoader<Convolution>
 {
 private:
+	float epsilon = 0.0005; // -66dB RMS
+	int maxIRSamples = 2048; // FIXME: should be based on sample rate
 	int sampleRate = 48000;
 
 protected:
 	Convolution* LoadFromFile(const std::filesystem::path& loadPath)
 	{
+		std::cout << "Loading IR from: " << loadPath << std::endl;
+			
 		WaveReader* waveReader = new WaveReader(loadPath.string(), (int)sampleRate);
 
 		float* waveData = waveReader->GetWaveData();
 
 		if (waveData != nullptr)
 		{
-			float* data = new float[waveReader->NumSamples];
+			size_t endPos = waveReader->NumSamples;
+
+			if ((maxIRSamples > 0) && (endPos > maxIRSamples))
+				endPos = maxIRSamples;
+
+			endPos--;
+
+			size_t numGreater = 0;
+
+			while (endPos >= 0)
+			{
+				if (abs(waveData[endPos]) > epsilon)
+				{
+					numGreater++;
+
+					if (numGreater > 10)
+					{
+						endPos += 10;
+
+						break;
+					}
+				}
+				else
+				{
+					numGreater = 0;
+				}
+
+				endPos--;
+			}
+
+			size_t numSamples = endPos + 1;
+
+			std::cout << "IR size: " << waveReader->NumSamples << " trimmed to: " << numSamples << std::endl;
+
+			float* data = new float[numSamples];
 
 			float gain = (float)pow(10, -18 * 0.05);  // IRs are usually too loud
 
-			for (size_t i = 0; i < waveReader->NumSamples; i++)
+			for (size_t i = 0; i < numSamples; i++)
 			{
 				data[i] = waveData[i] * gain;
 			}
@@ -72,7 +110,7 @@ protected:
 
 			newImpulseData[0] = data;
 
-			conv->ImpulseBuffer.Set((const float**)newImpulseData, (int)waveReader->NumSamples, 1);
+			conv->ImpulseBuffer.Set((const float**)newImpulseData, (int)numSamples, 1);
 			conv->ConvolutionEngine.SetImpulse(&conv->ImpulseBuffer);
 
 			delete waveReader;
@@ -81,6 +119,8 @@ protected:
 			return conv;
 		}
 
+		std::cout << "** IR load failed" << std::endl;
+
 		return nullptr;
 	}
 
@@ -88,6 +128,16 @@ public:
 	IRLoader(const FileType& fileType) :
 		FileLoader<Convolution>(fileType)
 	{
+	}
+
+	void SetEpsilon(float newEpsilon)
+	{
+		epsilon = newEpsilon;
+	}
+
+	void SetMaxIRSamples(int maxSamples)
+	{
+		maxIRSamples = maxSamples;
 	}
 
 	void SetSampleRate(int newSampleRate)
@@ -107,10 +157,17 @@ private:
 	IRLoader irLoader;
 
 public:
-
 	GuitarConvolver(const std::string folderName, const std::vector<std::string> fileExtensions, const std::filesystem::path& basePath);
 	virtual ~GuitarConvolver() {}
 	virtual void init(int samplingFreq);
 	void SetParameterValue(StompBoxParameter* parameter, float value);
+	void SetMaxIRSamples(int numSamples)
+	{
+		irLoader.SetMaxIRSamples(numSamples);
+	}
+	void SetIREpsilon(float epsilon)
+	{
+		irLoader.SetEpsilon(epsilon);
+	}
 	virtual void compute(int count, float* input, float* output);
 };
