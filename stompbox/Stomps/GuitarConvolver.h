@@ -63,8 +63,8 @@ protected:
 		{
 			size_t endPos = waveReader->NumSamples;
 
-			if ((maxIRSamples > 0) && (endPos > maxIRSamples))
-				endPos = maxIRSamples;
+			if ((maxIRSamples > 0) && (endPos > (size_t)maxIRSamples))
+				endPos = (size_t)maxIRSamples;
 
 			endPos--;
 
