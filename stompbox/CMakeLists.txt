@@ -13,6 +13,21 @@ else()
 	)
 endif()
 
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "(amd64)|(AMD64)|(x86_64)")
+	option(USE_NATIVE_ARCH "Enable architecture-specific optimizations" OFF)
+
+	if (USE_NATIVE_ARCH)
+		if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+			add_compile_options(/arch:AVX2)
+			message(STATUS "Enabling /arch:AVX2")
+		 
+		else()
+			add_compile_options(-march=x86-64-v3)
+			message(STATUS "Enabling -march=x86-64-v3")
+		endif()
+	endif (USE_NATIVE_ARCH)
+endif ()
+
 add_subdirectory(${STOMPBOX_DEPS_PATH}/NeuralAudio NeuralAudio)
 
 file(GLOB_RECURSE SOURCES *.cpp *.c *.h)
