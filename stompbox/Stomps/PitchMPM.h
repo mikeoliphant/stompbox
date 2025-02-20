@@ -118,14 +118,12 @@ public:
 
 private:
     size_t bufferSize;
-
-    audiofft::AudioFFT fft;
+    float sampleRate;
     size_t fftSize;
+    audiofft::AudioFFT fft;
     std::vector<float> real;
     std::vector<float> imag;
     std::vector<float> output;
-
-    float sampleRate;
     
     float turningPointX, turningPointY;
     //Array<float> nsdf;
@@ -220,14 +218,14 @@ private:
             return (!den) ? std::make_pair(x, array[x_adjusted]) : std::make_pair(x + delta / (2 * den), array[x_adjusted] - delta*delta/(8 * den));
         }
 
-        return std::make_pair(x_adjusted, array[x_adjusted]);
+        return std::make_pair((float)x_adjusted, array[x_adjusted]);
     }
     
     static std::vector<int> peak_picking(std::vector<float> nsdf)
     {
         std::vector<int> max_positions{};
-        int pos = 0;
-        int curMaxPos = 0;
+        size_t pos = 0;
+        size_t curMaxPos = 0;
         size_t size = nsdf.size();
         
         while (pos < (size - 1) / 3 && nsdf[pos] > 0) pos++;
@@ -254,9 +252,11 @@ private:
                 }
             }
         }
+
         if (curMaxPos > 0) {
             max_positions.push_back(curMaxPos);
         }
+
         return max_positions;
     }
     
@@ -329,7 +329,7 @@ private:
         //fft.fft(audioBuffer, real.data(), imag.data());
 
         // Complex Conjugate
-        for (int i = 0; i < fftSize; ++i)
+        for (size_t i = 0; i < fftSize; ++i)
         {
             /**
              * std::complex method
@@ -349,6 +349,7 @@ private:
         }
 
         fft.ifft(output.data(), real.data(), imag.data());
+
         return output;
     }
 
