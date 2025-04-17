@@ -765,20 +765,22 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                 if (cmd == commandWords.size() - 1)
                     break;
 
-                if (commandWords[cmd] == "Slot")
+                if ((commandWords[cmd] == "Slot") || (commandWords[cmd] == "MasterSlot"))
                 {
                     auto slot = new ChainElement();
                     slot->IsChain = false;
                     slot->Name = commandWords[cmd + 1];
+                    slot->IsMaster = (commandWords[cmd] == "MasterSlot");
 
                     chainLookup[slot->Name] = slot;
                     chainList.push_back(slot);
                 }
-                else if (commandWords[cmd] == "Chain")
+                else if ((commandWords[cmd] == "Chain") || (commandWords[cmd] == "MasterChain"))
                 {
                     auto chain = new ChainElement();
                     chain->IsChain = true;
                     chain->Name = commandWords[cmd + 1];
+                    chain->IsMaster = (commandWords[cmd] == "MasterChain");
 
                     chainLookup[chain->Name] = chain;
                     chainList.push_back(chain);
