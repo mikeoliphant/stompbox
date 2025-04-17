@@ -167,8 +167,7 @@ int main(int argc, char* argv[])
         preset_name = argv[1];
     }
 
-    fprintf(stderr, guitarProcessor->GetVersion().c_str());
-    fprintf(stderr, "\n\n");
+    fprintf(stderr, "%s\n\n", guitarProcessor->GetVersion().c_str());
 
     // Old stuff for working with BOSS GT-1 sysex messages
     
