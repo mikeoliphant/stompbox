@@ -113,24 +113,7 @@ void* GetPluginVectorValue(void* plugVec, size_t index)
 
 void* GetChainPlugins(void* processor, const char* chainName)
 {
-    std::string chainStr = chainName;
-
-    void* chain = nullptr;
-
-    if (chainStr == "InputChain")
-    {
-        chain = (void*)&(((PluginProcessor*)processor)->GetInputChain());
-    }
-    else if (chainStr == "FxLoopChain")
-    {
-        chain = (void*)&(((PluginProcessor*)processor)->GetFxLoop());
-    }
-    else if (chainStr == "OutputChain")
-    {
-        chain = (void*)&(((PluginProcessor*)processor)->GetOutputChain());
-    }
-
-    return chain;
+    return (void*)(((PluginProcessor*)processor)->GetChain(chainName));
 }
 
 void* GetPresets(void* processor)

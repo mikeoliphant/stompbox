@@ -178,19 +178,22 @@ public:
 		}
 	}
 
-	std::vector<StompBox*>& GetInputChain()
+	std::vector<StompBox*> *GetChain(const std::string& chainName)
 	{
-		return inputChain;
-	}
+		if (chainName == "InputChain")
+		{
+			return &inputChain;
+		}
+		else if (chainName == "FxLoopChain")
+		{
+			return &fxLoop;
+		}
+		else if (chainName == "OutputChain")
+		{
+			return &outputChain;
+		}
 
-	std::vector<StompBox*>& GetFxLoop()
-	{
-		return fxLoop;
-	}
-
-	std::vector<StompBox*>& GetOutputChain()
-	{
-		return outputChain;
+		return nullptr;
 	}
 
 	std::vector<std::string>& GetPresets()
