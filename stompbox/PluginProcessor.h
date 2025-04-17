@@ -26,6 +26,15 @@ struct CCMap
 	std::string Parameter;
 };
 
+class ChainElement
+{
+public:
+	std::string Name;
+	bool IsChain;
+	bool IsMaster;
+	std::vector<StompBox*> Plugins;
+};
+
 class PluginProcessor
 {
 protected:
@@ -38,7 +47,7 @@ protected:
 
 	float sampleRate;
 	float bpm = 120;
-	std::list<StompBox *> pluginList1;
+	std::list<StompBox*> pluginList1;
 	std::list<StompBox*> pluginList2;
 	std::list<StompBox*>& plugins = pluginList1;
 	int tmpBufSize = 64;
@@ -48,18 +57,9 @@ protected:
 	PluginFactory pluginFactory;
 	StompboxServer stompboxServer;
 	SerialDisplayInterface serialDisplayInterface;
-	StompBox* inputGain = nullptr;
-	StompBox* amp = nullptr;
-	StompBox* tonestack = nullptr;
-	StompBox* masterVolume = nullptr;
-	StompBox* cabinet = nullptr;
-	StompBox* tuner = nullptr;
-	StompBox* audioFilePlayer = nullptr;
-	StompBox* audioFileRecorder = nullptr;
+	std::unordered_map<std::string, ChainElement*> chainLookup;
+	std::list<ChainElement*> chainList;
 	std::vector<std::string> presets;
-	std::vector<StompBox*> inputChain;
-	std::vector<StompBox*> fxLoop;
-	std::vector<StompBox*> outputChain;
 	StompBox* monitorPlugin = nullptr;
 	std::function<void(float*, int)> monitorCallback = nullptr;
 	std::function<void(int, int, int)> midiCallback = nullptr;
@@ -132,29 +132,19 @@ public:
 		return &pluginFactory;
 	}
 
-	StompBox* GetInputGain()
-	{
-		return inputGain;
-	}
-
-	StompBox* GetMasterVolume()
-	{
-		return masterVolume;
-	}
-
 	StompBox* GetPluginSlot(const std::string& slotName)
 	{
-		if (slotName == "Amp")
+		auto slot = chainLookup.find(slotName);
+
+		if (slot != chainLookup.end())
 		{
-			return amp;
-		}
-		else if (slotName == "Tonestack")
-		{
-			return tonestack;
-		}
-		else if (slotName == "Cabinet")
-		{
-			return cabinet;
+			if (slot->second->IsChain)
+				return nullptr;
+
+			if (slot->second->Plugins.size() == 0)
+				return nullptr;
+
+			return slot->second->Plugins[0];
 		}
 
 		return nullptr;
@@ -163,34 +153,26 @@ public:
 	void SetPluginSlot(const std::string& slotName, const std::string& pluginID)
 	{
 		std::cout << "Set Plugin Slot: " << slotName << " to " << pluginID << std::endl;
-		
-		if (slotName == "Amp")
+
+		auto slot = chainLookup.find(slotName);
+
+		if (slot != chainLookup.end())
 		{
-			amp = CreatePlugin(pluginID);
-		}
-		else if (slotName == "Tonestack")
-		{
-			tonestack = CreatePlugin(pluginID);
-		}
-		else if (slotName == "Cabinet")
-		{
-			cabinet = CreatePlugin(pluginID);
+			if (!slot->second->IsChain)
+			{
+				slot->second->Plugins.clear();
+				slot->second->Plugins.push_back(CreatePlugin(pluginID));
+			}
 		}
 	}
 
 	std::vector<StompBox*> *GetChain(const std::string& chainName)
 	{
-		if (chainName == "InputChain")
+		auto chain = chainLookup.find(chainName);
+
+		if (chain != chainLookup.end())
 		{
-			return &inputChain;
-		}
-		else if (chainName == "FxLoopChain")
-		{
-			return &fxLoop;
-		}
-		else if (chainName == "OutputChain")
-		{
-			return &outputChain;
+			return &chain->second->Plugins;
 		}
 
 		return nullptr;
