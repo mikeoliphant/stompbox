@@ -160,8 +160,13 @@ public:
 		{
 			if (!slot->second->IsChain)
 			{
-				slot->second->Plugins.clear();
-				slot->second->Plugins.push_back(CreatePlugin(pluginID));
+				auto plugin = CreatePlugin(pluginID);
+
+				if (plugin != nullptr)
+				{
+					slot->second->Plugins.clear();
+					slot->second->Plugins.push_back(CreatePlugin(pluginID));
+				}
 			}
 		}
 	}
