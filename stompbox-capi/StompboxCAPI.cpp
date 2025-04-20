@@ -75,6 +75,17 @@ void* GetAllPlugins(void* processor)
     return (void *)&(((PluginProcessor*)processor)->GetPluginFactory()->GetAllPlugins());
 }
 
+const char* GetGlobalChain(void* processor)
+{
+    auto chain = ((PluginProcessor*)processor)->GetGlobalChain();
+
+    size_t len = chain.length() + 1;
+    char* buff = (char*)CoTaskMemAlloc(len);
+    strcpy(buff, chain.c_str());
+
+    return buff;
+}
+
 void* CreatePlugin(void* processor, const char* id)
 {
     StompBox* stomp = ((PluginProcessor*)processor)->CreatePlugin(id);

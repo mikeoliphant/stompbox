@@ -68,32 +68,6 @@ PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
 
     pluginFactory.SetDataPath(dataPath);
 
-    inputGain = CreatePlugin("Input");
-    inputGain->Enabled = true;
-
-    masterVolume = CreatePlugin("Master");
-    masterVolume->Enabled = true;
-
-    //amp = CreatePlugin("NAM");
-    //amp->Enabled = true;
-
-    //tonestack = (Tonestack*)CreatePlugin("EQ-7");
-    //tonestack->Enabled = true;
-
-    //cabinet = (GuitarConvolver*)CreatePlugin("Cabinet");
-    //cabinet->Enabled = true;
-
-    tuner = CreatePlugin("Tuner");
-    tuner->Enabled = false;
-
-    audioFilePlayer = CreatePlugin("AudioFilePlayer");
-
-    if (!dawMode)
-    {
-        audioFileRecorder = CreatePlugin("AudioFileRecorder");
-        audioFileRecorder->Enabled = true;
-    }
-
     tmpBuf1 = new float[tmpBufSize];
     tmpBuf2 = new float[tmpBufSize];
 
@@ -222,20 +196,20 @@ void PluginProcessor::UpdateClient()
                 switch (currentMidiMode)
                 {
                 case MIDI_MODE_TUNER:
-                    if (tuner->Enabled && (tuner->OutputValue != nullptr))
-                    {
-                        serialDisplayInterface.UpdateTuner(*(tuner->OutputValue));
-                    }
+                    //if (tuner->Enabled && (tuner->OutputValue != nullptr))
+                    //{
+                    //    serialDisplayInterface.UpdateTuner(*(tuner->OutputValue));
+                    //}
 
                     break;
 
                 case MIDI_MODE_RECORDER:
-                    if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
-                    {
-                        float secondsRecorded = audioFileRecorder->GetParameterValue(AUDIOFILERECORDER_SECONDSRECORDED);
+                    //if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
+                    //{
+                    //    float secondsRecorded = audioFileRecorder->GetParameterValue(AUDIOFILERECORDER_SECONDSRECORDED);
 
-                        serialDisplayInterface.UpdateRecordSeconds(secondsRecorded);
-                    }
+                    //    serialDisplayInterface.UpdateRecordSeconds(secondsRecorded);
+                    //}
 
                     break;
                 }
@@ -305,44 +279,14 @@ void PluginProcessor::UpdatePlugins()
 
     newPlugins.clear();
 
-    newPlugins.push_back(tuner);
-
-    //if (audioFileRecorder != nullptr)
-    //    newPlugins.push_back(audioFileRecorder);
-
-    newPlugins.push_back(inputGain);
-
-    for (const auto& plugin : inputChain)
+    for (auto& element : chainList)
     {
-        newPlugins.push_back(plugin);
-    }
-
-    if (amp != nullptr)
-        newPlugins.push_back(amp);
-
-    if (tonestack != nullptr)
-        newPlugins.push_back(tonestack);
-
-    for (const auto& plugin : fxLoop)
-    {
-        newPlugins.push_back(plugin);
+        for (auto& plugin : element->Plugins)
+        {
+            newPlugins.push_back(plugin);
+        }
     }
     
-    if (cabinet != nullptr)
-        newPlugins.push_back(cabinet);
-
-    for (const auto& plugin : outputChain)
-    {
-        newPlugins.push_back(plugin);
-    }
-
-    newPlugins.push_back(masterVolume);
-
-    newPlugins.push_back(audioFilePlayer);
-
-    if (audioFileRecorder != nullptr)
-        newPlugins.push_back(audioFileRecorder);
-
     plugins = newPlugins;
 
     for (const auto& plugin : plugins)
@@ -628,14 +572,24 @@ std::string PluginProcessor::DumpSettings()
 {
     std::string dump;
 
-    AppendPluginParams(dump, inputGain, false);
-    AppendPluginParams(dump, masterVolume, false);
+    // Write out our chain config
+    dump.append("SetGlobalChain ");
 
-    if (audioFileRecorder != nullptr)
-        AppendPluginParams(dump, audioFileRecorder, false);
+    dump.append(GetGlobalChain());
 
-    AppendPluginParams(dump, audioFilePlayer, false);
-    AppendPluginParams(dump, tuner, false);
+    dump.append("\r\n");
+
+    for (auto& element : chainList)
+    {
+        // Only "Master" elements get saved in global settings
+        if (element->IsMaster)
+        {
+            for (auto& plugin : element->Plugins)
+            {
+                AppendPluginParams(dump, plugin, false);
+            }
+        }
+    }
 
     if (modeChangeCC != -1)
     {
@@ -667,67 +621,37 @@ std::string PluginProcessor::DumpProgram()
     dump.append(currentPreset);
     dump.append("\r\n");
 
-    if (amp != nullptr)
-        dump.append("SetPluginSlot Amp " + amp->ID + "\r\n");
-
-    if (tonestack != nullptr)
-        dump.append("SetPluginSlot Tonestack " + tonestack->ID + "\r\n");
-
-    if (cabinet != nullptr)
-        dump.append("SetPluginSlot Cabinet " + cabinet->ID + "\r\n");
-
-    dump.append("SetChain Input ");
-
-    for (const auto& plugin : inputChain)
+    for (auto& element : chainList)
     {
-        dump.append(plugin->ID);
-        dump.append(" ");
-    }
+        // Only non-"Master" elements get saved in preset
+        if (!element->IsMaster)
+        {
+            if (element->IsChain)
+            {
+                dump.append("SetChain ");
+                dump.append(element->Name);
+                dump.append(" ");
+            }
+            else
+            {
+                dump.append("SetPluginSlot ");
+                dump.append(element->Name);
+                dump.append(" ");
+            }
 
-    dump.append("\r\n");
+            for (auto& plugin : element->Plugins)
+            {
+                dump.append(plugin->ID);
+                dump.append(" ");
+            }
 
-    dump.append("SetChain FxLoop ");
+            dump.append("\r\n");
 
-    for (const auto& plugin : fxLoop)
-    {
-        dump.append(plugin->ID);
-        dump.append(" ");
-    }
-
-    dump.append("\r\n");
-
-    dump.append("SetChain Output ");
-
-    for (const auto& plugin : outputChain)
-    {
-        dump.append(plugin->ID);
-        dump.append(" ");
-    }
-
-    dump.append("\r\n");
-
-    if (amp != nullptr)
-        AppendPluginParams(dump, amp, false);
-
-    if (tonestack != nullptr)
-        AppendPluginParams(dump, tonestack, false);
-
-    if (cabinet != nullptr)
-        AppendPluginParams(dump, cabinet, false);
-
-    for (const auto& plugin : inputChain)
-    {
-        AppendPluginParams(dump, plugin, false);
-    }
-
-    for (const auto& plugin : fxLoop)
-    {
-        AppendPluginParams(dump, plugin, false);
-    }
-
-    for (const auto& plugin : outputChain)
-    {
-        AppendPluginParams(dump, plugin, false);
+            for (const auto& plugin : element->Plugins)
+            {
+                AppendPluginParams(dump, plugin, false);
+            }
+        }
     }
 
     for (auto& entry : ccMapEntries)
@@ -837,6 +761,55 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 #ifdef __linux__
             system("shutdown -P now");
 #endif
+        }
+        else if (commandWords[0] == "SetGlobalChain")
+        {
+            chainList.clear();
+
+            for (size_t cmd = 1; cmd < commandWords.size(); cmd+=2)
+            {
+                if (cmd == commandWords.size() - 1)
+                    break;
+
+                if ((commandWords[cmd] == "Slot") || (commandWords[cmd] == "MasterSlot"))
+                {
+                    auto iter = chainLookup.find(commandWords[cmd + 1]);
+
+                    if (iter == chainLookup.end())
+                    {
+                        auto slot = new ChainElement();
+                        slot->IsChain = false;
+                        slot->Name = commandWords[cmd + 1];
+                        slot->IsMaster = (commandWords[cmd] == "MasterSlot");
+
+                        chainLookup[slot->Name] = slot;
+                        chainList.push_back(slot);
+                    }
+                    else
+                    {
+                        chainList.push_back(iter->second);
+                    }
+                }
+                else if ((commandWords[cmd] == "Chain") || (commandWords[cmd] == "MasterChain"))
+                {
+                    auto iter = chainLookup.find(commandWords[cmd + 1]);
+
+                    if (iter == chainLookup.end())
+                    {
+                        auto chain = new ChainElement();
+                        chain->IsChain = true;
+                        chain->Name = commandWords[cmd + 1];
+                        chain->IsMaster = (commandWords[cmd] == "MasterChain");
+
+                        chainLookup[chain->Name] = chain;
+                        chainList.push_back(chain);
+                    }
+                    else
+                    {
+                        chainList.push_back(iter->second);
+                    }
+                }
+            }
         }
         else if (commandWords[0] == "SetPluginSlot")
         {
@@ -1001,32 +974,17 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                std::vector<StompBox*>* chain = nullptr;
+                auto chain = chainLookup.find(commandWords[1]);
 
-                if (commandWords[1] == "Input")
-                {
-                    chain = &inputChain;
-                }
-                else if (commandWords[1] == "FxLoop")
-                {
-                    chain = &fxLoop;
-                }
-                else if (commandWords[1] == "Output")
-                {
-                    chain = &outputChain;
-                }
-                else
-                {
-                    err = "Bad Chain";
-                }
-
-                if (chain != nullptr)
+                if ((chain != chainLookup.end()) && chain->second->IsChain)
                 {
                     size_t numPlugins = commandWords.size() - 2;
 
                     std::cerr << "SetChain " << commandWords[1] << "\n";
 
-                    chain->clear();
+                    auto& plugins = chain->second->Plugins;
+
+                    plugins.clear();
 
                     for (size_t i = 0; i < numPlugins; i++)
                     {
@@ -1035,10 +993,14 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                         StompBox* newComponent = CreatePlugin(commandWords[i + 2]);
 
                         if (newComponent != nullptr)
-                            chain->push_back(newComponent);
+                            plugins.push_back(newComponent);
                     }
 
                     needPluginUpdate = true;
+                }
+                else
+                {
+                    err = "Bad Chain";
                 }
             }
         }
@@ -1264,8 +1226,8 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                     break;
 
                 case MIDI_MODE_TUNER:
-                    tuner->Enabled = false;
-                    tuner->EnabledIsDirty = true;
+                    //tuner->Enabled = false;
+                    //tuner->EnabledIsDirty = true;
                     break;
             }
 
@@ -1297,8 +1259,8 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                         serialDisplayInterface.ResetTuner();
                     }
 
-                    tuner->Enabled = true;
-                    tuner->EnabledIsDirty = true;
+                    //tuner->Enabled = true;
+                    //tuner->EnabledIsDirty = true;
 
                     break;
 
@@ -1378,11 +1340,11 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
             case MIDI_MODE_RECORDER:
                 if ((stompCC[2] != -1) && (midiData1 == stompCC[2]))
                 {
-                    if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
-                    {
-                        std::thread saveThread = std::thread(&AudioFileRecorder::SaveRecording, (AudioFileRecorder *)audioFileRecorder);
-                        saveThread.detach();
-                    }
+                    //if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
+                    //{
+                    //    std::thread saveThread = std::thread(&AudioFileRecorder::SaveRecording, (AudioFileRecorder *)audioFileRecorder);
+                    //    saveThread.detach();
+                    //}
                 }
                 break;
             }
