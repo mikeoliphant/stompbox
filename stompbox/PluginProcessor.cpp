@@ -572,6 +572,26 @@ std::string PluginProcessor::DumpSettings()
 {
     std::string dump;
 
+    // Write out our chain config
+    dump.append("SetGlobalChain");
+
+    for (auto& element : chainList)
+    {
+        dump.append(" ");
+
+        if (element->IsMaster)
+            dump.append("Master");
+
+        if (element->IsChain)
+            dump.append("Chain ");
+        else
+            dump.append("Slot ");
+
+        dump.append(element->Name);
+    }
+
+    dump.append("\r\n");
+
     for (auto& element : chainList)
     {
         // Only "Master" elements get saved in global settings
