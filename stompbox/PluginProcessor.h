@@ -132,6 +132,28 @@ public:
 		return &pluginFactory;
 	}
 
+	std::string GetGlobalChain()
+	{
+		std::string chainStr;
+
+		for (auto& element : chainList)
+		{
+			if (element->IsMaster)
+				chainStr.append("Master");
+
+			if (element->IsChain)
+				chainStr.append("Chain ");
+			else
+				chainStr.append("Slot ");
+
+			chainStr.append(element->Name);
+
+			chainStr.append(" ");
+		}
+
+		return chainStr;
+	}
+
 	StompBox* GetPluginSlot(const std::string& slotName)
 	{
 		auto slot = chainLookup.find(slotName);
