@@ -764,7 +764,6 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         }
         else if (commandWords[0] == "SetGlobalChain")
         {
-            chainLookup.clear();
             chainList.clear();
 
             for (size_t cmd = 1; cmd < commandWords.size(); cmd+=2)
@@ -774,23 +773,41 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                 if ((commandWords[cmd] == "Slot") || (commandWords[cmd] == "MasterSlot"))
                 {
-                    auto slot = new ChainElement();
-                    slot->IsChain = false;
-                    slot->Name = commandWords[cmd + 1];
-                    slot->IsMaster = (commandWords[cmd] == "MasterSlot");
+                    auto iter = chainLookup.find(commandWords[cmd + 1]);
 
-                    chainLookup[slot->Name] = slot;
-                    chainList.push_back(slot);
+                    if (iter == chainLookup.end())
+                    {
+                        auto slot = new ChainElement();
+                        slot->IsChain = false;
+                        slot->Name = commandWords[cmd + 1];
+                        slot->IsMaster = (commandWords[cmd] == "MasterSlot");
+
+                        chainLookup[slot->Name] = slot;
+                        chainList.push_back(slot);
+                    }
+                    else
+                    {
+                        chainList.push_back(iter->second);
+                    }
                 }
                 else if ((commandWords[cmd] == "Chain") || (commandWords[cmd] == "MasterChain"))
                 {
-                    auto chain = new ChainElement();
-                    chain->IsChain = true;
-                    chain->Name = commandWords[cmd + 1];
-                    chain->IsMaster = (commandWords[cmd] == "MasterChain");
+                    auto iter = chainLookup.find(commandWords[cmd + 1]);
 
-                    chainLookup[chain->Name] = chain;
-                    chainList.push_back(chain);
+                    if (iter == chainLookup.end())
+                    {
+                        auto chain = new ChainElement();
+                        chain->IsChain = true;
+                        chain->Name = commandWords[cmd + 1];
+                        chain->IsMaster = (commandWords[cmd] == "MasterChain");
+
+                        chainLookup[chain->Name] = chain;
+                        chainList.push_back(chain);
+                    }
+                    else
+                    {
+                        chainList.push_back(iter->second);
+                    }
                 }
             }
         }
