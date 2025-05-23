@@ -1,3 +1,5 @@
+[GitHub contributers](https://github.com/mikeoliphant/stompbox/graphs/contributors)
+
 This repository uses code from a number of sources. Please see the invidual repositories for license information:
 
 https://github.com/mikeoliphant/NeuralAudio
