@@ -1286,7 +1286,7 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                         serialDisplayInterface.ResetTuner();
                     }
 
-                    if (tuner == nullptr)
+                    if (tuner != nullptr)
                     {
                         tuner->Enabled = true;
                         tuner->EnabledIsDirty = true;
