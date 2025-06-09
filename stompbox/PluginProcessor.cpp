@@ -227,7 +227,6 @@ void PluginProcessor::UpdateClient()
                 {
                     if (plugin->Enabled)
                     {
-
                         for (size_t i = 0; i < plugin->NumParameters; i++)
                         {
                             StompBoxParameter* param = plugin->GetParameter(i);
@@ -1254,6 +1253,10 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                     {
                         tuner->Enabled = false;
                         tuner->EnabledIsDirty = true;
+                    }
+                    else
+                    {
+                        fprintf(stderr, "No tuner plugin available\n");
                     }
                     break;
             }
