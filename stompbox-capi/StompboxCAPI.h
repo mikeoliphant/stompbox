@@ -41,6 +41,8 @@ STOMPBOX_EXTERN const PATH_STR GetDataPath(void* processor);
 
 STOMPBOX_EXTERN void *GetAllPlugins(void* processor);
 
+STOMPBOX_EXTERN const char* GetGlobalChain(void* processor);
+
 STOMPBOX_EXTERN const char* GetPluginSlot(void* processor, const char* slotName);
 
 STOMPBOX_EXTERN void SetPluginSlot(void* processor, const char* slotName, const char* pluginID);

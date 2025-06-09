@@ -310,6 +310,7 @@ StompBox* CreateTunerPlugin()
 	PitchDetector *tuner = new PitchDetector(4096);
 
 	tuner->IsUserSelectable = false;
+	tuner->Enabled = false;
 
 	return tuner;
 }
