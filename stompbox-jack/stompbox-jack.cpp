@@ -1,9 +1,3 @@
-/** @file thru_client.c
- *
- * @brief This simple through client demonstrates the basic features of JACK
- * as they would be used by many applications.
- */
-
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -272,6 +266,15 @@ int main(int argc, char* argv[])
     {
         guitarProcessor->LoadPreset(preset_name);
     }
+
+    guitarProcessor->HandleCommand("SetGlobalChain MasterChain MasterIn Chain Input Slot Amp Slot Tonestack Chain FxLoop Slot Cabinet Chain Output MasterChain MasterOut");
+
+    guitarProcessor->HandleCommand("SetChain MasterIn AudioFileRecorder Tuner Input");
+    guitarProcessor->HandleCommand("SetChain MasterOut AudioFilePlayer Master");
+
+    guitarProcessor->HandleCommand("SetPluginSlot Amp NAM");
+    guitarProcessor->HandleCommand("SetPluginSlot Tonestack EQ-7");
+    guitarProcessor->HandleCommand("SetPluginSlot Cabint Cabinet);
 
     guitarProcessor->StartServer();
 
