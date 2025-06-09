@@ -262,11 +262,6 @@ int main(int argc, char* argv[])
     guitarProcessor = new PluginProcessor(std::filesystem::current_path(), false);
     guitarProcessor->Init((float)jack_get_sample_rate(client));
 
-    if (preset_name != NULL)
-    {
-        guitarProcessor->LoadPreset(preset_name);
-    }
-
     guitarProcessor->HandleCommand("SetGlobalChain MasterChain MasterIn Chain Input Slot Amp Slot Tonestack Chain FxLoop Slot Cabinet Chain Output MasterChain MasterOut");
 
     guitarProcessor->HandleCommand("SetChain MasterIn AudioFileRecorder Tuner Input");
@@ -275,6 +270,11 @@ int main(int argc, char* argv[])
     guitarProcessor->HandleCommand("SetPluginSlot Amp NAM");
     guitarProcessor->HandleCommand("SetPluginSlot Tonestack EQ-7");
     guitarProcessor->HandleCommand("SetPluginSlot Cabint Cabinet);
+
+    if (preset_name != NULL)
+    {
+        guitarProcessor->LoadPreset(preset_name);
+    }
 
     guitarProcessor->StartServer();
 
