@@ -92,7 +92,7 @@ stompbox-jack takes a single optional command-line argument - the name of the pr
 
 Currently it will connect to the first available jack audio input, and the first two available jack audio outputs. It will also connect to any available jack midi inputs.
 
-The following folders are epected to exist in the same folder as the stompbox-jack executable:
+The following folders are epected to exist in the same folder as the stompbox-jack executable is run from:
 
 **Presets** - folder to store configuration presets
 
