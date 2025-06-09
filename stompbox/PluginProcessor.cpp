@@ -595,25 +595,6 @@ std::string PluginProcessor::DumpSettings()
 {
     std::string dump;
 
-    // Write out our chain config
-    dump.append("SetGlobalChain ");
-
-    dump.append(GetGlobalChain());
-
-    dump.append("\r\n");
-
-    for (auto& element : chainList)
-    {
-        // Only "Master" elements get saved in global settings
-        if (element->IsMaster)
-        {
-            for (auto& plugin : element->Plugins)
-            {
-                AppendPluginParams(dump, plugin, false);
-            }
-        }
-    }
-
     if (modeChangeCC != -1)
     {
         dump.append("MapModeController ");
