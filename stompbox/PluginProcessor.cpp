@@ -196,10 +196,10 @@ void PluginProcessor::UpdateClient()
                 switch (currentMidiMode)
                 {
                 case MIDI_MODE_TUNER:
-                    if (tuner->Enabled && (tuner->GetParameter("Pitch") != nullptr))
-                    {
-                        serialDisplayInterface.UpdateTuner(tuner->GetParameter("Pitch")->GetValue());
-                    }
+                    //if (tuner->Enabled && (tuner->GetParameter("Pitch") != nullptr))
+                    //{
+                    //    serialDisplayInterface.UpdateTuner(tuner->GetParameter("Pitch")->GetValue());
+                    //}
 
                     break;
 
