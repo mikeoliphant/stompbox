@@ -236,6 +236,7 @@ void PluginProcessor::UpdateClient()
                                 cmd.append(plugin->ID);
                                 cmd.append(" ");
                                 cmd.append(param->Name);
+                                cmd.append(" ");
                                 cmd.append(std::to_string(param->GetValue()));
                                 cmd.append("\r\n");
 
