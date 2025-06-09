@@ -195,23 +195,27 @@ void PluginProcessor::UpdateClient()
             {
                 switch (currentMidiMode)
                 {
-                case MIDI_MODE_TUNER:
-                    //if (tuner->Enabled && (tuner->GetParameter("Pitch") != nullptr))
-                    //{
-                    //    serialDisplayInterface.UpdateTuner(tuner->GetParameter("Pitch")->GetValue());
-                    //}
+                    case MIDI_MODE_TUNER:
+                    {
+                        if ((tuner != nullptr) && (tuner->Enabled && (tuner->GetParameter("Pitch") != nullptr)))
+                        {
+                            serialDisplayInterface.UpdateTuner(tuner->GetParameter("Pitch")->GetValue());
+                        }
 
-                    break;
+                        break;
+                    }
 
-                case MIDI_MODE_RECORDER:
-                    //if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
-                    //{
-                    //    float secondsRecorded = audioFileRecorder->GetParameterValue(AUDIOFILERECORDER_SECONDSRECORDED);
+                    case MIDI_MODE_RECORDER:
+                    {
+                        if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
+                        {
+                            float secondsRecorded = audioFileRecorder->GetParameterValue(AUDIOFILERECORDER_SECONDSRECORDED);
 
-                    //    serialDisplayInterface.UpdateRecordSeconds(secondsRecorded);
-                    //}
+                            serialDisplayInterface.UpdateRecordSeconds(secondsRecorded);
+                        }
 
-                    break;
+                        break;
+                    }
                 }
             }
 
@@ -311,6 +315,9 @@ void PluginProcessor::UpdatePlugins()
     }
 
     fprintf(stderr, "\n");
+
+	tuner = pluginFactory.FindPlugin("Tuner");
+    audioFileRecorder = pluginFactory.FindPlugin("AudioFileRecorder");
 }
 
 StompBox* PluginProcessor::CreatePlugin(std::string const& id)
@@ -1243,8 +1250,11 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                     break;
 
                 case MIDI_MODE_TUNER:
-                    //tuner->Enabled = false;
-                    //tuner->EnabledIsDirty = true;
+                    if (tuner != nullptr)
+                    {
+                        tuner->Enabled = false;
+                        tuner->EnabledIsDirty = true;
+                    }
                     break;
             }
 
@@ -1276,8 +1286,11 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                         serialDisplayInterface.ResetTuner();
                     }
 
-                    //tuner->Enabled = true;
-                    //tuner->EnabledIsDirty = true;
+                    if (tuner == nullptr)
+                    {
+                        tuner->Enabled = true;
+                        tuner->EnabledIsDirty = true;
+                    }
 
                     break;
 
@@ -1357,11 +1370,11 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
             case MIDI_MODE_RECORDER:
                 if ((stompCC[2] != -1) && (midiData1 == stompCC[2]))
                 {
-                    //if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
-                    //{
-                    //    std::thread saveThread = std::thread(&AudioFileRecorder::SaveRecording, (AudioFileRecorder *)audioFileRecorder);
-                    //    saveThread.detach();
-                    //}
+                    if ((audioFileRecorder != nullptr) && audioFileRecorder->Enabled)
+                    {
+                        std::thread saveThread = std::thread(&AudioFileRecorder::SaveRecording, (AudioFileRecorder *)audioFileRecorder);
+                        saveThread.detach();
+                    }
                 }
                 break;
             }

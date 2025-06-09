@@ -60,6 +60,8 @@ protected:
 	std::unordered_map<std::string, ChainElement*> chainLookup;
 	std::list<ChainElement*> chainList;
 	std::vector<std::string> presets;
+	StompBox* tuner = nullptr;
+	StompBox* audioFileRecorder = nullptr;
 	StompBox* monitorPlugin = nullptr;
 	std::function<void(float*, int)> monitorCallback = nullptr;
 	std::function<void(int, int, int)> midiCallback = nullptr;
