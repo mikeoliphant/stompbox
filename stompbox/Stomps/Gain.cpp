@@ -22,7 +22,13 @@ Gain::Gain(float initialGain, float minGain, float maxGain)
 	Parameters[GAIN_GAIN].DisplayFormat = "{0:0.0}dB";
 	Parameters[GAIN_GAIN].Description = "Gain strength in dB";
 
-	OutputValue = &currentLevel;
+	Parameters[GAIN_LEVEL].Name = "Level";
+	Parameters[GAIN_LEVEL].SourceVariable = &currentLevel;
+	Parameters[GAIN_LEVEL].IsOutput = true;
+	Parameters[GAIN_LEVEL].MinValue = 0;
+	Parameters[GAIN_LEVEL].MaxValue = 1;
+	Parameters[GAIN_LEVEL].DefaultValue = currentLevel;
+	Parameters[GAIN_LEVEL].Description = "Current Level";
 }
 
 double Gain::GetLevel()

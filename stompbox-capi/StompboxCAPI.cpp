@@ -213,17 +213,6 @@ bool GetPluginIsUserSelectable(void* plugin)
     return ((StompBox*)plugin)->IsUserSelectable;
 }
 
-float GetOutputValue(void* plugin)
-{
-    if (((StompBox*)plugin)->OutputValue != nullptr)
-    {
-        return *(((StompBox*)plugin)->OutputValue);
-    }
-
-    return 0;
-}
-
-
 size_t GetPluginNumParameters(void* plugin)
 {
     StompBox* stomp = (StompBox*)plugin;
@@ -352,6 +341,11 @@ void SetParameterBPMSyncDenominator(void* parameter, int denom)
 bool GetParameterIsAdvanced(void* parameter)
 {
 	return ((StompBoxParameter*)(void*)parameter)->IsAdvanced;
+}
+
+bool GetParameterIsOutput(void* parameter)
+{
+    return ((StompBoxParameter*)(void*)parameter)->IsOutput;
 }
 
 const char* GetParameterFilePath(void* parameter)

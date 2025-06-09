@@ -4,9 +4,12 @@
 
 enum
 {
-	COMPRESSOR_SUSTAIN,
+	COMPRESSOR_THRESHOLD,
+	COMPRESSOR_RATIO,
 	COMPRESSOR_ATTACK,
+	COMPRESSOR_RELEASE,
 	COMPRESSOR_WETDRY,
+	COMPRESSOR_COMPRESSION,
 	COMPRESSOR_NUMPARAMETERS
 };
 
@@ -14,19 +17,21 @@ class Compressor : public StompBox
 {
 private:
 	int fSamplingFreq;
+	float compression;
 
-	FAUSTFLOAT fVslider0;
-	FAUSTFLOAT fEntry0;
-	FAUSTFLOAT fEntry1;
-	FAUSTFLOAT fEntry2;
-	double fConst0;
-	double fConst1;
 	FAUSTFLOAT fHslider0;
-	double fConst2;
-	double fConst3;
-	double fRec1[2];
+	FAUSTFLOAT fVslider0;
+	float fConst0;
+	float fConst1;
+	float fConst2;
+	float fRec1[2];
+	float fConst3;
 	FAUSTFLOAT fHslider1;
-	double fRec0[2];
+	FAUSTFLOAT fHslider2;
+	float fRec0[2];
+	FAUSTFLOAT fHslider3;
+	FAUSTFLOAT fHslider4;
+	FAUSTFLOAT fVbargraph0;
 
 public:
 	Compressor();

@@ -51,7 +51,7 @@ void GetDataPathFromModule(std::filesystem::path& dataPath)
 
 std::string PluginProcessor::GetVersion()
 {
-    return "stompbox v0.1.13 - Copyright (c) Mike Oliphant";
+    return "stompbox v0.1.13 - Copyright 2023-2025 Mike Oliphant";
 }
 
 PluginProcessor::PluginProcessor(std::filesystem::path dataPath, bool dawMode)
@@ -222,9 +222,9 @@ void PluginProcessor::UpdateClient()
                 switch (currentMidiMode)
                 {
                 case MIDI_MODE_TUNER:
-                    if (tuner->Enabled && (tuner->OutputValue != nullptr))
+                    if (tuner->Enabled && (tuner->GetParameter("Pitch") != nullptr))
                     {
-                        serialDisplayInterface.UpdateTuner(*(tuner->OutputValue));
+                        serialDisplayInterface.UpdateTuner(tuner->GetParameter("Pitch")->GetValue());
                     }
 
                     break;
@@ -247,17 +247,27 @@ void PluginProcessor::UpdateClient()
 
                 for (const auto& plugin : plugins)
                 {
-                    if (plugin->Enabled && (plugin->OutputValue != nullptr))
+                    if (plugin->Enabled)
                     {
-                        cmd.clear();
 
-                        cmd.append("SetOutput ");
-                        cmd.append(plugin->ID);
-                        cmd.append(" ");
-                        cmd.append(std::to_string(*(plugin->OutputValue)));
-                        cmd.append("\r\n");
+                        for (size_t i = 0; i < plugin->NumParameters; i++)
+                        {
+                            StompBoxParameter* param = plugin->GetParameter(i);
 
-                        SendClientMessage(cmd);
+                            if (param->IsOutput)
+                            {
+                                cmd.clear();
+
+                                cmd.append("SetParam ");
+                                cmd.append(plugin->ID);
+                                cmd.append(" ");
+                                cmd.append(param->Name);
+                                cmd.append(std::to_string(param->GetValue()));
+                                cmd.append("\r\n");
+
+                                SendClientMessage(cmd);
+                            }
+                        }
                     }
 
                     if (plugin->ParamIsDirty || plugin->EnabledIsDirty)
@@ -475,6 +485,9 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
         case PARAMETER_TYPE_FILE:
             dump.append("File");
             break;
+        case PARAMETER_TYPE_POWER:
+            dump.append("Power");
+            break;
         }
 
         dump.append(" MinValue ");
@@ -497,6 +510,9 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
 
         dump.append(" IsAdvanced ");
         dump.append(param->IsAdvanced ? "1" : "0");
+
+        dump.append(" IsOutput ");
+        dump.append(param->IsOutput ? "1" : "0");
 
         if (!param->Description.empty())
         {

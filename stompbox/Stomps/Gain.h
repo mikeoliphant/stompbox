@@ -5,6 +5,7 @@
 enum
 {
 	GAIN_GAIN,
+	GAIN_LEVEL,
 	GAIN_NUMPARAMETERS
 };
 

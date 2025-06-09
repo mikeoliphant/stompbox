@@ -79,8 +79,6 @@ STOMPBOX_EXTERN const char* GetPluginForegroundColor(void* plugin);
 
 STOMPBOX_EXTERN bool GetPluginIsUserSelectable(void* plugin);
 
-STOMPBOX_EXTERN float GetOutputValue(void* plugin);
-
 STOMPBOX_EXTERN size_t GetPluginNumParameters(void* plugin);
 
 STOMPBOX_EXTERN void* GetPluginParameter(void* plugin, size_t index);
@@ -116,6 +114,8 @@ STOMPBOX_EXTERN void SetParameterBPMSyncNumerator(void* parameter, int numerator
 STOMPBOX_EXTERN void SetParameterBPMSyncDenominator(void* parameter, int denom);
 
 STOMPBOX_EXTERN bool GetParameterIsAdvanced(void* parameter);
+
+STOMPBOX_EXTERN bool GetParameterIsOutput(void* parameter);
 
 STOMPBOX_EXTERN const char* GetParameterFilePath(void* parameter);
 

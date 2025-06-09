@@ -20,7 +20,8 @@ enum
 	PARAMETER_TYPE_INT,
 	PARAMETER_TYPE_VSLIDER,
 	PARAMETER_TYPE_ENUM,
-	PARAMETER_TYPE_FILE
+	PARAMETER_TYPE_FILE,
+	PARAMETER_TYPE_POWER
 };
 
 struct StompBoxParameter;
@@ -37,7 +38,6 @@ public:
 	StompBoxParameter* Parameters = nullptr;
 	StompBox* InputGain = nullptr;
 	StompBox* OutputVolume = nullptr;
-	float* OutputValue = nullptr;
 	size_t NumParameters;
 	std::string Name;
 	std::string ID;
@@ -96,6 +96,7 @@ struct StompBoxParameter
 	int BPMSyncNumerator = 0;
 	int BPMSyncDenominator = 0;
 	bool IsAdvanced = false;
+	bool IsOutput = false;
 	std::string FilePath;
 	const std::vector<std::string>* EnumValues = nullptr;
 	bool IsDirty = false;

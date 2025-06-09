@@ -52,7 +52,6 @@ void StompBox::init(int newSamplingFreq)
 	samplingFreq = (float)newSamplingFreq;
 }
 
-
 void StompBox::SetParameterValue(size_t id, float value)
 {
 	SetParameterValue(&(Parameters[id]), value);
