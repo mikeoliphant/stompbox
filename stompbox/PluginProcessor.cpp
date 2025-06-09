@@ -1254,10 +1254,6 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                         tuner->Enabled = false;
                         tuner->EnabledIsDirty = true;
                     }
-                    else
-                    {
-                        fprintf(stderr, "No tuner plugin available\n");
-                    }
                     break;
             }
 
@@ -1293,6 +1289,10 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
                     {
                         tuner->Enabled = true;
                         tuner->EnabledIsDirty = true;
+                    }
+                    else
+                    {
+                        fprintf(stderr, "No tuner plugin available\n");
                     }
 
                     break;
