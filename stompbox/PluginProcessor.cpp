@@ -1388,25 +1388,25 @@ bool PluginProcessor::HandleMidiCommand(int midiCommand, int midiData1, int midi
 
 bool PluginProcessor::CheckMidiCommand(StompBox* plugin, StompBoxParameter* parameter)
 {
-    for (auto& ccMap : ccMapEntries)
+    if (serialDisplayInterface.IsConnected())
     {
-        if ((ccMap.Plugin == plugin) && ((ccMap.Parameter.empty() && (parameter == nullptr)) || (ccMap.Parameter == parameter->Name)))
+        for (auto& ccMap : ccMapEntries)
         {
-            int16_t stomp = -1;
-
-            for (int16_t i = 0; i < 16; i++)
+            if ((ccMap.Plugin == plugin) && ((ccMap.Parameter.empty() && (parameter == nullptr)) || ((parameter != nullptr) && (ccMap.Parameter == parameter->Name))))
             {
-                if (stompCC[i] == ccMap.CCNumber)
+                int16_t stomp = -1;
+
+                for (int16_t i = 0; i < 16; i++)
                 {
-                    stomp = i;
+                    if (stompCC[i] == ccMap.CCNumber)
+                    {
+                        stomp = i;
 
-                    break;
+                        break;
+                    }
                 }
-            }
 
-            if (stomp != -1)
-            {
-                if (serialDisplayInterface.IsConnected())
+                if (stomp != -1)
                 {
                     if (ccMap.Parameter.empty())
                     {
