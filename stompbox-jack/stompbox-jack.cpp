@@ -269,7 +269,7 @@ int main(int argc, char* argv[])
 
     guitarProcessor->HandleCommand("SetPluginSlot Amp NAM");
     guitarProcessor->HandleCommand("SetPluginSlot Tonestack EQ-7");
-    guitarProcessor->HandleCommand("SetPluginSlot Cabint Cabinet);
+    guitarProcessor->HandleCommand("SetPluginSlot Cabint Cabinet");
 
     if (preset_name != NULL)
     {
