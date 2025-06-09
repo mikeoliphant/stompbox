@@ -24,7 +24,7 @@ PitchDetector::PitchDetector(int bufferSize)
 	Parameters[PITCHDETECTOR_PITCH].SourceVariable = &currentPitch;
 	Parameters[PITCHDETECTOR_PITCH].IsOutput = true;
 	Parameters[PITCHDETECTOR_PITCH].MinValue = 0;
-	Parameters[PITCHDETECTOR_PITCH].MaxValue = 1;
+	Parameters[PITCHDETECTOR_PITCH].MaxValue = 10000;
 	Parameters[PITCHDETECTOR_PITCH].DefaultValue = currentPitch;
 
 	pitchMPM = new PitchMPM(bufferSize);
