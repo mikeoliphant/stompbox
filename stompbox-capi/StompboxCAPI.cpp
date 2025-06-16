@@ -124,7 +124,7 @@ void* GetPluginVectorValue(void* plugVec, size_t index)
 
 void* GetChainPlugins(void* processor, const char* chainName)
 {
-    return (void*)(((PluginProcessor*)processor)->GetChain(chainName));
+    return (void*)&(((PluginProcessor*)processor)->GetChain(chainName)->Plugins);
 }
 
 void* GetPresets(void* processor)

@@ -195,13 +195,13 @@ public:
 		}
 	}
 
-	std::vector<StompBox*> *GetChain(const std::string& chainName)
+	ChainElement *GetChain(const std::string& chainName)
 	{
 		auto chain = chainLookup.find(chainName);
 
 		if (chain != chainLookup.end())
 		{
-			return &chain->second->Plugins;
+			return chain->second;
 		}
 
 		return nullptr;

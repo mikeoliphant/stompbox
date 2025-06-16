@@ -768,6 +768,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         }
         else if (commandWords[0] == "SetGlobalChain")
         {
+            // Fixme: not freeing chain elements
             chainList.clear();
 
             for (size_t cmd = 1; cmd < commandWords.size(); cmd+=2)
@@ -978,15 +979,15 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
         {
             if (commandWords.size() > 1)
             {
-                auto chain = chainLookup.find(commandWords[1]);
+                auto chain = GetChain(commandWords[1]);
 
-                if ((chain != chainLookup.end()) && chain->second->IsChain)
+                if (chain != nullptr)
                 {
                     size_t numPlugins = commandWords.size() - 2;
 
                     std::cerr << "SetChain " << commandWords[1] << "\n";
 
-                    auto& plugins = chain->second->Plugins;
+                    auto& plugins = chain->Plugins;
 
                     plugins.clear();
 
