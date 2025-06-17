@@ -166,7 +166,7 @@ public:
 			if (slot->second->IsChain)
 				return nullptr;
 
-			auto plugins = slot->second->Plugins.GetRead();
+			auto& plugins = slot->second->Plugins.GetRead();
 
 			if (plugins.size() == 0)
 				return nullptr;
@@ -191,7 +191,7 @@ public:
 
 				if (plugin != nullptr)
 				{
-					auto plugins = slot->second->Plugins.GetWriteLock();
+					auto& plugins = slot->second->Plugins.GetWriteLock();
 
 					plugins.clear();
 					plugins.push_back(CreatePlugin(pluginID));

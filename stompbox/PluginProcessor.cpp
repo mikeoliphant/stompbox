@@ -643,7 +643,9 @@ std::string PluginProcessor::DumpProgram()
                 dump.append(" ");
             }
 
-            for (auto& plugin : element->Plugins.GetRead())
+            auto& plugins = element->Plugins.GetRead();
+
+            for (auto& plugin : plugins)
             {
                 dump.append(plugin->ID);
                 dump.append(" ");
@@ -651,7 +653,7 @@ std::string PluginProcessor::DumpProgram()
 
             dump.append("\r\n");
 
-            for (const auto& plugin : element->Plugins.GetRead())
+            for (const auto& plugin : plugins)
             {
                 AppendPluginParams(dump, plugin, false);
             }
