@@ -295,7 +295,7 @@ void PluginProcessor::UpdatePlugins()
 
     for (auto& element : chainList)
     {
-        for (auto& plugin : element->Plugins)
+        for (auto& plugin : element->Plugins.GetRead())
         {
             newPlugins.push_back(plugin);
         }
@@ -643,7 +643,7 @@ std::string PluginProcessor::DumpProgram()
                 dump.append(" ");
             }
 
-            for (auto& plugin : element->Plugins)
+            for (auto& plugin : element->Plugins.GetRead())
             {
                 dump.append(plugin->ID);
                 dump.append(" ");
@@ -651,7 +651,7 @@ std::string PluginProcessor::DumpProgram()
 
             dump.append("\r\n");
 
-            for (const auto& plugin : element->Plugins)
+            for (const auto& plugin : element->Plugins.GetRead())
             {
                 AppendPluginParams(dump, plugin, false);
             }
@@ -987,7 +987,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                     std::cerr << "SetChain " << commandWords[1] << "\n";
 
-                    auto& plugins = chain->Plugins;
+                    auto& plugins = chain->Plugins.GetWriteLock();
 
                     plugins.clear();
 
@@ -1000,6 +1000,8 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                         if (newComponent != nullptr)
                             plugins.push_back(newComponent);
                     }
+
+                    chain->Plugins.FinishWrite();
 
                     needPluginUpdate = true;
                 }
