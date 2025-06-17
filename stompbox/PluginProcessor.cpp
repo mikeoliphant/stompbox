@@ -114,13 +114,16 @@ void PluginProcessor::Init(float newSampleRate)
     bool wasInitialized = initialized;
     initialized = true;
 
-    for (const auto& plugin : plugins)
+    for (auto& element : chainList)
     {
-        // Initialize right now if it is the first time. Otherwise we could be running, so set a flag to initialize in Process()
-        if (!wasInitialized)
-            InitPlugin(plugin);
-        else
-            plugin->NeedsInit = true;
+        for (auto& plugin : element->Plugins.GetRead())
+        {
+            // Initialize right now if it is the first time. Otherwise we could be running, so set a flag to initialize in Process()
+            if (!wasInitialized)
+                InitPlugin(plugin);
+            else
+                plugin->NeedsInit = true;
+        }
     }
 
     initialized = true;
@@ -144,9 +147,12 @@ void PluginProcessor::SetBPM(float newBpm)
 {
     bpm = newBpm;
 
-    for (const auto& plugin : plugins)
+    for (auto& element : chainList)
     {
-        plugin->SetBPM(bpm);
+        for (auto& plugin : element->Plugins.GetRead())
+        {
+            plugin->SetBPM(bpm);
+        }
     }
 }
 
@@ -223,41 +229,44 @@ void PluginProcessor::UpdateClient()
             {
                 clientUpdateFrame++;
 
-                for (const auto& plugin : plugins)
+                for (auto& element : chainList)
                 {
-                    if (plugin->Enabled)
+                    for (auto& plugin : element->Plugins.GetRead())
                     {
-                        for (size_t i = 0; i < plugin->NumParameters; i++)
+                        if (plugin->Enabled)
                         {
-                            StompBoxParameter* param = plugin->GetParameter(i);
-
-                            if (param->IsOutput)
+                            for (size_t i = 0; i < plugin->NumParameters; i++)
                             {
-                                cmd.clear();
+                                StompBoxParameter* param = plugin->GetParameter(i);
 
-                                cmd.append("SetParam ");
-                                cmd.append(plugin->ID);
-                                cmd.append(" ");
-                                cmd.append(param->Name);
-                                cmd.append(" ");
-                                cmd.append(std::to_string(param->GetValue()));
-                                cmd.append("\r\n");
+                                if (param->IsOutput)
+                                {
+                                    cmd.clear();
 
-                                SendClientMessage(cmd);
+                                    cmd.append("SetParam ");
+                                    cmd.append(plugin->ID);
+                                    cmd.append(" ");
+                                    cmd.append(param->Name);
+                                    cmd.append(" ");
+                                    cmd.append(std::to_string(param->GetValue()));
+                                    cmd.append("\r\n");
+
+                                    SendClientMessage(cmd);
+                                }
                             }
                         }
-                    }
 
-                    if (plugin->ParamIsDirty || plugin->EnabledIsDirty)
-                    {
-                        cmd.clear();
+                        if (plugin->ParamIsDirty || plugin->EnabledIsDirty)
+                        {
+                            cmd.clear();
 
-                        AppendPluginParams(cmd, plugin, true);
+                            AppendPluginParams(cmd, plugin, true);
 
-                        plugin->ParamIsDirty = false;
-                        plugin->EnabledIsDirty = false;
+                            plugin->ParamIsDirty = false;
+                            plugin->EnabledIsDirty = false;
 
-                        SendClientMessage(cmd);
+                            SendClientMessage(cmd);
+                        }
                     }
                 }
 
@@ -287,30 +296,19 @@ void PluginProcessor::UpdatePlugins()
 {
     needPluginUpdate = false;
 
-    std::list<StompBox*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
-
     fprintf(stderr, "Update Plugins\n");
-
-    newPlugins.clear();
 
     for (auto& element : chainList)
     {
-        for (auto& plugin : element->Plugins)
+        for (auto& plugin : element->Plugins.GetRead())
         {
-            newPlugins.push_back(plugin);
-        }
-    }
-    
-    plugins = newPlugins;
+            if (plugin->NeedsInit)
+            {
+                InitPlugin(plugin);
+            }
 
-    for (const auto& plugin : plugins)
-    {
-        if (plugin->NeedsInit)
-        {
-            InitPlugin(plugin);
+            fprintf(stderr, "%s ", plugin->ID.c_str());
         }
-
-        fprintf(stderr, "%s ", plugin->ID.c_str());
     }
 
     fprintf(stderr, "\n");
@@ -643,7 +641,9 @@ std::string PluginProcessor::DumpProgram()
                 dump.append(" ");
             }
 
-            for (auto& plugin : element->Plugins)
+            auto& plugins = element->Plugins.GetRead();
+
+            for (auto& plugin : plugins)
             {
                 dump.append(plugin->ID);
                 dump.append(" ");
@@ -651,7 +651,7 @@ std::string PluginProcessor::DumpProgram()
 
             dump.append("\r\n");
 
-            for (const auto& plugin : element->Plugins)
+            for (const auto& plugin : plugins)
             {
                 AppendPluginParams(dump, plugin, false);
             }
@@ -987,7 +987,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
 
                     std::cerr << "SetChain " << commandWords[1] << "\n";
 
-                    auto& plugins = chain->Plugins;
+                    auto& plugins = chain->Plugins.GetWriteLock();
 
                     plugins.clear();
 
@@ -1000,6 +1000,8 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                         if (newComponent != nullptr)
                             plugins.push_back(newComponent);
                     }
+
+                    chain->Plugins.FinishWrite();
 
                     needPluginUpdate = true;
                 }
@@ -1478,14 +1480,6 @@ void PluginProcessor::ThreadLoadPreset()
 
     UpdatePlugins();
 
-    for (const auto& plugin : plugins)
-    {
-        if (plugin->NeedsInit)
-        {
-            InitPlugin(plugin);
-        }
-    }
-
     StartRamp(1, defaultRampMS);
 
     if (stompboxServer.HaveClient())
@@ -1548,6 +1542,13 @@ bool PluginProcessor::LoadCommandsFromFile(std::filesystem::path filePath)
     return true;
 }
 
+void PluginProcessor::StartRamp(int rampDirection, float rampMS)
+{
+    rampSamplesSoFar = 0;
+    ramp = rampDirection;
+    rampSamples = (int)(sampleRate * (rampMS / 1000.0f));
+}
+
 void PluginProcessor::Process(float* input, float* output, size_t count)
 {
     if (ramp != 0)
@@ -1558,10 +1559,6 @@ void PluginProcessor::Process(float* input, float* output, size_t count)
             {
                 if (presetLoadThread == nullptr)
                 {
-                    std::list<StompBox*>& newPlugins = (plugins == pluginList1) ? pluginList2 : pluginList1;
-                    newPlugins.clear();
-                    plugins = newPlugins;
-
                     presetLoadThread = new std::thread(&PluginProcessor::ThreadLoadPreset, this);
                 }
             }
@@ -1587,22 +1584,28 @@ void PluginProcessor::Process(float* input, float* output, size_t count)
 
     memcpy(output, input, count * sizeof(float));
 
-    for (const auto& plugin : plugins)
+    if ((ramp == 0) || (rampSamplesSoFar != rampSamples))
     {
-        if (plugin->Enabled)
+        for (auto& element : chainList)
         {
-            if (plugin->InputGain != nullptr)
-                plugin->InputGain->compute((int)count, output, output);
+            for (auto& plugin : element->Plugins.GetRead())
+            {
+                if (plugin->Enabled)
+                {
+                    if (plugin->InputGain != nullptr)
+                        plugin->InputGain->compute((int)count, output, output);
 
-            plugin->compute((int)count, output, output);
+                    plugin->compute((int)count, output, output);
 
-            if (plugin->OutputVolume != nullptr)
-                plugin->OutputVolume->compute((int)count, output, output);
-        }
+                    if (plugin->OutputVolume != nullptr)
+                        plugin->OutputVolume->compute((int)count, output, output);
+                }
 
-        if (plugin == monitorPlugin)
-        {
-            monitorCallback(output, (int)count);
+                if (plugin == monitorPlugin)
+                {
+                    monitorCallback(output, (int)count);
+                }
+            }
         }
     }
 
@@ -1620,11 +1623,4 @@ void PluginProcessor::Process(float* input, float* output, size_t count)
 
     // restore previous floating point state
     std::feupdateenv(&fe_state);
-}
-
-void PluginProcessor::StartRamp(int rampDirection, float rampMS)
-{
-    rampSamplesSoFar = 0;
-    ramp = rampDirection;
-    rampSamples = (int)(sampleRate * (rampMS / 1000.0f));
 }

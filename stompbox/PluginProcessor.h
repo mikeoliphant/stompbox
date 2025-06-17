@@ -6,6 +6,7 @@
 #include "PluginFactory.h"
 #include "StompboxServer.h"
 #include "SerialDisplayInterface.h"
+#include "DoubleBufferedResource.h"
 
 enum
 {
@@ -32,7 +33,7 @@ public:
 	std::string Name;
 	bool IsChain;
 	bool IsMaster;
-	std::vector<StompBox*> Plugins;
+	DoubleBufferedResource<std::vector<StompBox*>> Plugins;
 };
 
 class PluginProcessor
@@ -47,9 +48,6 @@ protected:
 
 	float sampleRate;
 	float bpm = 120;
-	std::list<StompBox*> pluginList1;
-	std::list<StompBox*> pluginList2;
-	std::list<StompBox*>& plugins = pluginList1;
 	int tmpBufSize = 64;
 	float* tmpBuf1 = nullptr;
 	float* tmpBuf2 = nullptr;
@@ -87,7 +85,7 @@ protected:
 	int ramp = 0;
 	int rampSamplesSoFar;
 	int rampSamples;
-	float defaultRampMS = 50;
+	float defaultRampMS = 25;
 	bool needPluginUpdate = false;
 
 public:
@@ -165,10 +163,12 @@ public:
 			if (slot->second->IsChain)
 				return nullptr;
 
-			if (slot->second->Plugins.size() == 0)
+			auto& plugins = slot->second->Plugins.GetRead();
+
+			if (plugins.size() == 0)
 				return nullptr;
 
-			return slot->second->Plugins[0];
+			return plugins[0];
 		}
 
 		return nullptr;
@@ -188,8 +188,12 @@ public:
 
 				if (plugin != nullptr)
 				{
-					slot->second->Plugins.clear();
-					slot->second->Plugins.push_back(CreatePlugin(pluginID));
+					auto& plugins = slot->second->Plugins.GetWriteLock();
+
+					plugins.clear();
+					plugins.push_back(CreatePlugin(pluginID));
+
+					slot->second->Plugins.FinishWrite();
 				}
 			}
 		}
