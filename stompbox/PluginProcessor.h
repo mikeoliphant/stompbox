@@ -48,9 +48,6 @@ protected:
 
 	float sampleRate;
 	float bpm = 120;
-	std::list<StompBox*> pluginList1;
-	std::list<StompBox*> pluginList2;
-	std::list<StompBox*>& plugins = pluginList1;
 	int tmpBufSize = 64;
 	float* tmpBuf1 = nullptr;
 	float* tmpBuf2 = nullptr;
@@ -88,7 +85,7 @@ protected:
 	int ramp = 0;
 	int rampSamplesSoFar;
 	int rampSamples;
-	float defaultRampMS = 50;
+	float defaultRampMS = 25;
 	bool needPluginUpdate = false;
 
 public:
