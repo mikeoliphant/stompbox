@@ -144,6 +144,9 @@ public:
 			if (element->IsMaster)
 				chainStr.append("Master");
 
+			if (element->IsSplit)
+				chainStr.append("Split");
+
 			if (element->IsChain)
 				chainStr.append("Chain ");
 			else
