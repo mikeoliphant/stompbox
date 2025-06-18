@@ -31,8 +31,9 @@ class ChainElement
 {
 public:
 	std::string Name;
-	bool IsChain;
-	bool IsMaster;
+	bool IsChain = false;
+	bool IsMaster = false;
+	bool IsSplit = false;
 	DoubleBufferedResource<std::vector<StompBox*>> Plugins;
 };
 
@@ -56,7 +57,7 @@ protected:
 	StompboxServer stompboxServer;
 	SerialDisplayInterface serialDisplayInterface;
 	std::unordered_map<std::string, ChainElement*> chainLookup;
-	std::list<ChainElement*> chainList;
+	std::vector<ChainElement*> chainList;
 	std::vector<std::string> presets;
 	StompBox* tuner = nullptr;
 	StompBox* audioFileRecorder = nullptr;
@@ -87,6 +88,7 @@ protected:
 	int rampSamples;
 	float defaultRampMS = 25;
 	bool needPluginUpdate = false;
+	std::vector<float> splitBuffer;
 
 public:
 	PluginProcessor(std::filesystem::path dataPath, bool dawMode);
@@ -94,6 +96,7 @@ public:
 	static std::string GetVersion();
 	void ScanPresets();
 	void Init(float sampleRate);
+	void SetMaxAudioBufferSize(size_t numSamples);
 	void SetBPM(float bpm);
 	void StartServer();
 	StompBox* CreatePlugin(std::string const& id);

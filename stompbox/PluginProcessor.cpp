@@ -133,6 +133,11 @@ void PluginProcessor::Init(float newSampleRate)
     clientUpdateThread = new std::thread(&PluginProcessor::UpdateClient, this);
 }
 
+void PluginProcessor::SetMaxAudioBufferSize(size_t numSamples)
+{
+    splitBuffer.resize(numSamples);
+}
+
 void PluginProcessor::ScanPresets()
 {
     presets.clear();
@@ -795,7 +800,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                         chainList.push_back(iter->second);
                     }
                 }
-                else if ((commandWords[cmd] == "Chain") || (commandWords[cmd] == "MasterChain"))
+                else if ((commandWords[cmd] == "Chain") || (commandWords[cmd] == "MasterChain") || (commandWords[cmd] == "SplitChain"))
                 {
                     auto iter = chainLookup.find(commandWords[cmd + 1]);
 
@@ -805,6 +810,7 @@ std::string PluginProcessor::HandleCommand(std::string const& line)
                         chain->IsChain = true;
                         chain->Name = commandWords[cmd + 1];
                         chain->IsMaster = (commandWords[cmd] == "MasterChain");
+                        chain->IsSplit = (commandWords[cmd] == "SplitChain");
 
                         chainLookup[chain->Name] = chain;
                         chainList.push_back(chain);
@@ -1586,26 +1592,46 @@ void PluginProcessor::Process(float* input, float* output, size_t count)
 
     if ((ramp == 0) || (rampSamplesSoFar != rampSamples))
     {
+        bool inSplit = false;
+
         for (auto& element : chainList)
         {
+            if (element->IsSplit)
+            {
+                memcpy(splitBuffer.data(), output, count * sizeof(float));
+            }
+
             for (auto& plugin : element->Plugins.GetRead())
             {
+                float* processBuffer = inSplit ? splitBuffer.data() : output;
+
                 if (plugin->Enabled)
                 {
                     if (plugin->InputGain != nullptr)
-                        plugin->InputGain->compute((int)count, output, output);
+                        plugin->InputGain->compute((int)count, processBuffer, processBuffer);
 
-                    plugin->compute((int)count, output, output);
+                    plugin->compute((int)count, processBuffer, processBuffer);
 
                     if (plugin->OutputVolume != nullptr)
-                        plugin->OutputVolume->compute((int)count, output, output);
+                        plugin->OutputVolume->compute((int)count, processBuffer, processBuffer);
                 }
 
                 if (plugin == monitorPlugin)
                 {
-                    monitorCallback(output, (int)count);
+                    monitorCallback(processBuffer, (int)count);
                 }
             }
+
+            if (inSplit)
+            {
+                // Merge our split data back
+                for (int i = 0; i < count; i++)
+                {
+                    output[i] += splitBuffer[i];
+                }
+            }
+
+            inSplit = element->IsSplit;
         }
     }
 

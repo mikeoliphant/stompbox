@@ -25,6 +25,8 @@ STOMPBOX_EXTERN void DeleteProcessor(void* processor);
 
 STOMPBOX_EXTERN void InitProcessor(void* processor, float sampleRate);
 
+STOMPBOX_EXTERN void SetMaxAudioBufferSize(void* processor, size_t numSamples);
+
 STOMPBOX_EXTERN void StartServer(void* processor);
 
 STOMPBOX_EXTERN void Process(void* processor, float* input, float* output, size_t bufferSize);
