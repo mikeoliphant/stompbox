@@ -34,6 +34,11 @@ void InitProcessor(void* processor, float sampleRate)
     ((PluginProcessor*)processor)->Init(sampleRate);
 }
 
+void SetMaxAudioBufferSize(void* processor, size_t numSamples)
+{
+    ((PluginProcessor*)processor)->SetMaxAudioBufferSize(numSamples);
+}
+
 void StartServer(void* processor)
 {
     ((PluginProcessor*)processor)->StartServer();
