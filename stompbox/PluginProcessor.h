@@ -43,6 +43,7 @@ protected:
 	void UpdateClient();
 	void SendClientMessage(const std::string message);
 	void AppendParamDefs(std::string& dump, StompBox* plugin);
+	void AppendParamDef(std::string& dump, StompBoxParameter* param);
 	void AppendPluginParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 	void AppendParams(std::string& dump, StompBox* plugin, bool dirtyOnly);
 	void ThreadLoadPreset();

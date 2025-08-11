@@ -393,12 +393,12 @@ std::string PluginProcessor::DumpConfig()
         dump.append("\r\n");
 
         if (plugin->InputGain != nullptr)
-            AppendParamDefs(dump, plugin->InputGain);
+            AppendParamDef(dump, plugin->InputGain->GetParameter(0));
 
         AppendParamDefs(dump, plugin);
 
         if (plugin->OutputVolume != nullptr)
-            AppendParamDefs(dump, plugin->OutputVolume);
+            AppendParamDef(dump, plugin->OutputVolume->GetParameter(0));
 
         dump.append("EndConfig\r\n");
     }
@@ -410,112 +410,115 @@ void PluginProcessor::AppendParamDefs(std::string& dump, StompBox* plugin)
 {
     for (size_t i = 0; i < plugin->NumParameters; i++)
     {
-        StompBoxParameter* param = plugin->GetParameter(i);
+        AppendParamDef(dump, plugin->GetParameter(i));
+    }
+}
 
-        dump.append("ParameterConfig ");
-        dump.append(plugin->ID);
+void PluginProcessor::AppendParamDef(std::string& dump, StompBoxParameter* param)
+{
+    dump.append("ParameterConfig ");
+    dump.append(param->Stomp->ID);
+    dump.append(" ");
+    dump.append(param->Name);
+
+    dump.append(" Type ");
+
+    switch (param->ParameterType)
+    {
+    case PARAMETER_TYPE_KNOB:
+        dump.append("Knob");
+        break;
+    case PARAMETER_TYPE_BOOL:
+        dump.append("Bool");
+        break;
+    case PARAMETER_TYPE_INT:
+        dump.append("Int");
+        break;
+    case PARAMETER_TYPE_VSLIDER:
+        dump.append("VSlider");
+        break;
+    case PARAMETER_TYPE_ENUM:
+        dump.append("Enum");
+        break;
+    case PARAMETER_TYPE_FILE:
+        dump.append("File");
+        break;
+    case PARAMETER_TYPE_POWER:
+        dump.append("Power");
+        break;
+    }
+
+    dump.append(" MinValue ");
+    dump.append(std::to_string(param->MinValue));
+
+    dump.append(" MaxValue ");
+    dump.append(std::to_string(param->MaxValue));
+
+    dump.append(" DefaultValue ");
+    dump.append(std::to_string(param->DefaultValue));
+
+    dump.append(" RangePower ");
+    dump.append(std::to_string(param->RangePower));
+
+    dump.append(" ValueFormat ");
+    dump.append(param->DisplayFormat);
+
+    dump.append(" CanSyncToHostBPM ");
+    dump.append(param->CanSyncToHostBPM ? "1" : "0");
+
+    dump.append(" IsAdvanced ");
+    dump.append(param->IsAdvanced ? "1" : "0");
+
+    dump.append(" IsOutput ");
+    dump.append(param->IsOutput ? "1" : "0");
+
+    if (!param->Description.empty())
+    {
+        dump.append(" Description ");
+
+        dump.append("\"");
+        dump.append(param->Description);
+        dump.append("\"");
+    }
+
+    dump.append("\r\n");
+
+    if (param->ParameterType == PARAMETER_TYPE_ENUM)
+    {
+        dump.append("ParameterEnumValues ");
+
+        dump.append(param->Stomp->Name);
         dump.append(" ");
         dump.append(param->Name);
 
-        dump.append(" Type ");
 
-        switch (param->ParameterType)
+        for (const auto& enumValue : *(param->EnumValues))
         {
-        case PARAMETER_TYPE_KNOB:
-            dump.append("Knob");
-            break;
-        case PARAMETER_TYPE_BOOL:
-            dump.append("Bool");
-            break;
-        case PARAMETER_TYPE_INT:
-            dump.append("Int");
-            break;
-        case PARAMETER_TYPE_VSLIDER:
-            dump.append("VSlider");
-            break;
-        case PARAMETER_TYPE_ENUM:
-            dump.append("Enum");
-            break;
-        case PARAMETER_TYPE_FILE:
-            dump.append("File");
-            break;
-        case PARAMETER_TYPE_POWER:
-            dump.append("Power");
-            break;
+            dump.append(" ");
+            dump.append(enumValue);
         }
 
-        dump.append(" MinValue ");
-        dump.append(std::to_string(param->MinValue));
+        dump.append("\r\n");
+    }
+    else if (param->ParameterType == PARAMETER_TYPE_FILE)
+    {
+        dump.append("ParameterFileTree ");
 
-        dump.append(" MaxValue ");
-        dump.append(std::to_string(param->MaxValue));
+        dump.append(param->Stomp->Name);
+        dump.append(" ");
+        dump.append(param->Name);
+        dump.append(" ");
+        dump.append(param->FilePath);
+        dump.append(" ");
 
-        dump.append(" DefaultValue ");
-        dump.append(std::to_string(param->DefaultValue));
-
-        dump.append(" RangePower ");
-        dump.append(std::to_string(param->RangePower));
-
-        dump.append(" ValueFormat ");
-        dump.append(param->DisplayFormat);
-
-        dump.append(" CanSyncToHostBPM ");
-        dump.append(param->CanSyncToHostBPM ? "1" : "0");
-
-        dump.append(" IsAdvanced ");
-        dump.append(param->IsAdvanced ? "1" : "0");
-
-        dump.append(" IsOutput ");
-        dump.append(param->IsOutput ? "1" : "0");
-
-        if (!param->Description.empty())
+        for (const auto& enumValue : *(param->EnumValues))
         {
-            dump.append(" Description ");
-
-            dump.append("\"");
-            dump.append(param->Description);
+            dump.append(" \"");
+            dump.append(enumValue);
             dump.append("\"");
         }
 
         dump.append("\r\n");
-
-        if (param->ParameterType == PARAMETER_TYPE_ENUM)
-        {
-            dump.append("ParameterEnumValues ");
-
-            dump.append(plugin->Name);
-            dump.append(" ");
-            dump.append(param->Name);
-
-
-            for (const auto& enumValue : *(param->EnumValues))
-            {
-                dump.append(" ");
-                dump.append(enumValue);
-            }
-
-            dump.append("\r\n");
-        }
-        else if (param->ParameterType == PARAMETER_TYPE_FILE)
-        {
-            dump.append("ParameterFileTree ");
-
-            dump.append(plugin->Name);
-            dump.append(" ");
-            dump.append(param->Name);
-            dump.append(" ");
-            dump.append(param->FilePath);
-            dump.append(" ");
-
-            for (const auto& enumValue : *(param->EnumValues))
-            {
-                dump.append(" \"");
-                dump.append(enumValue);
-                dump.append("\"");
-            }
-
-            dump.append("\r\n");
-        }
     }
 }
 
